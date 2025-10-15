@@ -22,3 +22,23 @@ logging:
   level:
     root: INFO
     com.back.app: INFO
+
+
+#ne diraj    
+    #hikari:
+      #connection-timeout: 30000
+      #initialization-fail-timeout: 0
+      #maximum-pool-size: 2
+  #jpa:
+    #hibernate:
+      #ddl-auto: none
+    #properties:
+      #hibernate:
+        #dialect: org.hibernate.dialect.PostgreSQLDialect
+        #boot:
+          #allow_jdbc_metadata_access: false  
+    #show-sql: false
+  #sql:
+    #init:
+      #mode: never
+#ne diraj    
