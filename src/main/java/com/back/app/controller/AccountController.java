@@ -16,7 +16,7 @@ import lombok.RequiredArgsConstructor;
 
 
 @RestController
-@RequestMapping("/api/accounts/v1")
+@RequestMapping("/api/accounts")
 @RequiredArgsConstructor
 @Validated
 public class AccountController {
