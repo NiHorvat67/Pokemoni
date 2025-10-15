@@ -1,6 +1,7 @@
 package com.back.app.model;
 
 import jakarta.persistence.Entity;
+
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -17,6 +18,7 @@ public class Account {
     @Id
     private Integer account_Id;
     private String username;
+    private String account_password;
     private String user_email;
     private String user_first_name;
     private String user_last_name;
