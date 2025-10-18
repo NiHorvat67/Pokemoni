@@ -10,10 +10,11 @@
 # Opis projekta
 Ovaj projekt je reultat timskog rada u sklopu projeknog zadatka kolegija [Programsko inženjerstvo](https://www.fer.unizg.hr/predmet/proinz) na Fakultetu elektrotehnike i računarstva Sveučilišta u Zagrebu. 
 
-Kratko opisati cilj Vašeg projekta. Vaša motivacija?  (Napomena: odgovor nije »Zato što je to bio zadatak i nismo imali ideje za drugo.«). Koji problem rješavate?
-> Obzirom da je ovo zadani projekt navedite i što želite/jeste novo  naučili.
+GearShare je web platforma za iznajmljivanje sezonske sportske opreme koja spaja trgovce i klijente. Trgovci mogu jednostavno oglašavati skije, snowboarde, bicikle, kajake i sličnu opremu, dok klijenti mogu pregledavati ponudu, filtrirati prema potrebama, rezervirati željeni period i obaviti plaćanje.
 
-> Dobro izrađen opis omogućuje vam da pokažete svoj rad drugim programerima, kao i potencijalnim poslodavcima. Ne samo da prvi dojam na stranici opisa često razlikuje dobar projekt od lošeg projekta već i predstavlja dobru praksu koju morate savladati.
+Motivacija projekta je smanjiti trošak i složenost posjedovanja sezonske opreme te povećati iskorištenost postojeće opreme. Klijentima omogućujemo fleksibilan pristup kvalitetnoj opremi kad im je potrebna, a trgovcima dodatni kanal prodaje i transparentan sustav rezervacija uz izgradnju povjerenja kroz recenzije.
+
+Kroz razvoj projekta cilj nam je savladati moderne obrasce web arhitekture, integraciju vanjskih servisa za autentifikaciju (OAuth 2.0), upravljanje korisničkim ulogama i ovlastima te dobre prakse dokumentiranja, testiranja i timske suradnje.
 
 # Funkcijski zahtjevi
 > Navedite ključne zahtjeve Vašeg projekta.
@@ -23,8 +24,15 @@ Kratko opisati cilj Vašeg projekta. Vaša motivacija?  (Napomena: odgovor nije 
 
 #Instalcija
 # Članovi tima 
-> Popis članova tima/linkovi/ glavni doprinos
->
+<ul>
+  <li><a href="https://github.com/NiHorvat67">Nikola Horvat</a> </li>
+  <li><a href="https://github.com/">Leonard Kovač</a></li>
+  <li><a href="https://github.com/katic123">Leon Katić</a></li>
+  <li><a href="https://github.com/IgorVuk99">Igor Vukovic</a></li>
+  <li><a href="https://github.com/SigmaGrindset">Antonio Batarilovic</a></li>
+  <li><a href="https://github.com/">Noa Basic</a></li>
+  <li><a href="https://github.com/JakovMar">Jakov Marković</a></li>
+</ul>
 
 # Kontribucije
 >Pravila ovise o organizaciji tima i su često izdvojena u CONTRIBUTING.md
