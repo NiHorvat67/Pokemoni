@@ -1,7 +1,9 @@
 package com.back.app.model;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -23,12 +25,6 @@ public class Account {
     
     @Column(name = "username", unique = true)
     private String username;
-    private String account_password;
-    private String user_email;
-    private String user_first_name;
-    private String user_last_name;
-    private String user_location;
-    private String registration_date;
     
     @Column(name = "user_email", unique = true) 
     private String userEmail; 
