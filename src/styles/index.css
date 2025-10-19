@@ -1,10 +1,33 @@
-:root {
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Red+Hat+Display:ital,wght@0,300..900;1,300..900&display=swap');
+
+@import "tailwindcss";
+
+
+@theme {
+  --font-red-hat: "Red Hat Display", sans-serif;
+  --font-inter: "Inter", sans-serif;
+
+  --color-primary: #00FF55;
+  --color-dark-bg: #121413;
+  --color-input-bg: #F2FFF9;
+
+  --background-image-hero: url("../assets/images/hero.jpg");
+  --background-image-auth: url("../assets/images/auth.jpg");
 }
 
-body {
-  margin: 0;
+@layer components {
+  body {
+    @apply bg-dark-bg
+  }
+
+  .max-container {
+    max-width: 1440px;
+    margin: 0 auto;
+  }
+}
+
+@layer utilities {
+  .padding-x {
+    @apply sm:px-16 px-8;
+  }
 }
