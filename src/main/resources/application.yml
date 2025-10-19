@@ -13,7 +13,7 @@ spring:
           github:
             client-id: Ov23liwzLxCF1uF0IPKt
             client-secret:  118eb22bcba331b1eef933d8ed8a63e1b671d028
-            scope: email, public_profile
+            scope: user:email,read:user
           #google:
             #client-id: GOOGLE_CLIENT_ID
             #client-secret: GOOGLE_CLIENT_SECRET

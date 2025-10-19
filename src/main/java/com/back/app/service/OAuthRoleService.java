@@ -22,6 +22,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.*;
 
+
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -38,9 +39,9 @@ public class OAuthRoleService implements OAuth2UserService<OAuth2UserRequest, OA
 
         String registrationId = userRequest.getClientRegistration().getRegistrationId();
         Map<String, Object> attributes = new HashMap<>(oAuth2User.getAttributes());
-
-        String email = extractGitHubEmail(oAuth2User, userRequest);
-
+        
+        String email = extractEmail(oAuth2User, userRequest, registrationId);
+        
         log.info("Email extracted: {}", email);
         log.info("All attributes: {}", attributes);
 
@@ -75,8 +76,18 @@ public class OAuthRoleService implements OAuth2UserService<OAuth2UserRequest, OA
         return new DefaultOAuth2User(authorities, attributes, userNameAttributeName);
     }
 
-    private String extractGitHubEmail(OAuth2User oAuth2User, OAuth2UserRequest userRequest) {
+    private String extractEmail(OAuth2User oAuth2User, OAuth2UserRequest userRequest, String registrationId) {
+        
+        if ("github".equals(registrationId)) {
+            return extractGitHubEmail(oAuth2User, userRequest);
+        }
+        
+        
+        return (String) oAuth2User.getAttributes().get("email");
+    }
 
+    private String extractGitHubEmail(OAuth2User oAuth2User, OAuth2UserRequest userRequest) {
+        
         String email = (String) oAuth2User.getAttributes().get("email");
         if (email != null) {
             return email;
@@ -85,31 +96,32 @@ public class OAuthRoleService implements OAuth2UserService<OAuth2UserRequest, OA
         try {
             HttpHeaders headers = new HttpHeaders();
             headers.set("Authorization", "Bearer " + userRequest.getAccessToken().getTokenValue());
-
+            
             HttpEntity<String> entity = new HttpEntity<>("", headers);
-
+            
             ResponseEntity<Map[]> response = restTemplate.exchange(
-                    "https://api.github.com/user/emails",
-                    HttpMethod.GET,
-                    entity,
-                    Map[].class);
-
+                "https://api.github.com/user/emails",
+                HttpMethod.GET,
+                entity,
+                Map[].class
+            );
+            
             if (response.getBody() != null) {
-
+                
                 for (Map<String, Object> emailData : response.getBody()) {
                     Boolean primary = (Boolean) emailData.get("primary");
                     Boolean verified = (Boolean) emailData.get("verified");
                     String emailAddress = (String) emailData.get("email");
-
+                    
                     if (Boolean.TRUE.equals(primary) && Boolean.TRUE.equals(verified) && emailAddress != null) {
                         return emailAddress;
                     }
                 }
-
+                
                 for (Map<String, Object> emailData : response.getBody()) {
                     Boolean verified = (Boolean) emailData.get("verified");
                     String emailAddress = (String) emailData.get("email");
-
+                    
                     if (Boolean.TRUE.equals(verified) && emailAddress != null) {
                         return emailAddress;
                     }
@@ -118,7 +130,7 @@ public class OAuthRoleService implements OAuth2UserService<OAuth2UserRequest, OA
         } catch (Exception e) {
             log.error("Failed to fetch GitHub user emails", e);
         }
-
+        
         return null;
     }
 }
