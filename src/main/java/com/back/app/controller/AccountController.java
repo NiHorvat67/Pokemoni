@@ -1,6 +1,8 @@
 package com.back.app.controller;
 
+import java.lang.foreign.Linker.Option;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -31,6 +33,11 @@ public class AccountController {
     @GetMapping("/{id}")
     public ResponseEntity<Account> getMethodName(@PathVariable Integer id) {
         return ResponseEntity.ok().body(userService.getUserbyId(id));
+    }
+
+    @GetMapping("/current")
+    public Optional<Account> getUsersAccount(Account account){
+        return userService.getAccountbyEmail(account.getUserEmail());
     }
     
 

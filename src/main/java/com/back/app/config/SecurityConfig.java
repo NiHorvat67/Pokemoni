@@ -8,11 +8,9 @@ import org.springframework.security.web.SecurityFilterChain;
 
 import com.back.app.service.OAuthRoleService;
 
-
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
-
 
     private final OAuthRoleService customOAuth2UserService;
 
@@ -24,18 +22,19 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
             .authorizeHttpRequests(authorize -> authorize
-                .requestMatchers("/api/accounts/**").hasAnyRole("BUYER", "TRADER", "ADMIN")
-                .requestMatchers("/api/advertisment/**", "/", "/login").permitAll()
-                .anyRequest().authenticated()
-            )
+                    .requestMatchers("/api/accounts/**").hasAnyRole("BUYER", "TRADER", "ADMIN")
+                    .requestMatchers("/api/advertisment/**", "/", "/login", "/error").permitAll()
+                    .anyRequest().authenticated())
             .oauth2Login(oauth2 -> oauth2
-                .userInfoEndpoint(userInfo -> userInfo
-                    .userService(customOAuth2UserService)
-                )
-                .defaultSuccessUrl("/api/accounts/", true)
-            )
+                    .userInfoEndpoint(userInfo -> userInfo
+                            .userService(customOAuth2UserService))
+                    .defaultSuccessUrl("/api/accounts/", true)
+                    .failureUrl("/error"))
+            .exceptionHandling(exception -> exception
+                    .accessDeniedHandler((request, response, accessDeniedException) -> {
+                        response.sendRedirect("/error?denied");
+                    }))
             .csrf(csrf -> csrf.disable()); // Disable CSRF protection for OAuth2 development
-
 
         return http.build();
     }

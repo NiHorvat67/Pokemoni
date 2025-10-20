@@ -1,4 +1,4 @@
-package com.back.app.controller;
+package com.back.app.service;
 
 public class PaypalPaymentService implements PaymentService{
 
