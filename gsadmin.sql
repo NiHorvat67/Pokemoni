@@ -3,6 +3,7 @@
 CREATE TABLE account (
     account_id SERIAL PRIMARY KEY, 
     username VARCHAR(100) NOT NULL UNIQUE,
+    oauth2_id VARCHAR(100) NOT NULL UNIQUE,
     account_password VARCHAR(100) NOT NULL,
     user_email VARCHAR(255) NOT NULL UNIQUE,
     user_first_name VARCHAR(50),
@@ -57,13 +58,13 @@ CREATE TABLE item (
 );
 
 
-INSERT INTO account (username, account_password, user_email, user_first_name, user_last_name, user_contact, user_location, account_role) VALUES
-('alice_trader', 'pass1' ,'alice.smith@hire.com', 'Alice', 'Smith', '555-1001', 'London', 'trader'),        -- account_id 1 
-('bob_buyer', 'pass1' ,'bob.johnson@mail.com', 'Bob', 'Johnson', '555-1002', 'Paris', 'buyer'),                -- account_id 2 
-('max_admin', 'pass1' ,'max.chief@sys.com', 'Max', 'Chief', '555-1003', 'New York', 'admin'),              -- account_id 3 
-('trader_gear', 'pass1' ,'gear.hire@global.com', 'George', 'Gear', '555-1004', 'Berlin', 'trader'),         -- account_id 4 
-('jane_buyer', 'pass1' ,'jane.doe@mail.com', 'Jane', 'Doe', '555-1005', 'Tokyo', 'buyer'),                -- account_id 5 
-('adminNH', 'oauth_login', 'nh55636@fer.hr ', 'Nikola', 'Horvat', '0917343740', 'Zagreb', 'admin');                                 -- account_id 6
+INSERT INTO account (username, account_password, oauth2_id, user_email, user_first_name, user_last_name, user_contact, user_location, account_role) VALUES
+('alice_trader', 'pass1' ,'1','alice.smith@hire.com', 'Alice', 'Smith', '555-1001', 'London', 'trader'),        -- account_id 1 
+('bob_buyer', 'pass1','2' ,'bob.johnson@mail.com', 'Bob', 'Johnson', '555-1002', 'Paris', 'buyer'),                -- account_id 2 
+('max_admin', 'pass1' ,'3','max.chief@sys.com', 'Max', 'Chief', '555-1003', 'New York', 'admin'),              -- account_id 3 
+('trader_gear', 'pass1' ,'4','gear.hire@global.com', 'George', 'Gear', '555-1004', 'Berlin', 'trader'),         -- account_id 4 
+('jane_buyer', 'pass1' ,'5','jane.doe@mail.com', 'Jane', 'Doe', '555-1005', 'Tokyo', 'buyer'),                -- account_id 5 
+('adminNH', 'oauth_login', '6', 'nh55636@fer.hr ', 'Nikola', 'Horvat', '0917343740', 'Zagreb', 'admin');                                 -- account_id 6
 
 INSERT INTO reservation (reservation_start, reservation_end, buyer_id, reservation_trader_grade, reservation_gear_grade) VALUES
 -- Reservation 1: Buyer Bob (ID 2) reserves a future item
@@ -87,4 +88,3 @@ INSERT INTO item (advertisement_id, item_description, item_image_path) VALUES
 (1, 'RF 24-70mm f/2.8L IS USM lens.', '/images/ad1/lens.jpg'),
 -- Item for Advertisement 2 (Drone)
 (2, 'DJI Mavic 3 Pro drone, Fly More Kit.', '/images/ad2/drone.jpg');
-
