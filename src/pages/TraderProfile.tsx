@@ -21,10 +21,9 @@ const TraderProfile = () => {
     price: 300,
     productUrl: "/"
   })
-  console.log(products)
 
   return (
-    <section className="padding-x pt-30 sm:pt-45 pb-80">
+    <section className="padding-x pt-30 sm:pt-45 pb-20">
       <section className="max-container">
 
         <section id="info-container" className="mb-19 sm:mb-34">

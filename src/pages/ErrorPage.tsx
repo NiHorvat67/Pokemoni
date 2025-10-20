@@ -6,7 +6,7 @@ const ErrorPage = () => {
       <section className="absolute w-full h-full left-0 right-0 top-0 bottom-0-0 bg-hero bg-cover bg-center"></section>
       <section className="absolute w-full h-full left-0 right-0 top-0 bottom-0-0 bg-[#101211]/[90%]"></section>
       <section className="max-container relative">
-
+        i
         <div className="flex items-start flex-col">
           <h1 className="font-red-hat text-[32px] sm:text-[40px] font-bold mb-5">
             <span className="text-primary">404</span>
