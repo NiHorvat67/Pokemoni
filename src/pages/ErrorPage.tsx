@@ -1,4 +1,4 @@
-import homeIcon from "../assets/icons/home.svg"
+import { homeIcon } from "../assets/icons"
 
 const ErrorPage = () => {
   return (

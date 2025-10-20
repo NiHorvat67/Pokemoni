@@ -1,0 +1,40 @@
+#info-container {
+  display: grid;
+  grid-template-columns: 206px 1fr;
+  grid-template-areas:
+    "image name"
+    "image desc"
+  ;
+  column-gap: 64px;
+  align-items: center;
+}
+
+#profile-image {
+  grid-area: image;
+}
+
+#name {
+  grid-area: name;
+  margin-bottom: 40px;
+}
+
+#desc {
+  grid-area: desc;
+}
+
+
+@media screen and (max-width:40rem) {
+  #info-container {
+    column-gap: 20px;
+    row-gap: 26px;
+    grid-template-columns: 152px 1fr;
+    grid-template-areas:
+      "image name"
+      "desc desc"
+    ;
+  }
+
+  #name {
+    margin-bottom: 0;
+  }
+}
