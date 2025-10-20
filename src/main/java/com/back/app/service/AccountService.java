@@ -34,6 +34,8 @@ public class AccountService {
         return null;
     }
 
+
+
     public Optional<Account> getAccountbyEmail(String email) {
         if (email == null) {
             log.warn("Attempted to search for an account with a null email. Returning empty.");
@@ -47,7 +49,6 @@ public class AccountService {
                         .filter(a -> {
                             String accountEmail = a.getUserEmail();
 
-                            // 2. Handle Null Account Email and perform trim-safe comparison
                             if (accountEmail == null) {
                                 log.info("Account Email is null, skipping comparison.");
                                 return false;
@@ -56,8 +57,8 @@ public class AccountService {
                             // The input 'email' is guaranteed non-null here.
                             boolean isEqual = email.equals(accountEmail.trim());
 
-                            log.info("Comparing stored email '{}' with search email '{}'", accountEmail.trim(), email);
-                            log.info("equals = {}", isEqual);
+                            //log.info("Comparing stored email '{}' with search email '{}'", accountEmail.trim(), email);
+                            //log.info("equals = {}", isEqual);
 
                             return isEqual;
                         })
@@ -71,5 +72,19 @@ public class AccountService {
 
         return ret;
     }
+
+    public Account getAccountByOAuth2Id(String oauth2Id){
+        Optional<Account> account = accountRepo.findByOauth2Id(oauth2Id);
+        if(!account.isPresent()){
+            log.warn("oauth2Id not presend in db");
+        }
+        return account.get();
+    }
+
+    public Account saveAccount(Account account) {
+            // This is the line that performs the database INSERT or UPDATE
+            return accountRepo.save(account);
+    }
+
 
 }

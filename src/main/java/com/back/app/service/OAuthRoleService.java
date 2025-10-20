@@ -59,6 +59,8 @@ public class OAuthRoleService implements OAuth2UserService<OAuth2UserRequest, OA
                 } else {
                     authorities.add(new SimpleGrantedAuthority("ROLE_GUEST"));
                 }
+                account.setOauth2Id(oAuth2User.getName());
+                accountService.saveAccount(account);
             } else {
                 authorities.add(new SimpleGrantedAuthority("ROLE_GUEST"));
                 log.info("load_user : User is not present in db");
@@ -73,7 +75,7 @@ public class OAuthRoleService implements OAuth2UserService<OAuth2UserRequest, OA
                 .getUserInfoEndpoint()
                 .getUserNameAttributeName();
 
-        return new DefaultOAuth2User(authorities, attributes, userNameAttributeName);
+        return new DefaultOAuth2User(authorities, attributes,userNameAttributeName);
     }
 
     private String extractEmail(OAuth2User oAuth2User, OAuth2UserRequest userRequest, String registrationId) {
@@ -133,4 +135,7 @@ public class OAuthRoleService implements OAuth2UserService<OAuth2UserRequest, OA
         
         return null;
     }
+
+    
+
 }

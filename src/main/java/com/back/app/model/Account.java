@@ -26,6 +26,12 @@ public class Account {
     @Column(name = "username", unique = true)
     private String username;
     
+    @Column(name = "oauth2_id", unique = true)
+    private String oauth2Id;
+
+    @Column(name = "account_password", unique = true)
+    private String password;
+
     @Column(name = "user_email", unique = true) 
     private String userEmail; 
     
