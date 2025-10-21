@@ -17,12 +17,32 @@ Motivacija projekta je smanjiti trošak i složenost posjedovanja sezonske oprem
 Kroz razvoj projekta cilj nam je savladati moderne obrasce web arhitekture, integraciju vanjskih servisa za autentifikaciju (OAuth 2.0), upravljanje korisničkim ulogama i ovlastima te dobre prakse dokumentiranja, testiranja i timske suradnje.
 
 # Funkcijski zahtjevi
-> Navedite ključne zahtjeve Vašeg projekta.
+<ul>
+<li>Registracija i prijava putem vanjskog pružatelja identiteta.</li>
+<li>Podržane uloge i ovlasti: neregistrirani korisnik, klijent, trgovac i administrator.</li>
+<li>Javni katalog oglasa s detaljima opreme, cijenom, kaucijom i galerijom.</li>
+<li>Interaktivna karta s markerima lokacija preuzimanja i povrata.</li>
+<li>Filtriranje po vrsti opreme, razdoblju najma, cijeni i udaljenosti.</li>
+<li>Rezervacija željenog perioda uz provjeru dostupnosti u stvarnom vremenu.</li>
+<li>Online plaćanje rezervacije karticama i drugim podržanim kanalima.</li>
+<li>Godišnja članarina za trgovce s upravljanjem planom i statusom.</li>
+<li>Upravljanje oglasima: objava, izmjena, privremena deaktivacija i brisanje bez aktivnih rezervacija.</li>
+<li>Ocjene i recenzije nakon završetka najma za izgradnju reputacije.</li>
+<li>Prijava nepravilnosti i moderiranje slučajeva od strane administratora.</li>
+<li>Administratorski nadzor nad korisnicima, oglasima i transakcijama.</li>
+</ul>
 
 
 # Tehnologije
+<ul>
+<li>Frontend: React + Vite, statički hostan na Netlify</li>
+<li>Backend: Java Spring Boot, deploy na AWS ili Azure</li>
+<li>Baza: PostgreSQL, deploy na cloud PaaS (npr. Neon ili ekvivalent)</li>
+<li>Autentifikacija: OAuth 2.0 s vanjskim davateljem identiteta</li>
+<li>Plaćanja: integracija za kartice i PayPal radi naplate rezervacija i članarina</li>
+</ul>
 
-#Instalcija
+
 # Članovi tima 
 <ul>
   <li><a href="https://github.com/NiHorvat67">Nikola Horvat</a> </li>
@@ -30,7 +50,7 @@ Kroz razvoj projekta cilj nam je savladati moderne obrasce web arhitekture, inte
   <li><a href="https://github.com/katic123">Leon Katić</a></li>
   <li><a href="https://github.com/IgorVuk99">Igor Vukovic</a></li>
   <li><a href="https://github.com/SigmaGrindset">Antonio Batarilovic</a></li>
-  <li><a href="https://github.com/">Noa Basic</a></li>
+  <li><a href="https://github.com/NoaBasic">Noa Basic</a></li>
   <li><a href="https://github.com/JakovMar">Jakov Marković</a></li>
 </ul>
 
