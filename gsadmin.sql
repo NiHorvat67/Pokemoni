@@ -45,17 +45,12 @@ CREATE TABLE advertisement (
     FOREIGN KEY (trader_id) REFERENCES account(account_id) ON DELETE CASCADE,
 
     reservation_id INT UNIQUE,
+    item_description TEXT,
+    item_image_path VARCHAR(255) UNIQUE,
+
     FOREIGN KEY (reservation_id) REFERENCES reservation(reservation_id) ON DELETE SET NULL
 );
 
-CREATE TABLE item (
-    item_id SERIAL PRIMARY KEY,
-    item_description TEXT,
-    item_image_path VARCHAR(255) UNIQUE, 
-    
-    advertisement_id INT NOT NULL,
-    FOREIGN KEY (advertisement_id) REFERENCES advertisement(advertisement_id) ON DELETE CASCADE
-);
 
 
 INSERT INTO account (username, account_password, oauth2_id, user_email, user_first_name, user_last_name, user_contact, user_location, account_role) VALUES
@@ -73,18 +68,13 @@ INSERT INTO reservation (reservation_start, reservation_end, buyer_id, reservati
 ('2025-09-01 14:00:00+09', '2025-09-05 10:00:00+09', 5, 5, 4);   
 
 
-INSERT INTO advertisement (trader_id, advertisement_start, advertisement_end, advertisement_price, advertisement_deposit, advertisement_location_takeover, advertisement_location_return, reservation_id) VALUES
+INSERT INTO advertisement (trader_id, advertisement_start, advertisement_end, advertisement_price, advertisement_deposit, advertisement_location_takeover, advertisement_location_return, reservation_id, item_description, item_image_path) VALUES
 -- Advertisement 1: Trader Alice (ID 1) - Available
-(1, '2025-10-15', '2026-03-30', 50.00, 100.00, 'Piccadilly Circus', 'Piccadilly Circus', NULL), 
+(1, '2025-10-15', '2026-03-30', 50.00, 100.00, 'Piccadilly Circus', 'Piccadilly Circus', NULL,'Canon EOS R5 body, mint condition, includes 2 batteries.','/images/ad1/camera.jpg'),
 -- Advertisement 2: Trader George (ID 4) - Currently Reserved by Bob (Reservation 1)
-(4, '2025-11-01', '2025-11-30', 80.00, 150.00, 'Berlin Central Station', 'Berlin Central Station', 1),          
+(4, '2025-11-01', '2025-11-30', 80.00, 150.00, 'Berlin Central Station', 'Berlin Central Station', 1,'RF 24-70mm f/2.8L IS USM lens.', '/images/ad1/lens.jpg');
 -- Advertisement 3: Trader George (ID 4) - Completed Reservation by Jane (Reservation 2)
-(4, '2025-08-20', '2025-09-10', 60.00, 100.00, 'Tokyo Shibuya Crossing', 'Tokyo Shibuya Crossing', 2);            
 
 
-INSERT INTO item (advertisement_id, item_description, item_image_path) VALUES
--- Items for Advertisement 1 (Camera Gear)
-(1, 'Canon EOS R5 body, mint condition, includes 2 batteries.', '/images/ad1/camera.jpg'),
-(1, 'RF 24-70mm f/2.8L IS USM lens.', '/images/ad1/lens.jpg'),
--- Item for Advertisement 2 (Drone)
-(2, 'DJI Mavic 3 Pro drone, Fly More Kit.', '/images/ad2/drone.jpg');
+
+
