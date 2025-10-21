@@ -3,6 +3,7 @@ package com.back.app.controller;
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -26,16 +27,20 @@ public class AccountController {
     
     private final AccountService accountService;
 
+
+    @Secured({"ROLE_ADMIN"})
     @GetMapping("/")
-    public ResponseEntity<List<Account>> getAllEmployees(){
-        return ResponseEntity.ok().body(accountService.getAllEmployees());
+    public ResponseEntity<List<Account>> getAllAccounts(){
+        return ResponseEntity.ok().body(accountService.getAllAccounts());
     }
 
+    @Secured({"ROLE_ADMIN"})
     @GetMapping("/{id}")
     public ResponseEntity<Account> getMethodName(@PathVariable Integer id) {
         return ResponseEntity.ok().body(accountService.getUserbyId(id));
     }
 
+    @Secured({"ROLE_TRADER", "ROLE_BUYER", "ROLE_ADMIN"})
     @GetMapping("/current")
     public Account getCurrentUserAccount(HttpServletRequest request){
 

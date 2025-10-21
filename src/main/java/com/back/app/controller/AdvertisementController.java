@@ -23,11 +23,13 @@ public class AdvertisementController {
     
     private final AdvertisementService advertisementService;
 
+    // permited for all
     @GetMapping("/")
     public ResponseEntity<List<Advertisement>> getAllAdvertisements(){
         return ResponseEntity.ok().body(advertisementService.getAllAdvertisements());
     }
 
+    // permited for all
     @GetMapping("/{id}")
     public ResponseEntity<Advertisement> getMethodName(@PathVariable Integer id) {
         return ResponseEntity.ok().body(advertisementService.getAdvertisementbyId(id));

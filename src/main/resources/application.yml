@@ -3,9 +3,9 @@ spring:
     name: springboot
   datasource:
     driverClassName: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5431/gsadmin
+    url: jdbc:postgresql://aws-1-eu-central-1.pooler.supabase.com:5432/postgres?user=postgres.yukpteahhnmzzspunpoy&password=hjLifDNfcUC0jrwP
     username: postgres
-    password: 1234
+    password: hjLifDNfcUC0jrwP
   security:
     oauth2:
       client:

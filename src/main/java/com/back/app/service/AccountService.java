@@ -20,7 +20,7 @@ public class AccountService {
     
     private final AccountRepo accountRepo;
 
-    public List<Account> getAllEmployees(){
+    public List<Account> getAllAccounts(){
         return accountRepo.findAll();
     }
 
@@ -43,7 +43,7 @@ public class AccountService {
         }
 
         
-        List<Account> accounts = this.getAllEmployees();
+        List<Account> accounts = this.getAllAccounts();
 
         Optional<Account> ret = accounts.stream()
                         .filter(a -> {
