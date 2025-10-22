@@ -27,19 +27,26 @@ public class AccountController {
     
     private final AccountService accountService;
 
-
+    /*
+     * return all accounts
+     */
     @Secured({"ROLE_ADMIN"})
     @GetMapping("/")
     public ResponseEntity<List<Account>> getAllAccounts(){
         return ResponseEntity.ok().body(accountService.getAllAccounts());
     }
 
-    @Secured({"ROLE_ADMIN"})
+
+    /*
+     * 
+     * returns account based on id
+     */
     @GetMapping("/{id}")
     public ResponseEntity<Account> getMethodName(@PathVariable Integer id) {
         return ResponseEntity.ok().body(accountService.getUserbyId(id));
     }
 
+    
     @Secured({"ROLE_TRADER", "ROLE_BUYER", "ROLE_ADMIN"})
     @GetMapping("/current")
     public Account getCurrentUserAccount(HttpServletRequest request){
