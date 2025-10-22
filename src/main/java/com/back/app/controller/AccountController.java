@@ -1,10 +1,9 @@
 package com.back.app.controller;
 
-import java.lang.foreign.Linker.Option;
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -14,30 +13,47 @@ import org.springframework.web.bind.annotation.RestController;
 import com.back.app.model.Account;
 import com.back.app.service.AccountService;
 
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 
 @RestController
 @RequestMapping("/api/accounts")
 @RequiredArgsConstructor
 @Validated
+@Slf4j
 public class AccountController {
     
-    private final AccountService userService;
+    private final AccountService accountService;
 
+    /*
+     * return all accounts
+     */
+    @Secured({"ROLE_ADMIN"})
     @GetMapping("/")
-    public ResponseEntity<List<Account>> getAllEmployees(){
-        return ResponseEntity.ok().body(userService.getAllEmployees());
+    public ResponseEntity<List<Account>> getAllAccounts(){
+        return ResponseEntity.ok().body(accountService.getAllAccounts());
     }
 
+
+    /*
+     * 
+     * returns account based on id
+     */
     @GetMapping("/{id}")
     public ResponseEntity<Account> getMethodName(@PathVariable Integer id) {
-        return ResponseEntity.ok().body(userService.getUserbyId(id));
+        return ResponseEntity.ok().body(accountService.getUserbyId(id));
     }
 
+    
+    @Secured({"ROLE_TRADER", "ROLE_BUYER", "ROLE_ADMIN"})
     @GetMapping("/current")
-    public Optional<Account> getUsersAccount(Account account){
-        return userService.getAccountbyEmail(account.getUserEmail());
+    public Account getCurrentUserAccount(HttpServletRequest request){
+
+        String oauth2Id = request.getUserPrincipal().getName();
+        return  accountService.getAccountByOAuth2Id(oauth2Id);
+
     }
     
 
