@@ -1,26 +1,54 @@
 import profileImg from "../assets/images/profile.jpeg"
-import { locationIcon, mailIcon, starIcon } from "../assets/icons"
+import { locationIcon, mailIcon, starIcon, phoneIcon } from "../assets/icons"
 import "../styles/TraderProfile.css"
 import ProductCard from "../components/ProductCard"
-import bikeImg from "../assets/images/bike.jpeg"
+import { products } from "@/constants"
+
+import gsap from 'gsap';
+import { useGSAP } from '@gsap/react';
+import { useQuery } from "@tanstack/react-query"
+import axios from 'axios';
+import { useParams } from "react-router-dom"
 
 const TraderProfile = () => {
+  const { userId } = useParams()
+
+  const { status, error, data } = useQuery({
+    queryKey: ["traderAccount"],
+    queryFn: async () => {
+      return axios
+        .get(`/api/accounts/${userId}`)
+        .then(res => {
+          console.log(res.data)
+          if (res.data == "") {
+            window.location.pathname = "/error"
+          }
+          return res.data
+        })
+        .catch(err => console.log(err))
+    }
+  })
+
+
 
   const infoItems = [
-    { icon: mailIcon, text: "craigjones@gmail.com" },
-    { icon: locationIcon, text: "Random Adresa 21, Zagreb 10000, Hrvatska" },
-    { icon: starIcon, text: "4.5/5" },
+    { icon: mailIcon, text: data?.userEmail },
+    { icon: locationIcon, text: data?.userLocation },
+    { icon: phoneIcon, text: data?.userContact },
+    { icon: starIcon, text: "fali/5" },
   ]
 
-  const products = Array(5).fill({
-    category: "Mountain bikes",
-    img: bikeImg,
-    productName: "S-WORKS Enduro",
-    owner: { url: "/", name: "Sigma" },
-    desc: "Lorem ipsum dolor sit amet consectetur. Et nisl elementum sagittis aliquet enim scelerisque elit.",
-    price: 300,
-    productUrl: "/"
-  })
+
+  useGSAP(() => {
+    gsap.from(".product-card", {
+      opacity: 0,
+      ease: "power1.inOut",
+      y: 25,
+      stagger: .06,
+      duration: .5
+    })
+  }, [products])
+
 
   return (
     <section className="padding-x pt-30 sm:pt-45 pb-20">
@@ -34,8 +62,8 @@ const TraderProfile = () => {
             className="sm:ml-[-10px] ml-[-4px] rounded-full h-[152px] w-[152px] sm:h-[206px] sm:w-[206px] object-cover"
           />
           <div id="name">
-            <h1 className="text-white text-2xl sm:text-[32px] font-medium mb-1">Craig George</h1>
-            <p className="font-inter text-[#C4CCC7]">Trgovac</p>
+            <h1 className="text-white text-2xl sm:text-[32px] font-medium mb-1">{data?.userFirstName} {data?.userLastName}</h1>
+            <p className="font-inter text-desc capitalize">{data?.accountRole}</p>
           </div>
 
           <div id="desc" className="flex gap-4 flex-col">
@@ -50,22 +78,28 @@ const TraderProfile = () => {
 
         </section>
 
-        <h1 className="text-white font-inter font-medium text-xl sm:text-2xl mb-[54px]">Craig George is renting</h1>
 
         {/* <section className="flex gap-11 flex-wrap"> */}
-        <section className="grid min-[1250px]:grid-cols-4 min-[1000px]:grid-cols-3 min-[700px]:grid-cols-2 grid-cols-1 max-sm:justify-items-center gap-11">
-          {products.map((product, index) => (
-            <ProductCard key={index}
-              category={product.category}
-              img={product.img}
-              productName={product.productName}
-              owner={product.owner}
-              desc={product.desc}
-              price={product.price}
-              productUrl={product.productUrl}
-            ></ProductCard>
-          ))}
-        </section>
+        {data?.accountRole == "trader" &&
+          <>
+            <h1 className="text-white font-inter font-medium text-xl sm:text-2xl mb-[54px]">{data?.userFirstName} {data?.userLastName} is renting</h1>
+            <section className="grid min-[1250px]:grid-cols-4 min-[1000px]:grid-cols-3 min-[700px]:grid-cols-2 grid-cols-1 max-sm:justify-items-center gap-11">
+              {products.map((product, index) => (
+                <div key={index} className="product-card">
+                  <ProductCard
+                    category={product.category}
+                    img={product.img}
+                    productName={product.productName}
+                    owner={product.owner}
+                    desc={product.desc}
+                    price={product.price}
+                    productUrl={product.productUrl}
+                  ></ProductCard>
+                </div>
+              ))}
+            </section>
+          </>
+        }
 
       </section>
     </section>

@@ -1,8 +1,6 @@
 "use client"
 
-import * as React from "react"
 import { ChevronDownIcon } from "lucide-react"
-import { type DateRange } from "react-day-picker"
 
 import { Button } from "@/components/ui/button"
 import { Calendar } from "@/components/ui/calendar"
@@ -12,8 +10,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover"
 
-export default function Calendar23() {
-  const [range, setRange] = React.useState<DateRange | undefined>(undefined)
+export default function Calendar23({ range, setRange }: { range: any, setRange: any }) {
 
   return (
     <div className="flex flex-col gap-3">
