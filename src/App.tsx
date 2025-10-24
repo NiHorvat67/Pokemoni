@@ -5,7 +5,7 @@ import { QueryClient, QueryClientProvider, useQuery } from "@tanstack/react-quer
 import Homepage from "./pages/Homepage"
 import ErrorPage from "./pages/ErrorPage"
 import TraderProfile from "./pages/TraderProfile"
-import Auth from "./pages/Auth"
+import Auth from "./pages/auth/Auth"
 
 
 function App() {

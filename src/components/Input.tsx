@@ -1,10 +1,12 @@
-const Input = ({ placeholder }: { placeholder: string }) => {
+const Input = ({ placeholder, state, setState }: { placeholder: string, state: any, setState: any }) => {
   return (
     <>
       <input
         type="text"
+        value={state}
+        onChange={(e) => setState(e.target.value)}
         placeholder={placeholder}
-        className="font-inter text-[16px] bg-input-bg rounded-[8px] text-black px-5.5 py-3 min-w-[300px] max-w-[350px] w-full"
+        className="font-inter text-[16px] bg-input-bg rounded-[8px] text-black px-5.5 py-3 max-w-[350px] w-full"
       />
     </>
   );
