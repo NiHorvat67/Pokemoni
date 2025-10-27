@@ -7,7 +7,6 @@ const AuthStep1 = ({ step, currentStep, setCurrentStep }: { step: number, curren
 
 
   return (
-
     <div className="step-content flex max-lg:pb-19 flex-col items-center flex-1 md:justify-center md:mt-[-200px] justify-between">
       <div>
         <h1 id="heading" className="font-red-hat mb-5 text-white text-[28px] sm:text-[32px] font-medium text-center">Tvoja avantura počinje ovdje</h1>

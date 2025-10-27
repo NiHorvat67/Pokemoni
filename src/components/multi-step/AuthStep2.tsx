@@ -84,10 +84,10 @@ const AuthStep2 = ({ step, currentStep, setCurrentStep }: { step: number, curren
           </Select>
         </div>
         {role === "trader" &&
-          <Button text="Next" icon={true} onClick={nextOnClick} />
+          <Button long={true} text="Next" icon={true} onClick={nextOnClick} />
         }
         {role !== "trader" &&
-          <Button text="Finish" icon={true} onClick={finishOnClick} />
+          <Button long={true} text="Finish" icon={true} onClick={finishOnClick} />
         }
       </div>
       {errors.length !== 0 &&

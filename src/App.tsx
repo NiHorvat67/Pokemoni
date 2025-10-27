@@ -6,6 +6,7 @@ import Homepage from "./pages/Homepage"
 import ErrorPage from "./pages/ErrorPage"
 import TraderProfile from "./pages/TraderProfile"
 import Auth from "./pages/auth/Auth"
+import Advertisement from "./pages/Advertisement"
 
 
 function App() {
@@ -22,6 +23,7 @@ function App() {
             <Route path="/error" element={<ErrorPage />}></Route>
             <Route path="/profile/:userId" element={<TraderProfile />}></Route>
             <Route path="/auth" element={<Auth />}></Route>
+            <Route path="/advertisement" element={<Advertisement />}></Route>
           </Routes>
         </main>
       </BrowserRouter>

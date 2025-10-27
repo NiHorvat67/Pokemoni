@@ -51,6 +51,7 @@ const Homepage = () => {
       return axios
         .get(`/api/advertisement/search?${params.toString()}`)
         .then(res => {
+          console.log(res.data)
           return res.data
         })
         .catch(err => console.log(err))
