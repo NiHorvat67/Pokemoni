@@ -28,10 +28,9 @@ const priceRanges: { start: number; end?: number }[] = [...generatePriceRanges(4
 
 const subscriptionBenefits = ["Unlimited Listings", "Damage Reporting Tools", "Secure Payments", "Deposit Management"]
 
-
 export {
   products,
   categories,
   priceRanges,
-  subscriptionBenefits
+  subscriptionBenefits,
 }

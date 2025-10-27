@@ -5,8 +5,9 @@ import { QueryClient, QueryClientProvider, useQuery } from "@tanstack/react-quer
 import Homepage from "./pages/Homepage"
 import ErrorPage from "./pages/ErrorPage"
 import TraderProfile from "./pages/TraderProfile"
-import Auth from "./pages/auth/Auth"
+import Auth from "./pages/Auth"
 import Advertisement from "./pages/Advertisement"
+import Admin from "./pages/Admin"
 
 
 function App() {
@@ -23,7 +24,8 @@ function App() {
             <Route path="/error" element={<ErrorPage />}></Route>
             <Route path="/profile/:userId" element={<TraderProfile />}></Route>
             <Route path="/auth" element={<Auth />}></Route>
-            <Route path="/advertisement" element={<Advertisement />}></Route>
+            <Route path="/admin" element={<Admin />}></Route>
+            <Route path="/advertisement/:advertisementId" element={<Advertisement />}></Route>
           </Routes>
         </main>
       </BrowserRouter>

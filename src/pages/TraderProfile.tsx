@@ -51,7 +51,7 @@ const TraderProfile = () => {
 
 
   return (
-    <section className="padding-x pt-30 sm:pt-45 pb-20">
+    <section className="padding-x padding-t pb-20">
       <section className="max-container">
 
         <section id="info-container" className="mb-19 sm:mb-34">

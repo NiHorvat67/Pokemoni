@@ -34,6 +34,10 @@
   .padding-x {
     @apply sm:px-16 px-8;
   }
+
+  .padding-t {
+    @apply pt-30 sm:pt-35;
+  }
 }
 
 @theme inline {

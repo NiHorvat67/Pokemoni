@@ -1,23 +1,4 @@
-import sideImg from "../../assets/images/auth.jpg"
-import ApiProvider from "@/components/ApiProvider";
-import { githubIcon, googleIcon, checkIcon } from "@/assets/icons";
-import Input from "@/components/Input";
-import Button from "@/components/Button";
-import { subscriptionBenefits } from "@/constants";
-
-import AuthStep1 from "../../components/multi-step/AuthStep1";
-import AuthStep2 from "../../components/multi-step/AuthStep2";
-import AuthStep3 from "../../components/multi-step/AuthStep3";
-import AuthStep4 from "../../components/multi-step/AuthStep4";
-
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select-dropdown"
-
+import sideImg from "../assets/images/auth.jpg"
 import MultiStepAuth from "@/components/multi-step/MultiStepAuth";
 
 const Auth = () => {
