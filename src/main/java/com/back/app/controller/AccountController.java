@@ -27,10 +27,7 @@ public class AccountController {
     
     private final AccountService accountService;
 
-    /*
-     * return all accounts
-     */
-    @Secured({"ROLE_ADMIN"})
+
     @GetMapping("/")
     public ResponseEntity<List<Account>> getAllAccounts(){
         return ResponseEntity.ok().body(accountService.getAllAccounts());
