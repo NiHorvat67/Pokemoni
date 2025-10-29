@@ -2,43 +2,31 @@ spring:
   application:
     name: springboot
   datasource:
-    driverClassName: org.postgresql.Driver
-    url: jdbc:postgresql://aws-1-eu-central-1.pooler.supabase.com:5432/postgres?user=postgres.yukpteahhnmzzspunpoy&password=hjLifDNfcUC0jrwP
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5431/gsadmin
     username: postgres
-    password: hjLifDNfcUC0jrwP
+    password: 1234
+    hikari:
+      maximum-pool-size: 10
+      connection-timeout: 30000
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
   security:
     oauth2:
       client:
         registration:
           github:
             client-id: Ov23liwzLxCF1uF0IPKt
-            client-secret:  118eb22bcba331b1eef933d8ed8a63e1b671d028
+            client-secret: 118eb22bcba331b1eef933d8ed8a63e1b671d028
             scope: user:email,read:user
-          #google:
-            #client-id: GOOGLE_CLIENT_ID
-            #client-secret: GOOGLE_CLIENT_SECRET
 
 logging:
   level:
     root: INFO
     com.back.app: INFO
-
-
-#ne diraj    
-    #hikari:
-      #connection-timeout: 30000
-      #initialization-fail-timeout: 0
-      #maximum-pool-size: 2
-  #jpa:
-    #hibernate:
-      #ddl-auto: none
-    #properties:
-      #hibernate:
-        #dialect: org.hibernate.dialect.PostgreSQLDialect
-        #boot:
-          #allow_jdbc_metadata_access: false  
-    #show-sql: false
-  #sql:
-    #init:
-      #mode: never
-#ne diraj    
