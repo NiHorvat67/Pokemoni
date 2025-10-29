@@ -24,17 +24,18 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
             .authorizeHttpRequests(authorize -> authorize
-                    .requestMatchers("/api/advertisment/**", "/", "/login", "/error").permitAll()
-                    )
+                    .requestMatchers("/", "/login", "/error").permitAll()
+                    .requestMatchers("/api/advertisement/**", "/api/accounts/{id}", "/api/accounts/").permitAll() 
+                    .anyRequest().authenticated())
             .oauth2Login(oauth2 -> oauth2
                     .userInfoEndpoint(userInfo -> userInfo
                             .userService(customOAuth2UserService))
                     .defaultSuccessUrl("/", true)
                     .failureUrl("/error"))
-            .exceptionHandling(exception -> exception
-                    .accessDeniedHandler((request, response, accessDeniedException) -> {
-                        response.sendRedirect("/error?denied");
-                    }))
+            .exceptionHandling(exceptions -> exceptions
+                .accessDeniedPage("/error?denied") // The configured URL
+            )
+                    
             .csrf(csrf -> csrf.disable()); // Disable CSRF protection for OAuth2 development
 
         return http.build();
