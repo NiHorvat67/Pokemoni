@@ -17,7 +17,10 @@ spring:
             client-id: Ov23liwzLxCF1uF0IPKt
             client-secret: 118eb22bcba331b1eef933d8ed8a63e1b671d028
             scope: user:email,read:user
-
+springdoc:
+  api-docs:
+    path:
+      api-docs
 logging:
   level:
     root: INFO
