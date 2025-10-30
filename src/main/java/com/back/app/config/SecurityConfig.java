@@ -26,8 +26,8 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/", "/login", "/error").permitAll()
                         .requestMatchers("/api/advertisement/", "/api/advertisements/{id}",
-                                "/api/advertisements/search", "/api/accounts/{id}", "/api/accounts/").permitAll()
-                                .anyRequest().authenticated()
+                                "/api/advertisements/search", "/api/accounts/{id}", "/api/accounts/","/api/accounts/create").permitAll()
+                                .anyRequest().authenticated() 
                         )
                 .oauth2Login(oauth2 -> oauth2
                         .userInfoEndpoint(userInfo -> userInfo

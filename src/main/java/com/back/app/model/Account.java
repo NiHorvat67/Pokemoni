@@ -11,6 +11,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import java.time.LocalDate;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
@@ -21,33 +24,56 @@ public class Account {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "account_id")
-    private Integer accountId; 
-    
+    private Integer accountId;
+
     @Column(name = "username", unique = true)
     private String username;
-    
+
     @Column(name = "oauth2_id", unique = true)
     private String oauth2Id;
 
     @Column(name = "account_password", unique = true)
     private String password;
 
-    @Column(name = "user_email", unique = true) 
-    private String userEmail; 
-    
+    @Column(name = "user_email", unique = true)
+    private String userEmail;
+
     @Column(name = "user_first_name")
-    private String userFirstName; 
-    
+    private String userFirstName;
+
     @Column(name = "user_last_name")
-    private String userLastName; 
-    
+    private String userLastName;
+
     @Column(name = "user_location")
-    private String userLocation; 
-    
+    private String userLocation;
+
     @Column(name = "registration_date")
     private LocalDate registrationDate;
+
+    @Column(name = "account_role")
+    private String accountRole;
+
+   
+    public Account(String jsonString) throws JsonProcessingException {
+        ObjectMapper objectMapper = new ObjectMapper();
+        Account tempAccount = objectMapper.readValue(jsonString, Account.class);
+
+       
+        this.username = tempAccount.getUsername();
+        this.oauth2Id = tempAccount.getOauth2Id();
+        this.password = tempAccount.getPassword();
+        this.userEmail = tempAccount.getUserEmail();
+        this.userFirstName = tempAccount.getUserFirstName();
+        this.userLastName = tempAccount.getUserLastName();
+        this.userLocation = tempAccount.getUserLocation();
+        this.registrationDate = tempAccount.getRegistrationDate();
+        this.accountRole = tempAccount.getAccountRole();
+    }
+
     
-    @Column(name = "account_role")   
-    private String accountRole; 
-    
+    public static Account convertToAccount(String jsonString) throws JsonProcessingException {
+        ObjectMapper objectMapper = new ObjectMapper();
+        return objectMapper.readValue(jsonString, Account.class);
+    }
+
 }

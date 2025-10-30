@@ -25,4 +25,5 @@ public interface AdvertisementRepo extends JpaRepository<Advertisement, Integer>
             @Param("endDate") LocalDate endDate,
             @Param("minPrice") BigDecimal minPrice,
             @Param("maxPrice") BigDecimal maxPrice);
+
 }
