@@ -27,17 +27,16 @@ public class SecurityConfig {
                         .requestMatchers("/", "/login", "/error").permitAll()
                         .requestMatchers("/api/advertisement/", "/api/advertisements/{id}",
                                 "/api/advertisements/search", "/api/accounts/{id}", "/api/accounts/").permitAll()
-                        .anyRequest().authenticated())
+                                .anyRequest().authenticated()
+                        )
                 .oauth2Login(oauth2 -> oauth2
                         .userInfoEndpoint(userInfo -> userInfo
                                 .userService(customOAuth2UserService))
-                        .defaultSuccessUrl("/", true)
-                        .failureUrl("/"))
+                        .defaultSuccessUrl("/home", true)
+                        .failureUrl("/error?denied"))
                 .exceptionHandling(exceptions -> exceptions
                         .accessDeniedPage("/error?denied") // The configured URL
                 )
-                .logout(l -> l
-                        .logoutSuccessUrl("/").permitAll())
                 .csrf(csrf -> csrf.disable()); // Disable CSRF protection for OAuth2 development
 
         return http.build();

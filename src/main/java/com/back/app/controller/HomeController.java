@@ -13,9 +13,15 @@ import lombok.RequiredArgsConstructor;
 class HomeController {
     
     @GetMapping("/")
+    String rootRoute(){
+        return "Hello from /";
+    }
+
+    @GetMapping("/home")
     String homeRoute(){
         return "Hello from home";
     }
+    
 
 
 }
