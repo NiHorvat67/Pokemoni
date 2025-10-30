@@ -14,13 +14,12 @@ export default function Calendar23({ range, setRange }: { range: any, setRange: 
 
   return (
     <div className="flex flex-col gap-3">
-
       <Popover>
         <PopoverTrigger asChild>
           <Button
             variant="default"
             id="dates"
-            className="w-[130px] sm:w-[180px] justify-between font-normal"
+            className="h-12 rounded-[8px] bg-input-bg font-inter text-neutral-600 text-[16px] justify-between font-normal"
           >
             {range?.from && range?.to
               ? `${range.from.toLocaleDateString()} - ${range.to.toLocaleDateString()}`

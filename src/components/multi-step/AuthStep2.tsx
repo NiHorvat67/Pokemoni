@@ -73,7 +73,7 @@ const AuthStep2 = ({ step, currentStep, setCurrentStep }: { step: number, curren
           <Select onValueChange={(value: string) => {
             setRole(value)
           }}>
-            <SelectTrigger className="w-[130px] sm:w-[180px]">
+            <SelectTrigger className="">
               <SelectValue placeholder="Account type" />
             </SelectTrigger>
             <SelectContent>
@@ -84,10 +84,10 @@ const AuthStep2 = ({ step, currentStep, setCurrentStep }: { step: number, curren
           </Select>
         </div>
         {role === "trader" &&
-          <Button long={true} text="Next" icon={true} onClick={nextOnClick} />
+          <Button className="min-w-[300px]" long={true} text="Next" icon={true} onClick={nextOnClick} />
         }
         {role !== "trader" &&
-          <Button long={true} text="Finish" icon={true} onClick={finishOnClick} />
+          <Button className="min-w-[300px]" long={true} text="Finish" icon={true} onClick={finishOnClick} />
         }
       </div>
       {errors.length !== 0 &&

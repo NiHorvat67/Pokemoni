@@ -14,12 +14,12 @@ const Admin = () => {
         <h1 className="font-medium text-2xl text-white">Admin panel</h1>
 
         <section className="">
-          <h2 className="text-white text-xl font-medium mb-3">Yearly subscription</h2>
+          <h2 className="text-white text-xl font-medium mb-3">Yearly subscription — 5€</h2>
           <p className="text-desc mb-7">Set the price of the yearly subscription</p>
-          <div className="flex gap-4 sm:gap-7">
+          <form className="flex gap-4 sm:gap-7">
             <Input placeholder="Price" state={price} setState={setPrice} />
             <Button text="Update" icon={false} long={false} onClick={() => { }} />
-          </div>
+          </form>
 
         </section>
 

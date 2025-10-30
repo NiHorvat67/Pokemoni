@@ -1,7 +1,7 @@
 import heroImg from "../assets/images/hero.jpg"
 import Search from "../components/Search";
 import ProductCard from "../components/ProductCard";
-import Calendar23 from "@/components/calendar-23";
+import Calendar23 from "@/components/calendar-23-filter";
 import gsap from 'gsap';
 import { useGSAP } from '@gsap/react';
 import { useEffect, useState } from "react";

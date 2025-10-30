@@ -8,6 +8,7 @@ import TraderProfile from "./pages/TraderProfile"
 import Auth from "./pages/Auth"
 import Advertisement from "./pages/Advertisement"
 import Admin from "./pages/Admin"
+import NewAdvertisement from "./pages/NewAdvertisement"
 
 
 function App() {
@@ -25,6 +26,7 @@ function App() {
             <Route path="/profile/:userId" element={<TraderProfile />}></Route>
             <Route path="/auth" element={<Auth />}></Route>
             <Route path="/admin" element={<Admin />}></Route>
+            <Route path="/new-advertisement" element={<NewAdvertisement />}></Route>
             <Route path="/advertisement/:advertisementId" element={<Advertisement />}></Route>
           </Routes>
         </main>

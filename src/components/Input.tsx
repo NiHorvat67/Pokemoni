@@ -1,8 +1,8 @@
-const Input = ({ placeholder, state, setState }: { placeholder: string, state: any, setState: any }) => {
+const Input = ({ placeholder, state, setState, type = "text" }: { placeholder: string, state: any, setState: any, type?: string }) => {
   return (
     <>
       <input
-        type="text"
+        type={type}
         value={state}
         onChange={(e) => setState(e.target.value)}
         placeholder={placeholder}

@@ -8,7 +8,7 @@ import { useState } from "react";
 
 const MultiStepAuth = () => {
 
-  const [currentStep, setCurrentStep] = useState(2)
+  const [currentStep, setCurrentStep] = useState(1)
   const stepComponents = [AuthStep1, AuthStep2, AuthStep3, AuthStep4]
 
   return (
