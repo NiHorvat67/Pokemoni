@@ -1,12 +1,16 @@
 package com.back.app.controller;
 
+import java.net.URI;
 import java.util.List;
 
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -18,6 +22,8 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.bind.annotation.RequestBody;
+
 
 @Tag(name = "Accounts", description = "Manages user accounts, including retrieval by ID and for the currently authenticated user.")
 @RestController
@@ -38,11 +44,6 @@ public class AccountController {
         return ResponseEntity.ok().body(accountService.getAllAccounts());
     }
 
-
-    /*
-     * 
-     * returns account based on id
-     */
     @Operation(
         summary = "Retrieve account by ID",
         description = "Returns the account details for a specific account ID."
@@ -66,5 +67,37 @@ public class AccountController {
 
     }
     
+
+    @Operation(
+        summary = "Create a new account",
+        description = "Creates a new account and redirects the user to the /login route, checks if the arguments are valid"
+    )
+    @PostMapping("/create")
+    public ResponseEntity<String> postMethodName(@RequestBody Account newAccount) {
+
+        try {
+            
+            accountService.registerNewUserAccount(newAccount);
+
+            HttpHeaders responseHeaders = new HttpHeaders();
+            responseHeaders.setLocation(URI.create("/login"));
+            
+            return ResponseEntity.ok()
+                        .headers(responseHeaders)
+                        .body("Successfully created an account.");
+            
+        } catch (IllegalArgumentException e) {
+
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+
+        } catch (Exception e) {
+            
+            return new ResponseEntity<>("An unexpected error occurred during account creation.", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    
+
+
 
 }

@@ -1,14 +1,19 @@
 package com.back.app.service;
 
+import java.security.Principal;
 import java.util.List;
 import java.util.Optional;
 
+import org.hibernate.mapping.UserDefinedObjectType;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import com.back.app.repo.AccountRepo;
+
+import io.swagger.v3.oas.annotations.parameters.RequestBody;
+
 import com.back.app.model.Account;
 
 
@@ -83,6 +88,21 @@ public class AccountService {
 
     public Account saveAccount(Account account) {
             return accountRepo.save(account);
+    }
+
+
+    public Account registerNewUserAccount(@RequestBody Account account) throws IllegalArgumentException{
+
+        if(!account.getAccountRole().equals("ROLE_BUYER")
+            && !account.getAccountRole().equals("ROLE_TRADER")){
+                 throw new IllegalArgumentException("Invalid role selection");   
+            }
+        if(!accountRepo.findByUserEmail(account.getUserEmail()).isPresent()){
+            throw new IllegalArgumentException("email adress already in use");
+        }
+
+        return accountRepo.save(account);
+
     }
 
 

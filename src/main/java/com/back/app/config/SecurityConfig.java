@@ -26,15 +26,13 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/", "/login", "/error").permitAll()
                         .requestMatchers("/api/advertisement/", "/api/advertisements/{id}",
-                                "/api/advertisements/search", "/api/accounts/{id}", "/api/accounts/")
-                        .permitAll()
+                                "/api/advertisements/search", "/api/accounts/{id}", "/api/accounts/").permitAll()
                         .anyRequest().authenticated())
                 .oauth2Login(oauth2 -> oauth2
                         .userInfoEndpoint(userInfo -> userInfo
                                 .userService(customOAuth2UserService))
                         .defaultSuccessUrl("/", true)
-                        .failureUrl("/error"))
-
+                        .failureUrl("/"))
                 .exceptionHandling(exceptions -> exceptions
                         .accessDeniedPage("/error?denied") // The configured URL
                 )
