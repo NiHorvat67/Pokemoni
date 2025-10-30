@@ -3,7 +3,7 @@
 CREATE TABLE account (
     account_id SERIAL PRIMARY KEY, 
     username VARCHAR(100) NOT NULL UNIQUE,
-    oauth2_id VARCHAR(100) NOT NULL UNIQUE,
+    oauth2_id VARCHAR(100) UNIQUE,
     account_password VARCHAR(100) NOT NULL,
     user_email VARCHAR(255) NOT NULL UNIQUE,
     user_first_name VARCHAR(50),
@@ -59,8 +59,8 @@ INSERT INTO account (username, account_password, oauth2_id, user_email, user_fir
 ('max_admin', 'pass1' ,'3','max.chief@sys.com', 'Max', 'Chief', '555-1003', 'New York', 'admin'),              -- account_id 3 
 ('trader_gear', 'pass1' ,'4','gear.hire@global.com', 'George', 'Gear', '555-1004', 'Berlin', 'trader'),         -- account_id 4 
 ('jane_buyer', 'pass1' ,'5','jane.doe@mail.com', 'Jane', 'Doe', '555-1005', 'Tokyo', 'buyer'),                -- account_id 5 
-('adminNH', 'oauth_login', '6', 'nh55636@fer.hr ', 'Nikola', 'Horvat', '0917343740', 'Zagreb', 'admin');                                 -- account_id 6
-
+('adminNH', 'oauth_login', '6', 'nh55636@fer.hr ', 'Nikola', 'Horvat', '0917343740', 'Zagreb', 'admin'),                                 -- account_id 6
+('adminLK', 'oauth_login', '7', 'lk55939@fer.hr ', 'Leon', 'Katic', '0999999999', 'Zagreb', 'admin');
 INSERT INTO reservation (reservation_start, reservation_end, buyer_id, reservation_trader_grade, reservation_gear_grade) VALUES
 -- Reservation 1: Buyer Bob (ID 2) reserves a future item
 ('2025-11-10 10:00:00+01', '2025-11-12 18:00:00+01', 2, NULL, NULL), 
