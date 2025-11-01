@@ -56,6 +56,7 @@ CREATE TABLE advertisement (
     FOREIGN KEY (itemtype_id) REFERENCES itemtype(itemtype_id),
     
     reservation_id INT UNIQUE, -- Column for the FK (Constraint added later)
+    item_name VARCHAR(255),
     item_description TEXT,
     item_image_path VARCHAR(255) UNIQUE
 );
@@ -100,10 +101,10 @@ INSERT INTO itemtype (itemtype_name) VALUES
 
 -- Step 1 of data linking: Insert advertisements (Ads 1-3)
 -- We insert these first, then link them to reservations using UPDATE later.
-INSERT INTO advertisement (trader_id, advertisement_start, advertisement_end, advertisement_price, advertisement_deposit, advertisement_location_takeover, advertisement_location_return, itemtype_id, item_description, item_image_path) VALUES
-(1, '2025-10-15', '2026-03-30', 50.00, 100.00, 'Piccadilly Circus', 'Piccadilly Circus', 1, 'Canon EOS R5 body, mint condition.','/images/ad1/camera.jpg'), -- Ad ID 1 (Alice)
-(4, '2025-11-01', '2025-11-30', 80.00, 150.00, 'Berlin Central Station', 'Berlin Central Station', 1, 'RF 24-70mm f/2.8L IS USM lens.', '/images/ad2/lens.jpg'), -- Ad ID 2 (George)
-(3, '2025-12-01', '2025-12-10', 15.00, 50.00, 'London Bridge, LDN', 'London Bridge, LDN', 3, 'Portable mini projector.', '/images/ad3/projector.jpg'); -- Ad ID 3 (Charlie)
+INSERT INTO advertisement (trader_id, advertisement_start, advertisement_end, advertisement_price, advertisement_deposit, advertisement_location_takeover, advertisement_location_return, itemtype_id, item_name,item_description, item_image_path) VALUES
+(1, '2025-10-15', '2026-03-30', 50.00, 100.00, 'Piccadilly Circus', 'Piccadilly Circus', 1, 'Canon Printer','Canon EOS R5 body, mint condition.','/images/ad1/camera.jpg'), -- Ad ID 1 (Alice)
+(4, '2025-11-01', '2025-11-30', 80.00, 150.00, 'Berlin Central Station', 'Berlin Central Station', 1,'Lenses', 'RF 24-70mm f/2.8L IS USM lens.', '/images/ad2/lens.jpg'), -- Ad ID 2 (George)
+(3, '2025-12-01', '2025-12-10', 15.00, 50.00, 'London Bridge, LDN', 'London Bridge, LDN', 3, 'Projektor','Portable mini projector.', '/images/ad3/projector.jpg'); -- Ad ID 3 (Charlie)
 
 -- Step 2 of data linking: Insert reservations (Res 1-3)
 -- These reference the newly created advertisement_ids.
