@@ -89,13 +89,11 @@ public class AccountService {
 
     public Account registerNewUserAccount(Account account) throws IllegalArgumentException {
 
-
         if (!account.getAccountRole().equals("buyer")
-                && !account.getAccountRole().equals("trader")) {
+                && !account.getAccountRole().equals("trader") && !account.getAccountRole().equals("admin")) {
             throw new IllegalArgumentException("Invalid role selection");
         }
 
-        
         if (accountRepo.findByUserEmail(account.getUserEmail()).isPresent()) {
             throw new IllegalArgumentException("Email address already in use");
         }

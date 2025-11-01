@@ -17,7 +17,7 @@ public interface AdvertisementRepo extends JpaRepository<Advertisement, Integer>
            "(CAST(:endDate AS DATE) IS NULL OR a.advertisement_end >= CAST(:beginDate AS DATE)) AND " +
            "(CAST(:minPrice AS DECIMAL) IS NULL OR a.advertisement_price >= CAST(:minPrice AS DECIMAL)) AND " +
            "(CAST(:maxPrice AS DECIMAL) IS NULL OR a.advertisement_price <= CAST(:maxPrice AS DECIMAL)) AND " +
-           "a.reservation_id IS NULL " , //send jsons of advertisments that arent taken
+                      "a.reservation_id IS NULL " , //send jsons of advertisments that arent taken
            nativeQuery = true)
     List<Advertisement> findFilteredAdvertisements(
             @Param("categoryId") Integer categoryId,

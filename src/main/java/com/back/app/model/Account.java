@@ -43,7 +43,10 @@ public class Account {
 
     @Column(name = "user_last_name")
     private String userLastName;
-
+    
+    @Column(name = "user_contact")
+    private String userContact;
+    
     @Column(name = "user_location")
     private String userLocation;
 
@@ -53,24 +56,22 @@ public class Account {
     @Column(name = "account_role")
     private String accountRole;
 
-   
     public Account(String jsonString) throws JsonProcessingException {
         ObjectMapper objectMapper = new ObjectMapper();
         Account tempAccount = objectMapper.readValue(jsonString, Account.class);
 
-       
         this.username = tempAccount.getUsername();
         this.oauth2Id = tempAccount.getOauth2Id();
         this.password = tempAccount.getPassword();
         this.userEmail = tempAccount.getUserEmail();
         this.userFirstName = tempAccount.getUserFirstName();
         this.userLastName = tempAccount.getUserLastName();
+        this.userContact = tempAccount.getUserContact();
         this.userLocation = tempAccount.getUserLocation();
         this.registrationDate = tempAccount.getRegistrationDate();
         this.accountRole = tempAccount.getAccountRole();
     }
 
-    
     public static Account convertToAccount(String jsonString) throws JsonProcessingException {
         ObjectMapper objectMapper = new ObjectMapper();
         return objectMapper.readValue(jsonString, Account.class);
