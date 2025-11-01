@@ -10,6 +10,7 @@ import { useQuery, useMutation } from "@tanstack/react-query";
 import axios from "axios";
 import { type DateRange } from "react-day-picker"
 import * as React from "react"
+import { checkAppendSearchParams } from "@/utils";
 
 
 import {
@@ -34,22 +35,33 @@ const Homepage = () => {
   const [dateRange, setDateRange] = useState<any>({ from: "", to: "" })
   const [products, setProducts] = useState(fakeProducts)
 
+  const { dataaa } = useQuery({
+    queryKey: ["currentAccount"],
+    queryFn: async () => {
+      return axios
+        .get(`/api/accounts/current`)
+        .then(res => {
+          console.log(res.data)
+          return res.data
+        })
+        .catch(err => console.log(err))
+    }
+  })
+
   useEffect(() => {
     mutate()
   }, [])
 
   const { status, error, mutate } = useMutation({
     mutationFn: async () => {
-      const params = new URLSearchParams({
-        categoryId: categoryId,
-        minPrice: priceRange?.start,
-        maxPrice: priceRange?.end,
-        beginDate: dateRange.from ? dateRange?.from.toISOString().substring(0, 10) : "",
-        endDate: dateRange.to ? dateRange?.to.toISOString().substring(0, 10) : "",
-      })
-      console.log(params.toString())
+      const params = new URLSearchParams({})
+      checkAppendSearchParams(params, "categoryId", categoryId)
+      checkAppendSearchParams(params, "minPrice", priceRange?.start)
+      checkAppendSearchParams(params, "maxPrice", priceRange?.end)
+      checkAppendSearchParams(params, "beginDate", dateRange.from ? dateRange?.from.toISOString().substring(0, 10) : "")
+      checkAppendSearchParams(params, "endDate", dateRange.to ? dateRange?.to.toISOString().substring(0, 10) : "")
       return axios
-        .get(`/api/advertisement/search?${params.toString()}`)
+        .get(`/api/advertisements/search?${params.toString()}`)
         .then(res => {
           console.log(res.data)
           return res.data
@@ -76,10 +88,6 @@ const Homepage = () => {
 
   const onSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    console.log(query)
-    console.log(categoryId)
-    console.log(dateRange)
-    console.log(priceRange)
     mutate()
   }
 

@@ -1,7 +1,7 @@
 import bikeImg from "../assets/images/bike.jpeg"
 import { generatePriceRanges } from "@/utils";
 
-const products = Array(5).fill({
+const products = Array(15).fill({
   category: "Mountain bikes",
   img: bikeImg,
   productName: "S-WORKS Enduro",

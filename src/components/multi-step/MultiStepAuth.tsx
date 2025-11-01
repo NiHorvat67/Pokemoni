@@ -5,10 +5,13 @@ import AuthStep3 from "./AuthStep3";
 import AuthStep4 from "./AuthStep4";
 
 import { useState } from "react";
+import { useParams } from "react-router-dom";
 
 const MultiStepAuth = () => {
 
-  const [currentStep, setCurrentStep] = useState(1)
+  const { step } = useParams()
+
+  const [currentStep, setCurrentStep] = useState(step == "2" ? 2 : 1)
   const stepComponents = [AuthStep1, AuthStep2, AuthStep3, AuthStep4]
 
   return (

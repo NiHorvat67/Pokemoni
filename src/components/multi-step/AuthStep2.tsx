@@ -1,7 +1,9 @@
 import Input from "@/components/Input";
 import Button from "@/components/Button";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import PopupAlert from "../PopupAlert";
+import { useQuery, useMutation } from "@tanstack/react-query";
+import axios from "axios";
 
 import {
   Select,
@@ -11,15 +13,52 @@ import {
   SelectValue,
 } from "@/components/ui/select-dropdown"
 
+import useAuthContext from "@/hooks/useAuthContext";
+
 const AuthStep2 = ({ step, currentStep, setCurrentStep }: { step: number, currentStep: number, setCurrentStep: any }) => {
 
-  const [firstName, setFirstName] = useState("")
-  const [lastName, setLastName] = useState("")
-  const [address, setAddress] = useState("")
-  const [email, setEmail] = useState("")
-  const [phoneNum, setPhoneNum] = useState("")
-  const [role, setRole] = useState("")
+  const [firstName, setFirstName] = useState("sigma")
+  const [lastName, setLastName] = useState("grindset")
+  const [address, setAddress] = useState("jdsaljdslka")
+  const [email, setEmail] = useState("dsajdjdsasaldsak@g")
+  const [phoneNum, setPhoneNum] = useState("832901890321")
+  const [role, setRole] = useState("Buyer")
   const [errors, setErrors] = useState<any>([])
+
+  const { dispatch } = useAuthContext()
+
+
+  const { status, error, mutate } = useMutation({
+    mutationFn: async () => {
+      return axios({
+        method: "post",
+        url: "/api/accounts/create",
+        data: {
+          userEmail: email,
+          userFirstName: firstName,
+          userLastName: lastName,
+          userLocation: address,
+          accountRole: "trader",
+          userContact: phoneNum,
+          username: "dx1sxaajakdsaldjslakd",
+          password: "dxsjdsaakldjslakd",
+        }
+      })
+        .then(res => {
+          console.log(res.data)
+          console.log("success")
+          dispatch({ type: "LOGIN", payload: res.data })
+          window.location.pathname = "/"
+          return res.data
+        })
+        .catch(err => {
+          console.log("error")
+          console.log(err)
+        })
+    },
+
+  })
+
 
   const canProgress = () => {
     // mozda dodatno provjeriti u bazi podataka jeli moguce napraviti usera s trenutnim podatcima
@@ -36,13 +75,10 @@ const AuthStep2 = ({ step, currentStep, setCurrentStep }: { step: number, curren
 
   const finishOnClick = () => {
     setErrors([])
-    console.log(errors)
     if (!canProgress()) {
       console.log("cant finish")
     } else {
-      console.log("creating account")
-      console.log("account created")
-      window.location.pathname = "/"
+      mutate()
     }
   }
 

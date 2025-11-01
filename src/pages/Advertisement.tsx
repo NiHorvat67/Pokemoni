@@ -13,14 +13,19 @@ const Advertisement = () => {
     queryKey: ["advertisementData"],
     queryFn: async () => {
       return axios
-        .get(`/api/advertisement/${advertisementId}`)
+        .get(`/api/advertisements/${advertisementId}`)
         .then(res => {
           if (res.data == "") {
             window.location.pathname = "/error"
           }
           return res.data
         })
-        .catch(err => console.log(err))
+        .catch(err => {
+          console.log(err)
+          if (err.response.status === 400) {
+            window.location.pathname = "/error"
+          }
+        })
     }
   })
 
@@ -36,7 +41,9 @@ const Advertisement = () => {
           }
           return res.data
         })
-        .catch(err => console.log(err))
+        .catch(err => {
+          console.log(err)
+        })
     }
   })
 
