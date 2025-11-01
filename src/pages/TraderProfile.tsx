@@ -52,13 +52,13 @@ const TraderProfile = () => {
 
   useGSAP(() => {
     const cards = gsap.utils.toArray(".product-card").slice(numCards - increment < initialSize ? 0 : numCards - increment)
-    gsap.from(cards, {
+    gsap.fromTo(cards, {
       opacity: 0,
       ease: "power1.inOut",
       y: 25,
       stagger: .06,
       duration: .5,
-    })
+    }, { opacity: 1, y: 0 })
   }, [products, numCards])
 
 
@@ -67,13 +67,13 @@ const TraderProfile = () => {
       const cards = gsap.utils.toArray(".product-card").slice(
         numCards - increment < initialSize ? 0 : numCards - increment
       );
-      gsap.from(cards, {
+      gsap.fromTo(cards, {
         opacity: 0,
         ease: "power1.inOut",
         y: 25,
         stagger: 0.06,
         duration: 0.5,
-      });
+      }, { opacity: 1, y: 0 });
     }, 100); // or 50 ms if needed
 
     return () => clearTimeout(timeout);
