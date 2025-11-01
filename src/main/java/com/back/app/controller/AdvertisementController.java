@@ -25,7 +25,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Tag(name = "Advertisements", description = "Operations related to advertisement listings, searching, and filtering.")
 @RestController
-@RequestMapping("/api/advertisement")
+@RequestMapping("/api/advertisements")
 @RequiredArgsConstructor
 @Validated
 @Slf4j
@@ -46,6 +46,7 @@ public class AdvertisementController {
         summary = "Retrieve advertisement by ID", 
         description = "Returns the details for a specific advertisement ID."
     )
+    
     @GetMapping("/{id}")
     public ResponseEntity<Advertisement> getMethodName(@PathVariable Integer id) {
         return ResponseEntity.ok().body(advertisementService.getAdvertisementbyId(id));
