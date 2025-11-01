@@ -55,7 +55,9 @@ public class Account {
 
     @Column(name = "account_role")
     private String accountRole;
-
+    @Column(name = "account_rating")
+    private Double accountRating;
+    
     public Account(String jsonString) throws JsonProcessingException {
         ObjectMapper objectMapper = new ObjectMapper();
         Account tempAccount = objectMapper.readValue(jsonString, Account.class);
