@@ -12,5 +12,8 @@ public interface AccountRepo extends JpaRepository<Account, Integer>{
 
     Optional<Account> findByUserEmail(@Param("userEmail") String user_email); 
 
+    Optional<Account> findByUsername(@Param("username") String username); 
+
     Optional<Account> findByOauth2Id(String oauth2Id);
+    
 }

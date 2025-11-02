@@ -23,19 +23,21 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-            .authorizeHttpRequests(authorize -> authorize
-                    .requestMatchers("/api/advertisment/**", "/", "/login", "/error").permitAll()
-                    .anyRequest().authenticated())
-            .oauth2Login(oauth2 -> oauth2
-                    .userInfoEndpoint(userInfo -> userInfo
-                            .userService(customOAuth2UserService))
-                    .defaultSuccessUrl("/", true)
-                    .failureUrl("/error"))
-            .exceptionHandling(exception -> exception
-                    .accessDeniedHandler((request, response, accessDeniedException) -> {
-                        response.sendRedirect("/error?denied");
-                    }))
-            .csrf(csrf -> csrf.disable()); // Disable CSRF protection for OAuth2 development
+                .authorizeHttpRequests(authorize -> authorize
+                        .requestMatchers("/", "/login", "/error","/api/advertisements/", "/api/advertisements/{id}",
+                                "/api/advertisements/search").permitAll()
+                        .requestMatchers( "/api/accounts/{id}", "/api/accounts/","/api/accounts/create").permitAll()
+                                .anyRequest().authenticated() 
+                        )
+                .oauth2Login(oauth2 -> oauth2
+                        .userInfoEndpoint(userInfo -> userInfo
+                                .userService(customOAuth2UserService))
+                        .defaultSuccessUrl("/home", true)
+                        .failureUrl("/error?denied"))
+                .exceptionHandling(exceptions -> exceptions
+                        .accessDeniedPage("/error?denied") // The configured URL
+                )
+                .csrf(csrf -> csrf.disable()); // Disable CSRF protection for OAuth2 development
 
         return http.build();
     }

@@ -59,7 +59,7 @@ public class OAuthRoleService implements OAuth2UserService<OAuth2UserRequest, OA
                 } else {
                     authorities.add(new SimpleGrantedAuthority("ROLE_GUEST"));
                 }
-                account.setOauth2Id(oAuth2User.getName());
+                account.setOauth2Id(oAuth2User.getName()); // find the OAuth2 id and save it into the database
                 accountService.saveAccount(account);
             } else {
                 authorities.add(new SimpleGrantedAuthority("ROLE_GUEST"));
