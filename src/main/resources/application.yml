@@ -9,18 +9,34 @@ spring:
     hikari:
       maximum-pool-size: 10
       connection-timeout: 30000
+      initialization-fail-timeout: 0
+  jpa:
+    hibernate:
+      ddl-auto: none
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        boot:
+          allow_jdbc_metadata_access: false
+    show-sql: false
+  sql:
+    init:
+      mode: never
   security:
     oauth2:
       client:
         registration:
           github:
-            client-id: Ov23liwzLxCF1uF0IPKt
-            client-secret: 118eb22bcba331b1eef933d8ed8a63e1b671d028
+            client-id: Ov23li5fU5lNUFD9mXhP
+            client-secret: 5ba2b954f21c8635da9eddf31cb92568f1bdb252
             scope: user:email,read:user
-springdoc:
-  api-docs:
-    path:
-      api-docs
+          #google:
+            #client-id: GOOGLE_CLIENT_ID
+            #client-secret: GOOGLE_CLIENT_SECRET
+
+server:
+  forward-headers-strategy: native
+
 logging:
   level:
     root: INFO
