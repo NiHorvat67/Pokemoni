@@ -46,6 +46,7 @@ public class AdvertisementController {
    @GetMapping("/account/{id}")
     public ResponseEntity<List<Advertisement>> getAllAdvertisementsType(@PathVariable Integer id) {
         List<Advertisement> advertisements = advertisementService.getAllAdvertisementsByTrader(id);
+        advertisements.forEach((ad)->advertisementService.hideSensitiveData(ad));
         return ResponseEntity.ok(advertisements);
     }
 
