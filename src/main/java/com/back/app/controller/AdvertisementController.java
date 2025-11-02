@@ -1,5 +1,6 @@
 package com.back.app.controller;
 
+import java.util.HashMap;
 import java.util.List;
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -41,18 +42,23 @@ public class AdvertisementController {
         advertisements.forEach((ad)->advertisementService.hideSensitiveData(ad));
         return ResponseEntity.ok(advertisements);
     }
-
-   /*  @GetMapping("/trader_itemtype/{id}")
+    @Operation(summary = "Retrieve advertisements by ID of trader", description = "")
+   @GetMapping("/account/{id}")
     public ResponseEntity<List<Advertisement>> getAllAdvertisementsType(@PathVariable Integer id) {
-        List<Advertisement> advertisements = advertisementService.getAllAdvertisementsWithTraderAndItemType();
+        List<Advertisement> advertisements = advertisementService.getAllAdvertisementsByTrader(id);
         return ResponseEntity.ok(advertisements);
-    }*/
+    }
 
     @Operation(summary = "Retrieve advertisement by ID", description = "Returns the details for a specific advertisement ID.")
 
     @GetMapping("/{id}")
     public ResponseEntity<Advertisement> getMethodName(@PathVariable Integer id) {
-        return ResponseEntity.ok().body(advertisementService.hideSensitiveData(advertisementService.getAdvertisementbyId(id)));
+        Advertisement ad=advertisementService.getAdvertisementbyId(id);
+        if(ad !=null){
+            ad=advertisementService.hideSensitiveData(ad);
+            return ResponseEntity.ok().body(ad);
+        }
+        return ResponseEntity.notFound().build();
     }
 
     @Operation(summary = "Search and Filter Advertisements", description = "Returns advertisements matching the specified search criteria. All parameters are optional and combined using AND logic.")

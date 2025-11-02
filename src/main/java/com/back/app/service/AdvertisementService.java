@@ -28,6 +28,9 @@ public class AdvertisementService {
     public List<Advertisement> getAllAdvertisements() {
         return advertisementRepo.findAll();
     }
+    public List<Advertisement> getAllAdvertisementsByTrader(Integer id) {
+        return advertisementRepo.findAllForTraderId(id);
+    }
 
     public Advertisement hideSensitiveData(Advertisement ad) {
 
@@ -57,6 +60,8 @@ public class AdvertisementService {
         return null;
     }
 
+
+
     public List<Advertisement> getFilteredAdvertisements(
             String itemName,
             Integer categoryId,
@@ -70,7 +75,7 @@ public class AdvertisementService {
                 categoryId, beginDate, endDate, minPrice, maxPrice);
 
         List<Advertisement> filteredAds = advertisementRepo.findFilteredAdvertisements(
-                itemName,categoryId, beginDate, endDate, minPrice, maxPrice);
+                itemName, categoryId, beginDate, endDate, minPrice, maxPrice);
 
         log.info("Found {} advertisements matching the criteria", filteredAds.size());
         return filteredAds;

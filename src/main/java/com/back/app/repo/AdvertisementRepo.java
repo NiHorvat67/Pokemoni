@@ -10,8 +10,8 @@ import java.util.List;
 
 public interface AdvertisementRepo extends JpaRepository<Advertisement, Integer> {
 
-       @Query("SELECT a FROM Advertisement a JOIN FETCH a.trader JOIN FETCH a.itemType")
-       List<Advertisement> findAllWithTraderAndItemType();
+       @Query("SELECT a FROM Advertisement a WHERE a.trader.id = :traderId")
+       List<Advertisement> findAllForTraderId(@Param("traderId") Integer traderId);
 
        // query for parameters sent by frontend
        @Query(value = "SELECT * FROM advertisement a WHERE " +
@@ -22,9 +22,8 @@ public interface AdvertisementRepo extends JpaRepository<Advertisement, Integer>
                      +
                      "(CAST(:maxPrice AS DECIMAL) IS NULL OR a.advertisement_price <= CAST(:maxPrice AS DECIMAL)) AND "
                      +
-                     "(:itemName IS NULL OR a.item_name ILIKE '%' || :itemName || '%') AND " + 
-                     "a.reservation_id IS NULL", 
-                     nativeQuery = true)
+                     "(:itemName IS NULL OR a.item_name ILIKE '%' || :itemName || '%') AND " +
+                     "a.reservation_id IS NULL", nativeQuery = true)
        List<Advertisement> findFilteredAdvertisements(
                      @Param("itemName") String itemName,
                      @Param("categoryId") Integer categoryId,
