@@ -25,3 +25,7 @@ logging:
   level:
     root: INFO
     com.back.app: INFO
+
+app:
+  frontend:
+    url: http://localhost:5173

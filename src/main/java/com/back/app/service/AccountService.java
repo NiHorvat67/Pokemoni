@@ -79,6 +79,7 @@ public class AccountService {
         Optional<Account> account = accountRepo.findByOauth2Id(oauth2Id);
         if (!account.isPresent()) {
             log.warn("oauth2Id not presend in db");
+            return null;
         }
         return account.get();
     }
