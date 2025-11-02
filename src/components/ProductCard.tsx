@@ -28,7 +28,7 @@ const ProductCard = ({ category, img, productName, owner, desc, price, productUr
         <p className="text-[#D2D9D4] text-[14px] mb-7.5">{desc}</p>
         <div className="flex items-center justify-between">
           <span className="text-white font-semibold text-2xl">{price}€</span>
-          <a className="text-black px-5 py-2 bg-primary rounded-[8px]" href={productUrl}>Rent</a>
+          <a className="text-black px-5 py-2 bg-primary rounded-[8px] hover:shadow-[0_0_15px_#00FA55] transition-shadow duration-300" href={productUrl}>Rent</a>
         </div>
       </div>
 
