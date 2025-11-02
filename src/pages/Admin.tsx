@@ -47,11 +47,12 @@ const Admin = () => {
               </p>
 
               <div className="flex gap-5 sm:gap-7 flex-wrap">
-                <Button icon={false} text="Block account" className="!bg-[#E5002E] text-white !py-2 !px-4" long={false} onClick={() => { }} />
-                <Button icon={false} text="Disable renting" className="!bg-[#EED202] text-black !py-2 !px-4" long={false} onClick={() => { }} />
+                <Button icon={false} text="Block account" className="!bg-[#E5002E] hover:shadow-[0_0_15px_#E5002E] text-white !py-2 !px-4" long={false} onClick={() => { }} />
+                <Button icon={false} text="Disable renting" className="!bg-[#EED202] hover:shadow-[0_0_15px_#EED202] text-black !py-2 !px-4" long={false} onClick={() => { }} />
               </div>
             </div>
-
+            
+          
           </div>
         </section>
 

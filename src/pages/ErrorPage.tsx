@@ -13,7 +13,7 @@ const ErrorPage = () => {
             <span className="text-white"> Not Found</span>
           </h1>
           <p className="font-inter text-white text-[16px] mb-6">Sorry we are unable to find the page</p>
-          <a className="font-inter flex gap-2 px-[14px] py-[6px] bg-primary rounded-[8px]" href="/">
+          <a className="font-inter flex gap-2 px-[14px] py-[6px] bg-primary rounded-[8px]  hover:border-primary hover:shadow-[0_0_15px_#00FA55] transition-shadow duration-300" href="/">
             <img src={homeIcon} alt="home icon" />
             Go Home
           </a>
