@@ -1,16 +1,13 @@
 import heroImg from "../assets/images/hero.jpg"
 import Search from "../components/Search";
-import ProductCard from "../components/ProductCard";
 import Calendar23 from "@/components/calendar-23-filter";
-import gsap from 'gsap';
-import { useGSAP } from '@gsap/react';
 import { useEffect, useState } from "react";
 import { priceRanges } from "@/constants";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import axios from "axios";
-import { type DateRange } from "react-day-picker"
 import * as React from "react"
 import { checkAppendSearchParams } from "@/utils";
+import AdvertisementsGrid from "@/components/AdvertisementsGrid";
 
 
 
@@ -23,10 +20,6 @@ import {
 } from "@/components/ui/select-filter"
 
 
-interface PriceRange {
-  start: number;
-  end?: number;
-}
 
 const Homepage = () => {
 
@@ -35,10 +28,6 @@ const Homepage = () => {
   const [priceRange, setPriceRange] = useState<any>({ start: "", end: "" })
   const [dateRange, setDateRange] = useState<any>({ from: "", to: "" })
   const [products, setProducts] = useState([])
-
-  const increment = 5
-  const initialSize = 5
-  const [numCards, setNumCards] = useState(initialSize)
 
   useEffect(() => {
     mutate()
@@ -81,35 +70,6 @@ const Homepage = () => {
     }
 
   })
-
-  useGSAP(() => {
-    const cards = gsap.utils.toArray(".product-card").slice(numCards - increment < initialSize ? 0 : numCards - increment)
-    gsap.fromTo(cards, {
-      opacity: 0,
-      ease: "power1.inOut",
-      y: 25,
-      stagger: .06,
-      duration: .5,
-    }, { opacity: 1, y: 0 })
-  }, [products, numCards])
-
-
-  useGSAP(() => {
-    const timeout = setTimeout(() => {
-      const cards = gsap.utils.toArray(".product-card").slice(
-        numCards - increment < initialSize ? 0 : numCards - increment
-      );
-      gsap.fromTo(cards, {
-        opacity: 0,
-        ease: "power1.inOut",
-        y: 25,
-        stagger: 0.06,
-        duration: 0.5,
-      }, { opacity: 1, y: 0 });
-    }, 100); // or 50 ms if needed
-
-    return () => clearTimeout(timeout);
-  }, [])
 
 
   const onSubmit = (e: React.FormEvent) => {
@@ -167,38 +127,12 @@ const Homepage = () => {
 
         </form>
 
-        {products?.length === 0 && status &&
+        {products?.length === 0 && status === "success" &&
           <div className="flex justify-center">
             <h1 className="text-white font-inter font-medium">No advertisements found.</h1>
           </div>
         }
-        <section id="#products" className="grid min-[1250px]:grid-cols-4 min-[1000px]:grid-cols-3 min-[700px]:grid-cols-2 grid-cols-1 max-sm:justify-items-center gap-11">
-          {products.map((product: any, index) => {
-            if (index < numCards)
-              return (
-                <div key={index} className="product-card">
-                  <ProductCard
-                    category={product.itemType.itemtypeName}
-                    img={product.itemImagePath}
-                    productName={product.itemName}
-                    owner={{ name: `${product.trader.userFirstName} ${product.trader.userLastName}`, id: product.trader.accountId }}
-                    desc={product.itemDescription}
-                    price={product.advertisementPrice}
-                    advertisementId={product.advertisementId}
-                  ></ProductCard>
-                </div>
-              )
-          })}
-        </section>
-        {numCards < products.length &&
-          <div className="flex justify-center mt-20">
-            <button
-              onClick={() => { setNumCards(numCards + increment) }}
-              className="cursor-pointer text-primary bg-[#102B19] font-inter text-[16px] rounded-[8px] px-4 py-1.5">
-              Show more
-            </button>
-          </div>
-        }
+        <AdvertisementsGrid products={products} />
 
       </section>
 
