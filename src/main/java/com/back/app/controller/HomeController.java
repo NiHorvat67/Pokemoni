@@ -21,7 +21,5 @@ class HomeController {
     String homeRoute(){
         return "Hello from home";
     }
-    
-
 
 }
