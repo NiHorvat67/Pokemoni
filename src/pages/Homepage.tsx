@@ -5,7 +5,7 @@ import Calendar23 from "@/components/calendar-23-filter";
 import gsap from 'gsap';
 import { useGSAP } from '@gsap/react';
 import { useEffect, useState } from "react";
-import { products as categories, priceRanges } from "@/constants";
+import { priceRanges } from "@/constants";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import axios from "axios";
 import { type DateRange } from "react-day-picker"
@@ -42,7 +42,7 @@ const Homepage = () => {
 
   useEffect(() => {
     mutate()
-  }, [])
+  }, [categoryId, priceRange, dateRange])
 
 
   const { data: categories } = useQuery({
@@ -167,7 +167,7 @@ const Homepage = () => {
 
         </form>
 
-        {products?.length === 0 && status === "success" &&
+        {products?.length === 0 && status &&
           <div className="flex justify-center">
             <h1 className="text-white font-inter font-medium">No advertisements found.</h1>
           </div>

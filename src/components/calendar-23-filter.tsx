@@ -22,7 +22,7 @@ export default function Calendar23({ range, setRange }: { range: any, setRange: 
             className="w-[130px] sm:w-[180px] justify-between font-normal"
           >
             {range?.from && range?.to
-              ? `${range.from.toLocaleDateString()} - ${range.to.toLocaleDateString()}`
+              ? `${range.from.toLocaleDateString(undefined, { month: 'numeric', day: 'numeric' })} - ${range.to.toLocaleDateString(undefined, { month: 'numeric', day: 'numeric' })}`
               : "Select date"}
             <ChevronDownIcon />
           </Button>

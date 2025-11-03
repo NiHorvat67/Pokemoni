@@ -24,7 +24,7 @@ const categories = [
   { id: 10, name: "team sports" }
 ];
 
-const priceRanges: { start: number; end?: number }[] = [...generatePriceRanges(4, 50, 0), ...generatePriceRanges(4, 100, 2), { start: 800 }]
+const priceRanges: { start: number; end?: number }[] = [...generatePriceRanges(5, 20, 0), ...generatePriceRanges(1, 50, 1), { start: 150 }]
 
 const subscriptionBenefits = ["Unlimited Listings", "Damage Reporting Tools", "Secure Payments", "Deposit Management"]
 
