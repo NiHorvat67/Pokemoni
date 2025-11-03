@@ -5,12 +5,13 @@ import Calendar23 from "@/components/calendar-23-filter";
 import gsap from 'gsap';
 import { useGSAP } from '@gsap/react';
 import { useEffect, useState } from "react";
-import { products as fakeProducts, categories, priceRanges } from "@/constants";
+import { products as categories, priceRanges } from "@/constants";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import axios from "axios";
 import { type DateRange } from "react-day-picker"
 import * as React from "react"
 import { checkAppendSearchParams } from "@/utils";
+
 
 
 import {
@@ -33,28 +34,36 @@ const Homepage = () => {
   const [categoryId, setCategoryId] = useState("")
   const [priceRange, setPriceRange] = useState<any>({ start: "", end: "" })
   const [dateRange, setDateRange] = useState<any>({ from: "", to: "" })
-  const [products, setProducts] = useState(fakeProducts)
+  const [products, setProducts] = useState([])
 
-  const { dataaa } = useQuery({
-    queryKey: ["currentAccount"],
-    queryFn: async () => {
-      return axios
-        .get(`/api/accounts/current`)
-        .then(res => {
-          console.log(res.data)
-          return res.data
-        })
-        .catch(err => console.log(err))
-    }
-  })
+  const increment = 5
+  const initialSize = 5
+  const [numCards, setNumCards] = useState(initialSize)
 
   useEffect(() => {
     mutate()
   }, [])
 
-  const { status, error, mutate } = useMutation({
+
+  const { data: categories } = useQuery({
+    queryKey: ["categories"],
+    queryFn: async () => {
+      return axios
+        .get("/api/itemtypes/")
+        .then(res => {
+          console.log(res.data)
+          return res.data
+        })
+        .catch(err => {
+          console.log(err)
+        })
+    }
+  })
+
+  const { status, mutate } = useMutation({
     mutationFn: async () => {
       const params = new URLSearchParams({})
+      checkAppendSearchParams(params, "itemName", query)
       checkAppendSearchParams(params, "categoryId", categoryId)
       checkAppendSearchParams(params, "minPrice", priceRange?.start)
       checkAppendSearchParams(params, "maxPrice", priceRange?.end)
@@ -63,27 +72,44 @@ const Homepage = () => {
       return axios
         .get(`/api/advertisements/search?${params.toString()}`)
         .then(res => {
-          console.log(res.data)
           return res.data
         })
         .catch(err => console.log(err))
     },
     onSuccess: queryResult => {
-      // setProducts(queryResult)
-      setProducts(fakeProducts)
+      setProducts(queryResult)
     }
 
   })
 
   useGSAP(() => {
-    gsap.from(".product-card", {
+    const cards = gsap.utils.toArray(".product-card").slice(numCards - increment < initialSize ? 0 : numCards - increment)
+    gsap.fromTo(cards, {
       opacity: 0,
       ease: "power1.inOut",
       y: 25,
       stagger: .06,
-      duration: .5
-    })
-  }, [products])
+      duration: .5,
+    }, { opacity: 1, y: 0 })
+  }, [products, numCards])
+
+
+  useGSAP(() => {
+    const timeout = setTimeout(() => {
+      const cards = gsap.utils.toArray(".product-card").slice(
+        numCards - increment < initialSize ? 0 : numCards - increment
+      );
+      gsap.fromTo(cards, {
+        opacity: 0,
+        ease: "power1.inOut",
+        y: 25,
+        stagger: 0.06,
+        duration: 0.5,
+      }, { opacity: 1, y: 0 });
+    }, 100); // or 50 ms if needed
+
+    return () => clearTimeout(timeout);
+  }, [])
 
 
   const onSubmit = (e: React.FormEvent) => {
@@ -96,7 +122,7 @@ const Homepage = () => {
 
   return (
 
-    <section className="padding-x pt-30 sm:pt-50">
+    <section className="padding-x pt-30 sm:pt-50 pb-120">
       <div className="h-[560px] w-[100vw] absolute top-0 left-0 right-0">
         <img src={heroImg} alt="" className="h-full w-full object-cover object-center" />
         <div className="w-full h-[100.1%] absolute top-0 bg-gradient-to-b from-[#121413]/[0%] from-70% to-dark-bg to-100%"></div>
@@ -114,8 +140,8 @@ const Homepage = () => {
                 <SelectValue placeholder="Category" />
               </SelectTrigger>
               <SelectContent>
-                {categories.map((category) => (
-                  <SelectItem key={category.id} value={category.id.toString()}>{category.name}</SelectItem>
+                {categories && categories.map((category: any) => (
+                  <SelectItem key={category.itemtypeId} value={category.itemtypeId.toString()}>{category.itemtypeName}</SelectItem>
                 ))}
               </SelectContent>
             </Select>
@@ -141,22 +167,38 @@ const Homepage = () => {
 
         </form>
 
+        {products?.length === 0 && status === "success" &&
+          <div className="flex justify-center">
+            <h1 className="text-white font-inter font-medium">No advertisements found.</h1>
+          </div>
+        }
         <section id="#products" className="grid min-[1250px]:grid-cols-4 min-[1000px]:grid-cols-3 min-[700px]:grid-cols-2 grid-cols-1 max-sm:justify-items-center gap-11">
-          {products.map((product, index) => (
-            <div key={index} className="product-card">
-
-              <ProductCard
-                category={product.category}
-                img={product.img}
-                productName={product.productName}
-                owner={product.owner}
-                desc={product.desc}
-                price={product.price}
-                productUrl={product.productUrl}
-              ></ProductCard>
-            </div>
-          ))}
+          {products.map((product: any, index) => {
+            if (index < numCards)
+              return (
+                <div key={index} className="product-card">
+                  <ProductCard
+                    category={product.itemType.itemtypeName}
+                    img={product.itemImagePath}
+                    productName={product.itemName}
+                    owner={{ name: `${product.trader.userFirstName} ${product.trader.userLastName}`, id: product.trader.accountId }}
+                    desc={product.itemDescription}
+                    price={product.advertisementPrice}
+                    advertisementId={product.advertisementId}
+                  ></ProductCard>
+                </div>
+              )
+          })}
         </section>
+        {numCards < products.length &&
+          <div className="flex justify-center mt-20">
+            <button
+              onClick={() => { setNumCards(numCards + increment) }}
+              className="cursor-pointer text-primary bg-[#102B19] font-inter text-[16px] rounded-[8px] px-4 py-1.5">
+              Show more
+            </button>
+          </div>
+        }
 
       </section>
 

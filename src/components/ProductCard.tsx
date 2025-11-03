@@ -1,14 +1,15 @@
+import bikeImg from "../assets/images/bike.jpeg"
 
 
-const ProductCard = ({ category, img, productName, owner, desc, price, productUrl }:
+const ProductCard = ({ category, img, productName, owner, desc, price, advertisementId }:
   {
     category: string,
     productName: string,
-    owner: { name: string, url: string },
+    owner: { name: string, id: number },
     desc: string,
     price: number,
     img: any,
-    productUrl: string
+    advertisementId: number
   }) => {
 
 
@@ -17,18 +18,18 @@ const ProductCard = ({ category, img, productName, owner, desc, price, productUr
       <div className="absolute top-[12px] left-[24px] text-primary bg-[#102B19] rounded-[8px] px-2.5 py-1.75 text-[14px] font-inter">
         {category}
       </div>
-      <img src={img} alt="product image" className="w-full h-[225px] object-cover rounded-t-[8px]" />
+      <img src={bikeImg} alt="product image" className="w-full h-[225px] object-cover rounded-t-[8px]" />
 
       <div className="bg-[#222423] rounded-[8px] p-6 mt-[-8px] relative shadow-[0_-4px_4px_rgba(0,0,0,0.25)]">
         <h1 className="font-medium text-[20px] text-white mb-2">{productName}</h1>
         <p className="text-[#D2D9D4] text-[14px] mb-7.5">
           by
-          <a className="font-medium" href={owner.url}> {owner.name}</a>
+          <a className="font-medium" href={`/profile/${owner.id}`}> {owner.name}</a>
         </p>
         <p className="text-[#D2D9D4] text-[14px] mb-7.5">{desc}</p>
         <div className="flex items-center justify-between">
           <span className="text-white font-semibold text-2xl">{price}€</span>
-          <a className="text-black px-5 py-2 bg-primary rounded-[8px] hover:shadow-[0_0_15px_#00FA55] transition-shadow duration-300" href={productUrl}>Rent</a>
+          <a className="text-black px-5 py-2 bg-primary rounded-[8px] hover:shadow-[0_0_15px_#00FA55] transition-shadow duration-300" href={`/advertisement/${advertisementId}`}>Rent</a>
         </div>
       </div>
 

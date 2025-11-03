@@ -9,18 +9,17 @@ import { useGSAP } from '@gsap/react';
 import { useQuery } from "@tanstack/react-query"
 import axios from 'axios';
 import { useParams } from "react-router-dom"
-import {
-  useState, useEffect, useRef
-} from "react"
+import { useState, useEffect } from "react"
+import { useMutation } from "@tanstack/react-query"
 
 const TraderProfile = () => {
   const { userId } = useParams()
 
-  const increment = 2
+  const increment = 5
   const initialSize = 5
   const [numCards, setNumCards] = useState(initialSize)
+  const [products, setProducts] = useState([])
 
-  const [products, setProducts] = useState(fakeProducts)
 
   const { status, error, data } = useQuery({
     queryKey: ["traderAccount"],
@@ -38,16 +37,32 @@ const TraderProfile = () => {
   })
 
 
+  useEffect(() => {
+    mutate()
+  }, [])
+
+  const { mutate } = useMutation({
+    mutationFn: async () => {
+      return axios
+        .get(`/api/advertisements/account/${userId}`)
+        .then(res => {
+          // console.log(res.data)
+          return res.data
+        })
+        .catch(err => console.log(err))
+    },
+    onSuccess: queryResult => {
+      setProducts(queryResult)
+    }
+
+  })
 
   const infoItems = [
     { icon: mailIcon, text: data?.userEmail },
     { icon: locationIcon, text: data?.userLocation },
     { icon: phoneIcon, text: data?.userContact },
-    { icon: starIcon, text: "fali/5" },
   ]
-
-
-
+  if (data?.accountRating) infoItems.push({ icon: starIcon, text: `${data?.accountRating}/5` })
 
 
   useGSAP(() => {
@@ -115,18 +130,18 @@ const TraderProfile = () => {
           <>
             <h1 className="text-white font-inter font-medium text-xl sm:text-2xl mb-[54px]">{data?.userFirstName} {data?.userLastName} is renting</h1>
             <section className="grid min-[1250px]:grid-cols-4 min-[1000px]:grid-cols-3 min-[700px]:grid-cols-2 grid-cols-1 max-sm:justify-items-center gap-11">
-              {products.map((product, index) => {
+              {products.map((product: any, index) => {
                 if (index < numCards)
                   return (
                     <div key={index} className="product-card opacity-0">
                       <ProductCard
-                        category={product.category}
-                        img={product.img}
-                        productName={product.productName}
-                        owner={product.owner}
-                        desc={product.desc}
-                        price={product.price}
-                        productUrl={product.productUrl}
+                        category={product.itemType.itemtypeName}
+                        img={product.itemImagePath}
+                        productName={product.itemName}
+                        owner={{ name: `${product.trader.userFirstName} ${product.trader.userLastName}`, id: product.trader.accountId }}
+                        desc={product.itemDescription}
+                        price={product.advertisementPrice}
+                        advertisementId={product.advertisementId}
                       ></ProductCard>
                     </div>
                   )
@@ -136,7 +151,7 @@ const TraderProfile = () => {
               <div className="flex justify-center mt-20">
                 <button
                   onClick={() => { setNumCards(numCards + increment) }}
-                  className="text-primary bg-[#102B19] font-inter text-[16px] rounded-[8px] px-4 py-1.5">
+                  className="cursor-pointer text-primary bg-[#102B19] font-inter text-[16px] rounded-[8px] px-4 py-1.5">
                   Show more
                 </button>
               </div>

@@ -15,6 +15,7 @@ const Advertisement = () => {
       return axios
         .get(`/api/advertisements/${advertisementId}`)
         .then(res => {
+          console.log(res.data)
           if (res.data == "") {
             window.location.pathname = "/error"
           }
@@ -29,24 +30,6 @@ const Advertisement = () => {
     }
   })
 
-  const { data: traderData } = useQuery({
-    enabled: data?.traderId != null,
-    queryKey: ["traderData"],
-    queryFn: async () => {
-      return axios
-        .get(`/api/accounts/${data?.traderId}`)
-        .then(res => {
-          if (res.data == "") {
-            window.location.pathname = "/error"
-          }
-          return res.data
-        })
-        .catch(err => {
-          console.log(err)
-        })
-    }
-  })
-
 
   return (
     <section className="padding-x padding-t">
@@ -56,9 +39,9 @@ const Advertisement = () => {
           <img src={bikeImg} alt="product image" className="max-h-[300px] lg:max-h-[400px]  lg:w-2/5 object-cover object-center rounded-[8px]" />
           <div className="flex flex-col items-start gap-10 lg:gap-12">
             <div className="flex items-start gap-1 flex-col">
-              <p className="text-primary bg-[#102B19] rounded-[8px] px-2.5 py-1.75 text-[14px] font-inter">Mountain bikes</p>
-              <h1 className="font-inter text-[24px] sm:text-[32px] font-medium text-white">S-WORKS Enduro</h1>
-              <p className="font-inter text-white text-[14px]">by <a className="font-medium" href={`/profile/${data?.traderId}`}>{traderData?.userFirstName} {traderData?.userLastName}</a></p>
+              <p className="text-primary bg-[#102B19] rounded-[8px] px-2.5 py-1.75 text-[14px] font-inter">{data?.itemType.itemtypeName}</p>
+              <h1 className="font-inter text-[24px] sm:text-[32px] font-medium text-white">{data?.itemName}</h1>
+              <p className="font-inter text-white text-[14px]">by <a className="font-medium" href={`/profile/${data?.trader.accountId}`}>{data?.trader.userFirstName} {data?.trader.userLastName}</a></p>
             </div>
             <p className="font-inter text-white text-[16px] max-w-[700px]"> {data?.itemDescription}</p>
 
@@ -76,7 +59,7 @@ const Advertisement = () => {
             <div className="flex font-inter items-center gap-11">
               <div className="flex flex-col items-start flex-1 justify-start text-white min-w-[100px]">
                 <h1 className="font-medium text-[32px]">{data?.advertisementPrice}€</h1>
-                <p className="text-desc text-sm">Kaucija 20€</p>
+                <p className="text-desc text-sm">Kaucija {data?.advertisementDeposit}€</p>
               </div>
               <Button text="Rent" icon={true} long={false} onClick={() => { }} />
             </div>
