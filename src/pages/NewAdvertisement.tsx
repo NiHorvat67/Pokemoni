@@ -9,7 +9,6 @@ import {
 } from "@/components/ui/select-dropdown"
 
 import { Input as InputShadCn } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
 
 import { useState } from "react";
 import { categories } from "@/constants";
@@ -50,9 +49,8 @@ const NewAdvertisement = () => {
                   <SelectValue placeholder="Category" />
                 </SelectTrigger>
                 <SelectContent>
-                  {categories.map((category, index) => (
+                  {categories.map((category) => (
                     <SelectItem key={category.id} value={category.id.toString()}>{category.name}</SelectItem>
-
                   ))}
 
                 </SelectContent>

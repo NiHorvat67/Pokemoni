@@ -1,19 +1,18 @@
 import { checkIcon } from "@/assets/icons";
 import { useGSAP } from "@gsap/react";
-import gsap from "gsap";
 import { useState } from "react";
 
-const AuthStep4 = ({ step, currentStep, setCurrentStep, tl }: { step: number, currentStep: number, setCurrentStep: any, tl: any }) => {
+const AuthStep4 = ({ tl }: { step: number, currentStep: number, setCurrentStep: any, tl: any }) => {
 
   const timeoutDelay = 5
   const [timer, setTimer] = useState(timeoutDelay)
 
-  // setTimeout(() => {
-  //   window.location.pathname = "/"
-  // }, timeoutDelay * 1000)
-  // setInterval(() => {
-  //   setTimer(timer - 1)
-  // }, 1000)
+  setTimeout(() => {
+    window.location.pathname = "/"
+  }, timeoutDelay * 1000)
+  setInterval(() => {
+    setTimer(timer - 1)
+  }, 1000)
 
 
   useGSAP(() => {

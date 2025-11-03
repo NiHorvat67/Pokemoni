@@ -15,7 +15,7 @@ const TraderProfile = () => {
   const [products, setProducts] = useState([])
 
 
-  const { status, error, data } = useQuery({
+  const { data } = useQuery({
     queryKey: ["traderAccount"],
     queryFn: async () => {
       return axios

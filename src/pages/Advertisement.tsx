@@ -1,7 +1,7 @@
 import { locationIcon } from "@/assets/icons";
 import Button from "@/components/Button";
 import bikeImg from "@/assets/images/bike.jpeg"
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { useParams } from "react-router-dom";
 
@@ -9,7 +9,7 @@ const Advertisement = () => {
 
   const { advertisementId } = useParams()
 
-  const { status, error, data } = useQuery({
+  const { data } = useQuery({
     queryKey: ["advertisementData"],
     queryFn: async () => {
       return axios

@@ -1,8 +1,8 @@
 import Input from "@/components/Input";
 import Button from "@/components/Button";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import PopupAlert from "../PopupAlert";
-import { useQuery, useMutation } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
 
 import {
@@ -15,7 +15,7 @@ import {
 
 import useAuthContext from "@/hooks/useAuthContext";
 
-const AuthStep2 = ({ step, currentStep, setCurrentStep }: { step: number, currentStep: number, setCurrentStep: any }) => {
+const AuthStep2 = ({ step, setCurrentStep }: { step: number, currentStep: number, setCurrentStep: any }) => {
 
   const [firstName, setFirstName] = useState("sigma")
   const [lastName, setLastName] = useState("grindset")
@@ -28,7 +28,7 @@ const AuthStep2 = ({ step, currentStep, setCurrentStep }: { step: number, curren
   const { dispatch } = useAuthContext()
 
 
-  const { status, error, mutate } = useMutation({
+  const { mutate } = useMutation({
     mutationFn: async () => {
       return axios({
         method: "post",

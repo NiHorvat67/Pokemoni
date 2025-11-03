@@ -35,7 +35,7 @@ const PopupAlert = ({ errors }: { errors: string[] }) => {
           <AlertTitle>Please fix the following errors</AlertTitle>
           <AlertDescription>
             <ul className="list-disc list-inside space-y-1 mt-2">
-              {errors.map((error: string, index: number) => (
+              {errors.map((error: string) => (
                 <li key={error}>{error}</li>
 
               ))}

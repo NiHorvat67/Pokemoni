@@ -2,7 +2,7 @@ import { subscriptionBenefits } from "@/constants";
 import { checkIcon } from "@/assets/icons";
 import Button from "@/components/Button";
 
-const AuthStep3 = ({ step, currentStep, setCurrentStep }: { step: number, currentStep: number, setCurrentStep: any }) => {
+const AuthStep3 = ({ step, setCurrentStep }: { step: number, currentStep: number, setCurrentStep: any }) => {
 
   const paymentOnClick = () => {
     console.log("process payment")
