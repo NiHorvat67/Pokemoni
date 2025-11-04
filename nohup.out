@@ -1,0 +1,104 @@
+
+> GearShare@0.0.0 preview
+> vite preview
+
+  ➜  Local:   http://localhost:4173/
+  ➜  Network: http://172.31.23.138:4173/
+  ➜  Network: http://172.18.0.1:4173/
+
+> GearShare@0.0.0 preview
+> vite preview
+
+  ➜  Local:   http://localhost:4173/
+  ➜  Network: http://172.31.23.138:4173/
+  ➜  Network: http://172.18.0.1:4173/
+
+> GearShare@0.0.0 preview
+> vite preview
+
+  ➜  Local:   http://localhost:4173/
+  ➜  Network: http://172.31.23.138:4173/
+  ➜  Network: http://172.18.0.1:4173/
+Killed
+
+> GearShare@0.0.0 build
+> vite build
+
+vite v7.1.12 building for production...
+transforming...
+✓ 2324 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                      0.44 kB │ gzip:   0.29 kB
+dist/assets/github-DkTr3Tul.png      8.64 kB
+dist/assets/bike-nU_HJU1C.jpeg      11.10 kB
+dist/assets/google-D9xX5EyR.png     27.62 kB
+dist/assets/hero-nz3Yn3JO.jpg      302.33 kB
+dist/assets/auth-CnLx9r_l.jpg    1,939.43 kB
+dist/assets/index-Djvf0ytn.css      57.03 kB │ gzip:  10.42 kB
+dist/assets/index-CrgYXq33.js      596.45 kB │ gzip: 199.58 kB
+
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+✓ built in 3.36s
+
+> GearShare@0.0.0 preview
+> vite preview
+
+  ➜  Local:   http://localhost:4173/
+  ➜  Network: http://172.31.23.138:4173/
+  ➜  Network: http://172.18.0.1:4173/
+9:12:18 AM [vite] http proxy error: /api/advertisements/search?
+Error: connect ECONNREFUSED 13.61.145.50:8080
+    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1637:16)
+9:12:18 AM [vite] http proxy error: /api/itemtypes/
+Error: connect ECONNREFUSED 13.61.145.50:8080
+    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1637:16)
+9:12:19 AM [vite] http proxy error: /api/itemtypes/
+Error: connect ECONNREFUSED 13.61.145.50:8080
+    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1637:16)
+9:12:19 AM [vite] http proxy error: /api/advertisements/search?
+Error: connect ECONNREFUSED 13.61.145.50:8080
+    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1637:16)
+9:12:23 AM [vite] http proxy error: /api/itemtypes/
+Error: connect ECONNREFUSED 13.61.145.50:8080
+    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1637:16)
+9:12:23 AM [vite] http proxy error: /api/advertisements/search?
+Error: connect ECONNREFUSED 13.61.145.50:8080
+    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1637:16)
+
+> GearShare@0.0.0 preview
+> vite preview
+
+Port 4173 is in use, trying another one...
+  ➜  Local:   http://localhost:4174/
+  ➜  Network: http://172.31.23.138:4174/
+  ➜  Network: http://172.18.0.1:4174/
+
+> GearShare@0.0.0 preview
+> vite preview
+
+Port 4173 is in use, trying another one...
+Port 4174 is in use, trying another one...
+  ➜  Local:   http://localhost:4175/
+  ➜  Network: http://172.31.23.138:4175/
+  ➜  Network: http://172.18.0.1:4175/
+Killed
+Killed
+Killed
+
+> GearShare@0.0.0 preview
+> vite preview
+
+  ➜  Local:   http://localhost:4173/
+  ➜  Network: http://172.31.23.138:4173/
+  ➜  Network: http://172.18.0.1:4173/
+
+> GearShare@0.0.0 preview
+> vite preview
+
+  ➜  Local:   http://localhost:4173/
+  ➜  Network: http://172.31.23.138:4173/
+  ➜  Network: http://172.18.0.1:4173/
