@@ -6,7 +6,7 @@ CREATE TABLE account (
     user_first_name VARCHAR(50),
     user_last_name VARCHAR(50),
     user_contact VARCHAR(255),
-    user_contact_email VARCHAR(255) UNIQUE
+    user_contact_email VARCHAR(255) UNIQUE,
     user_location VARCHAR(255),
     registration_date DATE NOT NULL DEFAULT CURRENT_DATE,
     account_role VARCHAR(20) NOT NULL CHECK (account_role IN ('trader', 'buyer', 'admin')),
@@ -175,13 +175,13 @@ UPDATE advertisement SET reservation_id = 8 WHERE advertisement_id = 8;
 UPDATE advertisement SET reservation_id = 9 WHERE advertisement_id = 9;
 
 -- Add more accounts for a richer dataset
-INSERT INTO account (username, account_password, oauth2_id, user_email, user_first_name, user_last_name, user_contact, user_location, account_role, account_rating) VALUES
-('sarah_adventurer', 'pass123', '8', 'sarah.wilson@outdoor.com', 'Sarah', 'Wilson', '555-1008', 'Munich', 'trader', 4.7),      -- 8
-('mike_explorer', 'pass123', '9', 'mike.brown@adventure.com', 'Mike', 'Brown', '555-1009', 'Vienna', 'trader', 4.2),          -- 9
-('lisa_traveler', 'pass123', '10', 'lisa.garcia@travel.com', 'Lisa', 'Garcia', '555-1010', 'Madrid', 'buyer', NULL),          -- 10
-('david_sports', 'pass123', '11', 'david.miller@sports.com', 'David', 'Miller', '555-1011', 'Rome', 'buyer', NULL),           -- 11
-('emma_climber', 'pass123', '12', 'emma.jones@climb.com', 'Emma', 'Jones', '555-1012', 'Zurich', 'trader', 4.9),              -- 12
-('tom_cyclist', 'pass123', '13', 'tom.davis@bike.com', 'Tom', 'Davis', '555-1013', 'Amsterdam', 'trader', 4.5);               -- 13
+INSERT INTO account (oauth2_id, user_email, user_first_name, user_last_name, user_contact,user_contact_email, user_location, account_role, account_rating) VALUES
+('8', 'sarah.wilson@outdoor.com', 'Sarah', 'Wilson', '555-1008','sarah.wilson@outdoor.com', 'Munich', 'trader', 4.7),      -- 8
+('9', 'mike.brown@adventure.com', 'Mike', 'Brown', '555-1009', 'mike.brown@adventure.com','Vienna', 'trader', 4.2),          -- 9
+('10', 'lisa.garcia@travel.com', 'Lisa', 'Garcia', '555-1010', 'lisa.garcia@travel.com','Madrid', 'buyer', NULL),          -- 10
+('11', 'david.miller@sports.com', 'David', 'Miller', '555-1011','david.miller@sports.com', 'Rome', 'buyer', NULL),           -- 11
+('12', 'emma.jones@climb.com', 'Emma', 'Jones', '555-1012','emma.jones@climb.com','Zurich', 'trader', 4.9),              -- 12
+('13', 'tom.davis@bike.com', 'Tom', 'Davis', '555-1013','tom.davis@bike.com', 'Amsterdam', 'trader', 4.5);               -- 13
 
 -- Add more advertisements from new traders
 INSERT INTO advertisement (
@@ -221,3 +221,46 @@ INSERT INTO reservation (
 ('2024-04-15 11:00:00+00', '2024-04-22 16:00:00+00', 5, 5, 2, 14),
 ('2024-08-10 10:00:00+00', '2024-08-15 18:00:00+00', 4, 4, 5, 15),
 ('2024-09-05 08:00:00+00', '2024-09-12 17:00:00+00', 5, 4, 10, 16);
+-- Add more advertisements without reservations
+INSERT INTO advertisement (
+    advertisement_price, advertisement_deposit,
+    advertisement_location_takeover, advertisement_location_return,
+    advertisement_start, advertisement_end, trader_id, itemtype_id, item_name, item_description, item_image_path
+) VALUES
+-- Alice's additional items (account_id 1)
+(22.00, 110.00, 'London Sports Center', 'London Sports Center', '2024-03-01', '2024-12-31', 1, 1, 'Beginner Ski Set', 'Perfect skis for beginners with soft flex and easy control.', '/images/skis_beginner1.jpg'),
+(15.75, 65.00, 'London Downtown', 'London Downtown', '2024-02-15', '2024-11-30', 1, 2, 'Freestyle Snowboard', 'Twin-tip snowboard ideal for park and freestyle riding.', '/images/snowboard_freestyle1.jpg'),
+(8.50, 35.00, 'London Outdoor Shop', 'London Outdoor Shop', '2024-03-10', '2024-10-31', 1, 7, 'Hiking Poles Set', 'Lightweight adjustable hiking poles with comfortable grips.', '/images/hiking_poles1.jpg'),
+
+-- Charlie's additional items (account_id 3)
+(42.00, 220.00, 'NYC Gear Hub', 'NYC Gear Hub', '2024-04-01', '2024-12-31', 3, 3, 'Climbing Shoes Set', 'Various sizes of climbing shoes for different skill levels.', '/images/climbing_shoes1.jpg'),
+(18.00, 95.00, 'Central Park Rental', 'Central Park Rental', '2024-03-20', '2024-11-15', 3, 5, 'Hybrid Bike', 'Versatile hybrid bike for city and light trail use.', '/images/hybrid_bike1.jpg'),
+(12.50, 55.00, 'NYC Waterfront', 'NYC Waterfront', '2024-06-01', '2024-09-15', 3, 6, 'Canoe 2-Person', 'Stable canoe perfect for river and lake exploration.', '/images/canoe1.jpg'),
+
+-- George's additional items (account_id 4)
+(33.00, 180.00, 'Berlin Outdoor Center', 'Berlin Outdoor Center', '2024-11-01', '2025-02-28', 4, 8, 'Snowboard Package Pro', 'High-performance snowboard with step-in bindings.', '/images/snowboard_pro1.jpg'),
+(25.50, 120.00, 'Berlin Camping World', 'Berlin Camping World', '2024-05-01', '2024-09-30', 4, 4, 'Family Camping Tent', 'Spacious 4-person tent with separate rooms.', '/images/family_tent1.jpg'),
+(11.00, 45.00, 'Berlin City Location', 'Berlin City Location', '2024-04-01', '2024-12-31', 4, 7, 'Waterproof Jacket', 'Breathable waterproof jacket for all weather conditions.', '/images/waterproof_jacket1.jpg'),
+
+-- Sarah's additional items (account_id 8)
+(28.50, 140.00, 'Munich Sports Arena', 'Munich Sports Arena', '2024-09-01', '2025-03-31', 8, 1, 'All-Mountain Skis', 'Versatile skis suitable for all types of terrain.', '/images/all_mountain_skis1.jpg'),
+(20.00, 85.00, 'Munich Outdoor', 'Munich Outdoor', '2024-05-15', '2024-08-31', 8, 6, 'Inflatable Kayak', 'Compact inflatable kayak perfect for travel and storage.', '/images/inflatable_kayak1.jpg'),
+
+-- Mike's additional items (account_id 9)
+(16.25, 75.00, 'Vienna City Center', 'Vienna City Center', '2024-04-10', '2024-10-31', 9, 4, 'Camping Hammock', 'Comfortable camping hammock with mosquito net.', '/images/camping_hammock1.jpg'),
+(13.75, 60.00, 'Vienna Outdoor Shop', 'Vienna Outdoor Shop', '2024-03-01', '2024-11-30', 9, 7, 'Camping Stove', 'Portable gas stove with wind protection.', '/images/camping_stove1.jpg'),
+
+-- Emma's additional items (account_id 12)
+(38.00, 250.00, 'Zurich Climbing Center', 'Zurich Climbing Center', '2024-02-01', '2024-12-31', 12, 3, 'Bouldering Crash Pad', 'Large crash pad for safe bouldering outdoors.', '/images/crash_pad1.jpg'),
+(24.50, 110.00, 'Zurich Lake', 'Zurich Lake', '2024-06-01', '2024-08-31', 12, 6, 'Stand-up Paddleboard Premium', 'High-quality rigid SUP with carbon fiber paddle.', '/images/sup_premium1.jpg'),
+
+-- Tom's additional items (account_id 13)
+(19.25, 90.00, 'Amsterdam Bike Central', 'Amsterdam Bike Central', '2024-03-01', '2024-12-31', 13, 5, 'Electric City Bike', 'E-bike with pedal assist for easy city commuting.', '/images/ebike_city1.jpg'),
+(14.00, 65.00, 'Amsterdam Outdoor', 'Amsterdam Outdoor', '2024-04-15', '2024-10-31', 13, 7, 'Camping Chair Set', 'Comfortable lightweight camping chairs.', '/images/camping_chairs1.jpg'),
+
+-- More diverse items from various traders
+(50.00, 300.00, 'London Premium Outlet', 'London Premium Outlet', '2024-01-01', '2024-12-31', 1, 9, 'Mountain Expedition Pack', 'Professional backpack for multi-day mountain expeditions.', '/images/expedition_pack1.jpg'),
+(35.75, 175.00, 'NYC Adventure Store', 'NYC Adventure Store', '2024-03-01', '2024-11-30', 3, 9, 'Portable Power Station', 'Solar-ready power station for off-grid adventures.', '/images/power_station1.jpg'),
+(27.25, 130.00, 'Berlin Tech Gear', 'Berlin Tech Gear', '2024-02-01', '2024-12-31', 4, 7, 'GPS Navigation Device', 'Rugged GPS with topographic maps and long battery life.', '/images/gps_device1.jpg'),
+(31.50, 160.00, 'Munich Winter Sports', 'Munich Winter Sports', '2024-11-15', '2025-03-15', 8, 8, 'Ice Climbing Gear', 'Complete ice climbing set with axes and crampons.', '/images/ice_climbing1.jpg'),
+(22.75, 115.00, 'Vienna Photography', 'Vienna Photography', '2024-04-01', '2024-10-31', 9, 7, 'Outdoor Photography Kit', 'Camera protection and accessories for outdoor photography.', '/images/photo_kit1.jpg');
