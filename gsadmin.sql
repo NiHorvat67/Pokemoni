@@ -1,13 +1,12 @@
 -- 1. Table: account (Independent)
 CREATE TABLE account (
     account_id SERIAL PRIMARY KEY, 
-    username VARCHAR(100) NOT NULL UNIQUE,
     oauth2_id VARCHAR(100) UNIQUE,
-    account_password VARCHAR(100) NOT NULL,
     user_email VARCHAR(255) NOT NULL UNIQUE,
     user_first_name VARCHAR(50),
     user_last_name VARCHAR(50),
     user_contact VARCHAR(255),
+    user_contact_email VARCHAR(255) UNIQUE
     user_location VARCHAR(255),
     registration_date DATE NOT NULL DEFAULT CURRENT_DATE,
     account_role VARCHAR(20) NOT NULL CHECK (account_role IN ('trader', 'buyer', 'admin')),
@@ -99,15 +98,14 @@ CREATE TRIGGER trg_check_trader_role
 BEFORE INSERT OR UPDATE ON advertisement
 FOR EACH ROW EXECUTE FUNCTION check_trader_role();
 
--- Insert into account (IDs 1-7)
-INSERT INTO account (username, account_password, oauth2_id, user_email, user_first_name, user_last_name, user_contact, user_location, account_role,account_rating) VALUES
-('alice_trader', 'pass1' ,'1','alice.smith@hire.com', 'Alice', 'Smith', '555-1001', 'London', 'trader',3.9),         -- 1 (Trader)
-('bob_buyer', 'pass1','2' ,'bob.johnson@mail.com', 'Bob', 'Johnson', '555-1002', 'Paris', 'buyer',null),                 -- 2 (Buyer)
-('charlie_trader', 'pass1' ,'3','charlie.t@mail.com', 'Charlie', 'Trader', '555-1003', 'New York', 'trader',4.4),     -- 3 (Trader)
-('george_trader', 'pass1' ,'4','gear.hire@global.com', 'George', 'Gear', '555-1004', 'Berlin', 'trader',4.1),         -- 4 (Trader)
-('jane_buyer', 'pass1' ,'5','jane.doe@mail.com', 'Jane', 'Doe', '555-1005', 'Tokyo', 'buyer',null),                  -- 5 (Buyer)
-('adminNH', 'oauth_login', '6', 'nh55636@fer.hr ', 'Nikola', 'Horvat', '0917343740', 'Zagreb', 'admin',null),         -- 6 (Admin)
-('adminLK', 'oauth_login', '7', 'lk55939@fer.hr ', 'Leon', 'Katic', '0999999999', 'Zagreb', 'admin',null);           -- 7 (Admin)
+INSERT INTO account (oauth2_id, user_email, user_first_name, user_last_name, user_contact, user_contact_email, user_location, account_role, account_rating) VALUES
+('1', 'alice.smith@hire.com', 'Alice', 'Smith', '555-1001', 'alice.contact@hire.com', 'London', 'trader', 3.9),         -- 1 (Trader)
+('2', 'bob.johnson@mail.com', 'Bob', 'Johnson', '555-1002', 'bob.contact@mail.com', 'Paris', 'buyer', NULL),            -- 2 (Buyer)
+('3', 'charlie.t@mail.com', 'Charlie', 'Trader', '555-1003', 'charlie.contact@mail.com', 'New York', 'trader', 4.4),    -- 3 (Trader)
+('4', 'gear.hire@global.com', 'George', 'Gear', '555-1004', 'george.contact@global.com', 'Berlin', 'trader', 4.1),      -- 4 (Trader)
+('5', 'jane.doe@mail.com', 'Jane', 'Doe', '555-1005', 'jane.contact@mail.com', 'Tokyo', 'buyer', NULL),                 -- 5 (Buyer)
+('6', 'nh55636@fer.hr', 'Nikola', 'Horvat', '0917343740', 'nikola.contact@fer.hr', 'Zagreb', 'admin', NULL),            -- 6 (Admin)
+('7', 'lk55939@fer.hr', 'Leon', 'Katic', '0999999999', 'leon.contact@fer.hr', 'Zagreb', 'admin', NULL);                 -- 7 (Admin)
 -- Insert into itemtype
 INSERT INTO itemtype (itemtype_name) VALUES
 ('Skis'),                    -- 1
