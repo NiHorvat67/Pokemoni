@@ -40,7 +40,6 @@ const TraderProfile = () => {
       return axios
         .get(`/api/advertisements/account/${userId}`)
         .then(res => {
-          // console.log(res.data)
           return res.data
         })
         .catch(err => console.log(err))
@@ -63,14 +62,14 @@ const TraderProfile = () => {
     <section className="padding-x padding-t pb-20">
       <section className="max-container">
 
-        <section id="info-container" className="mb-19 sm:mb-34">
+        <section id="info-container" className="mb-19 sm:mb-34 max-sm:!gap-x-[0px]">
           <img
             id="profile-image"
             src={profileImg}
             alt="profile"
-            className="sm:ml-[-10px] ml-[-4px] rounded-full h-[152px] w-[152px] sm:h-[206px] sm:w-[206px] object-cover"
+            className="sm:ml-[-10px] ml-[-4px] rounded-full h-[110px] w-[110px] sm:h-[206px] sm:w-[206px] object-cover"
           />
-          <div id="name">
+          <div id="name" className="max-sm:ml-[-20px] ">
             <h1 className="text-white text-2xl sm:text-[32px] font-medium mb-1">{data?.userFirstName} {data?.userLastName}</h1>
             <p className="font-inter text-desc capitalize">{data?.accountRole}</p>
           </div>

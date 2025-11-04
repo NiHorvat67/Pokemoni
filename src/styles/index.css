@@ -20,6 +20,7 @@
 }
 
 @layer components {
+
   body {
     @apply bg-dark-bg
   }
@@ -36,7 +37,11 @@
   }
 
   .padding-t {
-    @apply pt-30 sm:pt-35;
+    @apply pt-25 sm:pt-35;
+  }
+
+  .padding-b {
+    @apply pb-10 sm:pb-20
   }
 }
 

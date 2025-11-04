@@ -43,7 +43,7 @@ const AdvertisementsGrid = ({ products }: { products: any[] }) => {
 
   return (
     <>
-      <section className="grid min-[1250px]:grid-cols-4 min-[1000px]:grid-cols-3 min-[700px]:grid-cols-2 grid-cols-1 max-sm:justify-items-center gap-11">
+      <section id="products-grid" className="grid min-[1250px]:grid-cols-4 min-[1000px]:grid-cols-3 min-[700px]:grid-cols-2 grid-cols-1 max-sm:justify-items-center gap-11">
         {products.map((product: any, index) => {
           if (index < numCards)
             return (

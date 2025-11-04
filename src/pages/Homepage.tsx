@@ -9,7 +9,9 @@ import * as React from "react"
 import { checkAppendSearchParams } from "@/utils";
 import AdvertisementsGrid from "@/components/AdvertisementsGrid";
 
-
+import { useMediaQuery } from 'react-responsive'
+import gsap from "gsap";
+import ScrollToPlugin from "gsap/src/ScrollToPlugin";
 
 import {
   Select,
@@ -20,6 +22,7 @@ import {
 } from "@/components/ui/select-filter"
 
 
+gsap.registerPlugin(ScrollToPlugin)
 
 const Homepage = () => {
 
@@ -28,6 +31,8 @@ const Homepage = () => {
   const [priceRange, setPriceRange] = useState<any>({ start: "", end: "" })
   const [dateRange, setDateRange] = useState<any>({ from: "", to: "" })
   const [products, setProducts] = useState([])
+  const isMobile = useMediaQuery({ maxWidth: 640 })
+
 
   useEffect(() => {
     mutate()
@@ -40,7 +45,6 @@ const Homepage = () => {
       return axios
         .get("/api/itemtypes/")
         .then(res => {
-          console.log(res.data)
           return res.data
         })
         .catch(err => {
@@ -74,22 +78,22 @@ const Homepage = () => {
 
   const onSubmit = (e: React.FormEvent) => {
     e.preventDefault()
+    e.target.query.blur()
+    gsap.to(window, { duration: .7, ease: "power1.inOut", scrollTo: { y: "#search-form", offsetY: isMobile ? 50 : 200 } });
     mutate()
   }
-
-
 
 
   return (
 
     <section className="padding-x pt-30 sm:pt-50 pb-120">
-      <div className="h-[560px] w-[100vw] absolute top-0 left-0 right-0">
+      <div className="h-[370px] sm:h-[550px] w-[100vw]x absolute top-0 left-0 right-0">
         <img src={heroImg} alt="" className="h-full w-full object-cover object-center" />
         <div className="w-full h-[100.1%] absolute top-0 bg-gradient-to-b from-[#121413]/[0%] from-70% to-dark-bg to-100%"></div>
       </div>
 
-      <section className="max-container relative pt-77">
-        <form onSubmit={onSubmit} className="flex flex-col items-center mb-25 sm:mb-40 gap-4 sm:gap-6">
+      <section className="max-container relative pt-50 sm:pt-77">
+        <form id="search-form" onSubmit={onSubmit} className="flex flex-col items-center mb-25 sm:mb-40 gap-4 sm:gap-6">
           <Search query={query} setQuery={setQuery} placeholder="Search gear" />
           <div className="flex flex-wrap items-center justify-center gap-4 sm:gap-6 font-inter">
 

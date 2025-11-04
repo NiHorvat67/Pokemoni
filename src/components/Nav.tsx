@@ -6,14 +6,15 @@ const Nav = () => {
   const linkClass = ({ isActive }: { isActive: boolean }) => isActive ? "relative inline-block text-white py-2 leading-none after:content-[''] after:absolute after:left-1/2 after:-translate-x-1/2 after:bottom-[2px] after:h-[2px] after:w-full after:bg-white after:origin-center after:scale-x-120 after:transition-transform after:duration-300" : "relative inline-block text-white py-2 leading-none after:content-[''] after:absolute after:left-1/2 after:-translate-x-1/2 after:bottom-[2px] after:h-[2px] after:w-full after:bg-white after:origin-center after:scale-x-0 hover:after:scale-x-120 after:transition-transform after:duration-300";
   const location = useLocation();
   const { user } = useAuthContext();
+  console.log(user)
   const hideSingInButton = location.pathname === "/auth";
   return (
-    <header className="padding-x py-6 sm:py-3 absolute z-10 w-full bg-dark-bg/70 backdrop-blur-md">
+    <header className="padding-x py-2.5 sm:py-3 absolute z-10 w-full bg-dark-bg/50 backdrop-blur-[6px]">
       <div className="grid grid-cols-3 items-center">
         {/* kada se napravi dropdown na profilu, u div iznad dodati max-container klasu */}
 
         <div className="flex justify-start items-center">
-          <NavLink className="font-red-hat text-2xl sm:text-[32px]" to="/">
+          <NavLink className="font-red-hat text-xl sm:text-[32px]" to="/">
             <span className="font-bold text-primary">Gear</span>
             <span className="text-white">Share</span>
           </NavLink>

@@ -29,7 +29,7 @@ const Admin = () => {
 
           <div className="flex flex-col gap-8">
 
-            <div className="flex gap-6 flex-col bg-[#222423] rounded-[8px] px-7 py-5 sm:px-9 sm:py-7 max-w-[670px]">
+            <div className="flex gap-6 flex-col bg-[#222423] rounded-[8px] sm:px-7 py-4 px-5 sm:py-5 sm:px-9 sm:py-7 max-w-[670px]">
               <div className="flex flex-wrap gap-5 justify-between text-white">
                 <h2 className="">
                   <a href="/" className="font-bold">Craig George </a>
@@ -51,8 +51,8 @@ const Admin = () => {
                 <Button icon={false} text="Disable renting" className="!bg-[#EED202] hover:shadow-[0_0_15px_#EED202] text-black !py-2 !px-4" long={false} onClick={() => { }} />
               </div>
             </div>
-            
-          
+
+
           </div>
         </section>
 

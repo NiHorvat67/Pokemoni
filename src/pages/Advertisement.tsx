@@ -32,14 +32,14 @@ const Advertisement = () => {
 
 
   return (
-    <section className="padding-x padding-t">
+    <section className="padding-x padding-t padding-b">
       <section className="max-container">
 
         <div className="flex gap-8 lg:gap-20 max-lg:flex-col">
           <img src={bikeImg} alt="product image" className="max-h-[300px] lg:max-h-[400px]  lg:w-2/5 object-cover object-center rounded-[8px]" />
           <div className="flex flex-col items-start gap-10 lg:gap-12">
             <div className="flex items-start gap-1 flex-col">
-              <p className="text-primary bg-[#102B19] rounded-[8px] px-2.5 py-1.75 text-[14px] font-inter">{data?.itemType.itemtypeName}</p>
+              <p className="text-primary bg-[#102B19] rounded-[8px] px-2.5 py-1.25 text-[13px] font-inter">{data?.itemType.itemtypeName}</p>
               <h1 className="font-inter text-[24px] sm:text-[32px] font-medium text-white">{data?.itemName}</h1>
               <p className="font-inter text-white text-[14px]">by <a className="font-medium" href={`/profile/${data?.trader.accountId}`}>{data?.trader.userFirstName} {data?.trader.userLastName}</a></p>
             </div>

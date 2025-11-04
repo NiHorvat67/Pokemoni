@@ -22,7 +22,7 @@ const AuthStep2 = ({ step, setCurrentStep }: { step: number, currentStep: number
   const [address, setAddress] = useState("jdsaljdslka")
   const [email, setEmail] = useState("dsajdjdsasaldsak@g")
   const [phoneNum, setPhoneNum] = useState("832901890321")
-  const [role, setRole] = useState("Buyer")
+  const [role, setRole] = useState("")
   const [errors, setErrors] = useState<any>([])
 
   const { dispatch } = useAuthContext()
@@ -40,13 +40,12 @@ const AuthStep2 = ({ step, setCurrentStep }: { step: number, currentStep: number
           userLocation: address,
           accountRole: "trader",
           userContact: phoneNum,
-          username: "dx1sxaajakdsaldjslakd",
+          username: "321x",
           password: "dxsjdsaakldjslakd",
         }
       })
         .then(res => {
           console.log(res.data)
-          console.log("success")
           dispatch({ type: "LOGIN", payload: res.data })
           window.location.pathname = "/"
           return res.data
