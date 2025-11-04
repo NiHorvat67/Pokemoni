@@ -68,7 +68,7 @@ public class AccountController {
 
             Account newAccount = Account.convertToAccount(newAccountString);
             accountService.registerNewUserAccount(newAccount);
-            log.info("Account created successfully via create  for: {}", newAccount.getUsername());
+            log.info("Account created successfully via create  for: {}", newAccount.getUserEmail());
 
             HttpHeaders responseHeaders = new HttpHeaders();
             responseHeaders.setLocation(URI.create("/login"));

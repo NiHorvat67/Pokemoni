@@ -99,9 +99,7 @@ public class AccountService {
             throw new IllegalArgumentException("Email address already in use");
         }
 
-        if (accountRepo.findByUsername(account.getUsername()).isPresent()) {
-            throw new IllegalArgumentException("Username already in use");
-        }
+ 
 
         if (account.getRegistrationDate() == null) {
             account.setRegistrationDate(LocalDate.now());
