@@ -20,7 +20,7 @@ const AuthStep2 = ({ step, setCurrentStep }: { step: number, currentStep: number
   const [firstName, setFirstName] = useState("sigma")
   const [lastName, setLastName] = useState("grindset")
   const [address, setAddress] = useState("jdsaljdslka")
-  const [email, setEmail] = useState("dsajdjdsasaldsak@g")
+  const [email, setEmail] = useState("antoniobnoni@gmail.com")
   const [phoneNum, setPhoneNum] = useState("832901890321")
   const [role, setRole] = useState("")
   const [errors, setErrors] = useState<any>([])
@@ -40,13 +40,9 @@ const AuthStep2 = ({ step, setCurrentStep }: { step: number, currentStep: number
           userLocation: address,
           accountRole: "trader",
           userContact: phoneNum,
-          username: "321x",
-          password: "dxsjdsaakldjslakd",
         }
       })
         .then(res => {
-          console.log(res.data)
-          dispatch({ type: "LOGIN", payload: res.data })
           window.location.pathname = "/"
           return res.data
         })
@@ -60,8 +56,6 @@ const AuthStep2 = ({ step, setCurrentStep }: { step: number, currentStep: number
 
 
   const canProgress = () => {
-    // mozda dodatno provjeriti u bazi podataka jeli moguce napraviti usera s trenutnim podatcima
-    // npr jeli email unique, jel email postoji....
     const inputsFilled = firstName !== "" && lastName !== "" && address !== "" && email !== "" && phoneNum !== "" && role !== ""
     if (!inputsFilled) {
       setErrors((prev: string[]) => [...prev, "Fill out all the input fields"])

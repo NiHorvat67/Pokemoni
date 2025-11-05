@@ -39,6 +39,7 @@ const Homepage = () => {
   }, [categoryId, priceRange, dateRange])
 
 
+
   const { data: categories } = useQuery({
     queryKey: ["categories"],
     queryFn: async () => {

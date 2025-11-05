@@ -9,6 +9,7 @@ import Auth from "./pages/Auth"
 import Advertisement from "./pages/Advertisement"
 import Admin from "./pages/Admin"
 import NewAdvertisement from "./pages/NewAdvertisement"
+import { AuthContextProvider } from "./context/authContext"
 
 import useAuthContext from "./hooks/useAuthContext"
 
@@ -21,22 +22,24 @@ function App() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <BrowserRouter>
-        <main className="relative">
-          <Nav />
-          <Routes>
-            <Route path="/" element={<Homepage />}></Route>
-            <Route path="/error" element={<ErrorPage />}></Route>
-            <Route path="/profile/:userId" element={<TraderProfile />}></Route>
-            <Route path="/auth/:step?" element={<Auth />}></Route>
-            <Route path="/admin" element={<Admin />}></Route>
-            <Route path="/new-advertisement" element={<NewAdvertisement />}></Route>
-            <Route path="/advertisement/:advertisementId" element={<Advertisement />}></Route>
-            <Route path="/advertisement/:advertisementId" element={<Advertisement />}></Route>
-            <Route path="*" element={<Navigate to="/error" replace />}></Route>
-          </Routes>
-        </main>
-      </BrowserRouter>
+      <AuthContextProvider>
+        <BrowserRouter>
+          <main className="relative">
+            <Nav />
+            <Routes>
+              <Route path="/" element={<Homepage />}></Route>
+              <Route path="/error" element={<ErrorPage />}></Route>
+              <Route path="/profile/:userId" element={<TraderProfile />}></Route>
+              <Route path="/auth/:step?" element={<Auth />}></Route>
+              <Route path="/admin" element={<Admin />}></Route>
+              <Route path="/new-advertisement" element={<NewAdvertisement />}></Route>
+              <Route path="/advertisement/:advertisementId" element={<Advertisement />}></Route>
+              <Route path="/advertisement/:advertisementId" element={<Advertisement />}></Route>
+              <Route path="*" element={<Navigate to="/error" replace />}></Route>
+            </Routes>
+          </main>
+        </BrowserRouter>
+      </AuthContextProvider>
     </QueryClientProvider>
   )
 }

@@ -13,7 +13,7 @@ const AuthStep1 = ({ step, currentStep, setCurrentStep }: { step: number, curren
         <p className="text-desc font-inter md:mb-16 max-w-[470px] text-center">Pronađi savršenu sportsku opremu i kreni istraživati nove staze, planine i valove.</p>
       </div>
       <div className="flex flex-col gap-6">
-        <ApiProvider icon={googleIcon} text="Continue with Google" />
+        {/* <ApiProvider icon={googleIcon} text="Continue with Google" /> */}
         <ApiProvider icon={githubIcon} text="Continue with Github" />
       </div>
     </div>

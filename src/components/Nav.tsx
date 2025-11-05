@@ -6,8 +6,8 @@ const Nav = () => {
   const linkClass = ({ isActive }: { isActive: boolean }) => isActive ? "relative inline-block text-white py-2 leading-none after:content-[''] after:absolute after:left-1/2 after:-translate-x-1/2 after:bottom-[2px] after:h-[2px] after:w-full after:bg-white after:origin-center after:scale-x-120 after:transition-transform after:duration-300" : "relative inline-block text-white py-2 leading-none after:content-[''] after:absolute after:left-1/2 after:-translate-x-1/2 after:bottom-[2px] after:h-[2px] after:w-full after:bg-white after:origin-center after:scale-x-0 hover:after:scale-x-120 after:transition-transform after:duration-300";
   const location = useLocation();
   const { user } = useAuthContext();
-  console.log(user)
-  const hideSingInButton = location.pathname === "/auth";
+  const hideSingInButton = location.pathname.includes("/auth"); // za /auth i /auth/2
+
   return (
     <header className="padding-x py-2.5 sm:py-3 absolute z-10 w-full bg-dark-bg/50 backdrop-blur-[6px]">
       <div className="grid grid-cols-3 items-center">
