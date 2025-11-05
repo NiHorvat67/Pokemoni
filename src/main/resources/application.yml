@@ -44,4 +44,4 @@ logging:
 
 app:
   frontend:
-    url: http://localhost:5173
+    url: "localhost:5173"

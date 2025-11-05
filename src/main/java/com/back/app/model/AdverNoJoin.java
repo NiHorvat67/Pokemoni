@@ -7,15 +7,17 @@ import lombok.NoArgsConstructor;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
 @AllArgsConstructor
 @Data
 @Entity
 @Table(name = "advertisement")
 
-public class Advertisement {
+public class AdverNoJoin {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -40,9 +42,8 @@ public class Advertisement {
     @Column(name = "advertisement_end")
     private LocalDate advertisementEnd;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "trader_id")
-    private Account trader;
+    @Column(name = "trader_id")
+    private Integer traderId;
 
     @Column(name = "reservation_id")
     private Integer reservationId;
@@ -51,9 +52,8 @@ public class Advertisement {
     private String itemName;
 
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "itemtype_id")
-    private ItemType itemType;
+    @Column(name = "itemtype_id")
+    private Integer itemTypeId;
 
     @Column(name = "item_description")
     private String itemDescription;
@@ -62,7 +62,7 @@ public class Advertisement {
     private String itemImagePath;
 
     // placeholder
-    public Advertisement() {
+    public AdverNoJoin() {
         this.advertisementPrice = new BigDecimal("25.00");
         this.advertisementDeposit = new BigDecimal("100.00");
         this.advertisementLocationTakeover = "London Sports Center";
@@ -70,14 +70,26 @@ public class Advertisement {
         this.advertisementStart = LocalDate.now().plusDays(1);
         this.advertisementEnd = LocalDate.now().plusMonths(3);
         this.reservationId = null;
+        this.itemTypeId=3;
+        this.traderId=3;
         this.itemName = "Professional Skis Set";
         this.itemDescription = "High-quality professional skis with poles, perfect for intermediate to advanced skiers.";
         this.itemImagePath = "/images/jhdfsghfdhgkds1.jpg";
 
     }
 
-    public static Advertisement convertToAdvertisement(String jsonString) throws JsonProcessingException {
+    public static AdverNoJoin convertToAdverNoJoin(String jsonString) throws JsonProcessingException {
         ObjectMapper objectMapper = new ObjectMapper();
-        return objectMapper.readValue(jsonString, Advertisement.class);
+        objectMapper.registerModule(new JavaTimeModule()); 
+        return objectMapper.readValue(jsonString, AdverNoJoin.class);
+    }
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+    public LocalDate getAdvertisementStart() {
+        return advertisementStart;
+    }
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+    public LocalDate getAdvertisementEnd() {
+        return advertisementEnd;
     }
 }

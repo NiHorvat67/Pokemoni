@@ -5,17 +5,28 @@ import java.util.List;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.back.app.model.Account;
+import com.back.app.model.AdverNoJoin;
 import com.back.app.model.Advertisement;
-
+import com.back.app.model.ItemType;
+import com.back.app.service.AccountService;
 import com.back.app.service.AdvertisementService;
+import com.back.app.service.ItemTypeService;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -32,21 +43,23 @@ import lombok.extern.slf4j.Slf4j;
 @Validated
 @Slf4j
 public class AdvertisementController {
-
+    @Autowired
     private final AdvertisementService advertisementService;
+
 
     @Operation(summary = "Retrieve all advertisements", description = "Returns a comprehensive, unfiltered list of all active advertisement listings.")
     @GetMapping("/")
     public ResponseEntity<List<Advertisement>> getAllAdvertisements() {
         List<Advertisement> advertisements = advertisementService.getAllAdvertisements();
-        advertisements.forEach((ad)->advertisementService.hideSensitiveData(ad));
+        advertisements.forEach((ad) -> advertisementService.hideSensitiveData(ad));
         return ResponseEntity.ok(advertisements);
     }
+
     @Operation(summary = "Retrieve advertisements by ID of trader", description = "")
-   @GetMapping("/account/{id}")
+    @GetMapping("/account/{id}")
     public ResponseEntity<List<Advertisement>> getAllAdvertisementsType(@PathVariable Integer id) {
         List<Advertisement> advertisements = advertisementService.getAllAdvertisementsByTrader(id);
-        advertisements.forEach((ad)->advertisementService.hideSensitiveData(ad));
+        advertisements.forEach((ad) -> advertisementService.hideSensitiveData(ad));
         return ResponseEntity.ok(advertisements);
     }
 
@@ -54,9 +67,9 @@ public class AdvertisementController {
 
     @GetMapping("/{id}")
     public ResponseEntity<Advertisement> getMethodName(@PathVariable Integer id) {
-        Advertisement ad=advertisementService.getAdvertisementbyId(id);
-        if(ad !=null){
-            ad=advertisementService.hideSensitiveData(ad);
+        Advertisement ad = advertisementService.getAdvertisementbyId(id);
+        if (ad != null) {
+            ad = advertisementService.hideSensitiveData(ad);
             return ResponseEntity.ok().body(ad);
         }
         return ResponseEntity.notFound().build();
@@ -76,8 +89,33 @@ public class AdvertisementController {
                 categoryId, beginDate, endDate, minPrice, maxPrice);
 
         List<Advertisement> advertisements = advertisementService.getFilteredAdvertisements(
-                itemName,categoryId, beginDate, endDate, minPrice, maxPrice);
+                itemName, categoryId, beginDate, endDate, minPrice, maxPrice);
 
         return ResponseEntity.ok().body(advertisements);
+    }
+
+    @PostMapping("/test")
+    public ResponseEntity<String> testEndpoint() {
+        return ResponseEntity.ok("Controller is working!");
+    }
+
+    @PostMapping("/create")
+    public ResponseEntity<String> createNewAdvertisement(@RequestBody String newAdvertisementString) {
+        try {
+            log.info("Received advertisement: {}", newAdvertisementString);
+
+            AdverNoJoin advertisement = AdverNoJoin.convertToAdverNoJoin(newAdvertisementString);
+
+            advertisementService.saveAdverNoJoin(advertisement);
+            return ResponseEntity.ok(newAdvertisementString);
+
+        } catch (JsonProcessingException e) {
+            log.error("JSON parsing error: {}", e.getMessage());
+            return ResponseEntity.badRequest().body("Invalid JSON format: " + e.getMessage());
+        } catch (Exception e) {
+            log.error("Unexpected error: {}", e.getMessage(), e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Error: " + e.getMessage());
+        }
     }
 }

@@ -26,14 +26,8 @@ public class Account {
     @Column(name = "account_id")
     private Integer accountId;
 
-    @Column(name = "username", unique = true)
-    private String username;
-
     @Column(name = "oauth2_id", unique = true)
     private String oauth2Id;
-
-    @Column(name = "account_password", unique = true)
-    private String password;
 
     @Column(name = "user_email", unique = true)
     private String userEmail;
@@ -46,6 +40,10 @@ public class Account {
     
     @Column(name = "user_contact")
     private String userContact;
+
+    @Column(name = "user_contact_email")
+    private String userContactEmail;
+    
     
     @Column(name = "user_location")
     private String userLocation;
@@ -62,9 +60,9 @@ public class Account {
         ObjectMapper objectMapper = new ObjectMapper();
         Account tempAccount = objectMapper.readValue(jsonString, Account.class);
 
-        this.username = tempAccount.getUsername();
+        
         this.oauth2Id = tempAccount.getOauth2Id();
-        this.password = tempAccount.getPassword();
+        
         this.userEmail = tempAccount.getUserEmail();
         this.userFirstName = tempAccount.getUserFirstName();
         this.userLastName = tempAccount.getUserLastName();

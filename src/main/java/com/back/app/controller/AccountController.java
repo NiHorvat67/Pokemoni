@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.back.app.model.Account;
 import com.back.app.service.AccountService;
+import com.fasterxml.jackson.core.JsonProcessingException;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -58,6 +59,13 @@ public class AccountController {
         return accountService.getAccountByOAuth2Id(oauth2Id);
 
     }
+    @GetMapping("/current_id")
+    public Integer getCurrentUserId(HttpServletRequest request) {
+
+        String oauth2Id = request.getUserPrincipal().getName();
+        return accountService.getAccountByOAuth2Id(oauth2Id).getAccountId();
+
+    }
 
     @Operation(summary = "Create a new account", description = "Creates a new account and redirects the user to the /login route, checks if the arguments are valid")
     @PostMapping("/create")
@@ -68,22 +76,22 @@ public class AccountController {
 
             Account newAccount = Account.convertToAccount(newAccountString);
             accountService.registerNewUserAccount(newAccount);
-            log.info("Account created successfully via create  for: {}", newAccount.getUsername());
+            log.info("Account created successfully via create  for: {}", newAccount.getUserEmail());
 
             HttpHeaders responseHeaders = new HttpHeaders();
             responseHeaders.setLocation(URI.create("/login"));
 
             return ResponseEntity.ok()
                     .headers(responseHeaders)
-                    .body("Successfully created an account.");
+                    .body(newAccountString);
 
-        } catch (IllegalArgumentException e) {
-            log.error("Validation error in create: {}", e.getMessage());
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        } catch (JsonProcessingException e) {
+            log.error("JSON parsing error: {}", e.getMessage());
+            return ResponseEntity.badRequest().body("Invalid JSON format: " + e.getMessage());
         } catch (Exception e) {
-            log.error("Unexpected error in create: {}", e.getMessage(), e);
-            return new ResponseEntity<>("An unexpected error occurred during account creation.",
-                    HttpStatus.INTERNAL_SERVER_ERROR);
+            log.error("Unexpected error: {}", e.getMessage(), e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Error: " + e.getMessage());
         }
     }
 
