@@ -14,8 +14,10 @@ import org.springframework.stereotype.Service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import com.back.app.repo.AdverNoJoinRepo;
 import com.back.app.repo.AdvertisementRepo;
 import com.back.app.model.Account;
+import com.back.app.model.AdverNoJoin;
 import com.back.app.model.Advertisement;
 
 @Service
@@ -24,10 +26,12 @@ import com.back.app.model.Advertisement;
 public class AdvertisementService {
 
     private final AdvertisementRepo advertisementRepo;
+    private final AdverNoJoinRepo adverNoJoinRepo;
 
     public List<Advertisement> getAllAdvertisements() {
         return advertisementRepo.findAll();
     }
+
     public List<Advertisement> getAllAdvertisementsByTrader(Integer id) {
         return advertisementRepo.findAllForTraderId(id);
     }
@@ -60,8 +64,6 @@ public class AdvertisementService {
         return null;
     }
 
-
-
     public List<Advertisement> getFilteredAdvertisements(
             String itemName,
             Integer categoryId,
@@ -79,5 +81,9 @@ public class AdvertisementService {
 
         log.info("Found {} advertisements matching the criteria", filteredAds.size());
         return filteredAds;
+    }
+
+    public AdverNoJoin saveAdverNoJoin(AdverNoJoin adverNoJoin) {
+        return adverNoJoinRepo.save(adverNoJoin);
     }
 }
