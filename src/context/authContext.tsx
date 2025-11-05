@@ -37,7 +37,6 @@ export const AuthContextProvider = ({ children }: { children: any }) => {
         })
     },
     onSuccess: result => {
-      console.log(result)
       dispatch({ type: "LOGIN", payload: result })
     }
   })

@@ -8,7 +8,7 @@ import {
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 
-const PopupAlert = ({ errors }: { errors: string[] }) => {
+const PopupAlert = ({ errors, className }: { errors: string[], className?: string }) => {
 
   useGSAP(() => {
     gsap.from(".error-container", {
@@ -37,7 +37,6 @@ const PopupAlert = ({ errors }: { errors: string[] }) => {
             <ul className="list-disc list-inside space-y-1 mt-2">
               {errors.map((error: string) => (
                 <li key={error}>{error}</li>
-
               ))}
             </ul>
           </AlertDescription>

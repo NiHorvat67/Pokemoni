@@ -97,7 +97,6 @@ const AuthStep2 = ({ step, setCurrentStep }: { step: number, currentStep: number
           <Input state={firstName} setState={setFirstName} placeholder="Ime" />
           <Input state={lastName} setState={setLastName} placeholder="Prezime" />
           <Input state={address} setState={setAddress} placeholder="Email" />
-          <Input state={email} setState={setEmail} placeholder="Adresa" />
           <Input state={phoneNum} setState={setPhoneNum} placeholder="Mobitel" />
           <Select onValueChange={(value: string) => {
             setRole(value)

@@ -7,6 +7,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select-dropdown"
+import PopupAlert from "@/components/PopupAlert";
+
 
 import { Input as InputShadCn } from "@/components/ui/input"
 
@@ -15,6 +17,9 @@ import { categories } from "@/constants";
 import Button from "@/components/Button";
 import Textarea from "@/components/Textarea";
 import Calendar23 from "@/components/calendar-23-dropdown";
+import { useMutation } from "@tanstack/react-query";
+import axios from "axios";
+import useAuthContext from "@/hooks/useAuthContext";
 
 const NewAdvertisement = () => {
 
@@ -27,14 +32,70 @@ const NewAdvertisement = () => {
   const [description, setDescription] = useState("")
   const [dateRange, setDateRange] = useState<any>({ from: "", to: "" })
 
+  const { user } = useAuthContext()
+  const [errors, setErrors] = useState<any>([])
+
+
+
+  const { mutate } = useMutation({
+    mutationFn: async () => {
+      return axios({
+        method: "post",
+        url: "/api/advertisements/create",
+        data: {
+          advertisementPrice: Number(price),
+          advertisementDeposit: deposit ? Number(deposit) : 0,
+          advertisementLocationTakeover: pickupLocation,
+          advertisementLocationReturn: returnLocation,
+          advertisementStart: dateRange?.from.toISOString().substring(0, 10),
+          advertisementEnd: dateRange?.to.toISOString().substring(0, 10),
+          traderId: user.accountId,
+          itemName: heading,
+          itemTypeId: Number(category),
+          itemDescription: description,
+          itemImagePath: "/11111",
+        }
+      })
+        .then(res => {
+          console.log(res.data)
+          window.location.href = `/advertisement/${res.data}`
+          return res.data
+        })
+        .catch(err => {
+          console.log("error")
+          console.log(err)
+        })
+    }
+  })
+
+  const canProgress = () => {
+    const inputsFilled = heading !== "" && pickupLocation !== "" && returnLocation !== "" && price !== "" && category !== "" && description !== "" && dateRange.from !== "" && dateRange.to !== ""
+    if (!inputsFilled) {
+      setErrors((prev: string[]) => [...prev, "Fill out all the input fields"])
+      setTimeout(() => {
+        setErrors([])
+      }, 7 * 1000)
+    }
+    return inputsFilled
+  }
+
+  const onSubmit = (e) => {
+    e.preventDefault()
+    setErrors([])
+    if (!canProgress()) {
+      console.log("cant finish")
+    } else {
+      mutate()
+    }
+  }
 
   return (
-    <section className="padding-x padding-t">
+    <section className="padding-x padding-t padding-b min-h-[100vh]">
       <section className="max-container font-inter">
 
         <h1 className="font-medium text-2xl text-white mb-12 sm:mb-16">Create new advertisement</h1>
 
-        <form className="grid max-md:grid-cols-1 grid-cols-[repeat(2,minmax(250px,380px))] gap-x-20 gap-y-10 max-sm:grid-cols-1x">
+        <form onSubmit={onSubmit} className="grid max-md:grid-cols-1 grid-cols-[repeat(2,minmax(250px,380px))] gap-x-20 gap-y-10 max-sm:grid-cols-1x">
 
 
           <section className="text-white font-medium max-w-[350px] w-full">
@@ -75,6 +136,10 @@ const NewAdvertisement = () => {
         </form >
 
       </section >
+
+      {errors.length !== 0 &&
+        <PopupAlert className="" errors={errors} />
+      }
     </section >
   );
 }
