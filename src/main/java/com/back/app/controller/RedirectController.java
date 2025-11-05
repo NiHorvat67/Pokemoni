@@ -32,10 +32,15 @@ public class RedirectController {
         String oauth2Id = request.getUserPrincipal().getName();
         Account ret = accountService.getAccountByOAuth2Id(oauth2Id);
 
+        log.info(frontendBaseUrl);
         if(ret == null){
+            log.info("redirect:" + frontendBaseUrl + "/auth/2");
             return "redirect:" + frontendBaseUrl + "/auth/2";
+
         }else{
+            log.info("redirect:" + frontendBaseUrl + "/auth/2");
             return "redirect:" + frontendBaseUrl + "/";
+
         }
 
     }
