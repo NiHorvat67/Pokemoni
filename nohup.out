@@ -1,6 +1,0 @@
-[3:1105/220533.089694:ERROR:dbus/bus.cc:408] Failed to connect to the bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory
-Gtk-Message: 22:05:33.561: Failed to load module "xapp-gtk3-module"
-[3:1105/220533.614432:ERROR:dbus/bus.cc:408] Failed to connect to the bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory
-[3:1105/220533.614512:ERROR:dbus/bus.cc:408] Failed to connect to the bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory
-(node:3) MaxListenersExceededWarning: Possible EventEmitter memory leak detected. 11 enable-disable-menu-items listeners added to [IpcMainImpl]. MaxListeners is 10. Use emitter.setMaxListeners() to increase limit
-(Use `pgadmin4 --trace-warnings ...` to show where the warning was created)
