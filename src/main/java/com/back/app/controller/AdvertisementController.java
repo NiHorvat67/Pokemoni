@@ -107,7 +107,7 @@ public class AdvertisementController {
             AdverNoJoin advertisement = AdverNoJoin.convertToAdverNoJoin(newAdvertisementString);
 
             advertisementService.saveAdverNoJoin(advertisement);
-            return ResponseEntity.ok(newAdvertisementString);
+            return ResponseEntity.ok().body(advertisement.getAdvertisementId().toString());
 
         } catch (JsonProcessingException e) {
             log.error("JSON parsing error: {}", e.getMessage());
