@@ -23,9 +23,8 @@ public class PaymentService {
 
     public Session createPaymentLink(Account account, long amount) {
 
-        String STRIPE_API_KEY = "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";// System.getenv().get("STRIPE_API_KEY");
-        Stripe.apiKey = STRIPE_API_KEY;
-        log.info("stripe api key {}", STRIPE_API_KEY);
+        Stripe.apiKey = "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";
+        log.info("stripe api key {}", Stripe.apiKey);
         
         String CLIENT_BASE_URL = "http://localhost:8080"; 
         String customerEmail = "nikolahorvat2004@gmail.com";

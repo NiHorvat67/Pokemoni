@@ -26,7 +26,6 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 public class PaymentController {
 
-    String STRIPE_API_KEY = "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";//System.getenv().get("STRIPE_API_KEY");
     private final AccountService accountService;
     private final PaymentService paymentService;
 
