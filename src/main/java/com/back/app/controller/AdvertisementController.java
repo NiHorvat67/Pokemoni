@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.back.app.model.Account;
+
 import com.back.app.model.AdverNoJoin;
 import com.back.app.model.Advertisement;
 import com.back.app.model.ItemType;
@@ -100,14 +101,14 @@ public class AdvertisementController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<String> createNewAdvertisement(@RequestBody String newAdvertisementString) {
+    public ResponseEntity< String> createNewAdvertisement(@RequestBody String newAdvertisementString) {
         try {
             log.info("Received advertisement: {}", newAdvertisementString);
 
             AdverNoJoin advertisement = AdverNoJoin.convertToAdverNoJoin(newAdvertisementString);
 
             advertisementService.saveAdverNoJoin(advertisement);
-            return ResponseEntity.ok(newAdvertisementString);
+            return ResponseEntity.ok().body(advertisement.getAdvertisementId().toString());
 
         } catch (JsonProcessingException e) {
             log.error("JSON parsing error: {}", e.getMessage());
@@ -118,4 +119,5 @@ public class AdvertisementController {
                     .body("Error: " + e.getMessage());
         }
     }
+    
 }
