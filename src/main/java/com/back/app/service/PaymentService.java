@@ -12,6 +12,7 @@ import com.stripe.param.checkout.SessionCreateParams;
 import com.stripe.param.checkout.SessionCreateParams.LineItem.PriceData;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import lombok.extern.slf4j.Slf4j;
 
 // receive payment in USD
@@ -21,11 +22,15 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class PaymentService {
 
+    @Value("${stripe.api.key}") 
+    private String stripeApiKey;
+
     public Session createPaymentLink(Account account, long amount) {
 
-        Stripe.apiKey = "";
+
+        Stripe.apiKey = stripeApiKey;
         log.info("stripe api key {}", Stripe.apiKey);
-        
+    
         String CLIENT_BASE_URL = "http://localhost:8080"; 
         String customerEmail = "nikolahorvat2004@gmail.com";
 

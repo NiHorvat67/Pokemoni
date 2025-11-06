@@ -42,6 +42,10 @@ logging:
     root: INFO
     com.back.app: INFO
 
+stripe:
+  api:
+    key: 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
+
 app:
   frontend:
     url: "http://localhost:5173"
