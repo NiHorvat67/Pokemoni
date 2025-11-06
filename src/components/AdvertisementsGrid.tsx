@@ -47,7 +47,7 @@ const AdvertisementsGrid = ({ products }: { products: any[] }) => {
         {products.map((product: any, index) => {
           if (index < numCards)
             return (
-              <div key={index} className="product-card opacity-0">
+              <div key={product.advertisementId} className="product-card opacity-0">
                 <ProductCard
                   category={product.itemType.itemtypeName}
                   img={product.itemImagePath}

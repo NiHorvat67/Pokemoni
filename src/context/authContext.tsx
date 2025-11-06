@@ -8,6 +8,7 @@ export const AuthContext = createContext({})
 const authReducer = (state: any, action: any) => {
   switch (action.type) {
     case "LOGIN":
+      localStorage.setItem("user", JSON.stringify(action.payload))
       return { user: action.payload }
     case "LOGOUT":
       // api call za delete JSESSIONID cookiea
@@ -21,7 +22,8 @@ const authReducer = (state: any, action: any) => {
 
 export const AuthContextProvider = ({ children }: { children: any }) => {
 
-  const [state, dispatch] = useReducer(authReducer, { user: null })
+  const user = JSON.parse(localStorage.getItem("user"))
+  const [state, dispatch] = useReducer(authReducer, { user: user })
 
   const { mutate } = useMutation({
     mutationFn: async () => {
@@ -42,7 +44,13 @@ export const AuthContextProvider = ({ children }: { children: any }) => {
   })
 
   useEffect(() => {
-    mutate()
+    const user = JSON.parse(localStorage.getItem("user"))
+    // user storean u localstorage da se ne mora svaki puta raditi request na /accounts/current
+    if (user) {
+      dispatch({ type: "LOGIN", payload: user })
+    } else {
+      mutate()
+    }
 
   }, [])
 

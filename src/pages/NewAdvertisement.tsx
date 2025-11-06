@@ -53,7 +53,7 @@ const NewAdvertisement = () => {
           itemName: heading,
           itemTypeId: Number(category),
           itemDescription: description,
-          itemImagePath: "/11111",
+          itemImagePath: "/111111",
         }
       })
         .then(res => {

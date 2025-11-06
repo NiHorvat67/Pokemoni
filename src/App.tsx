@@ -15,8 +15,8 @@ import useAuthContext from "./hooks/useAuthContext"
 function App() {
 
   const { user } = useAuthContext()
-  // zabraniti auth rute ako je user vec ulogiran. kasnije zbog lakseg testiranja
   console.log(user)
+  // zabraniti auth rute ako je user vec ulogiran. kasnije zbog lakseg testiranja
   return (
     <BrowserRouter>
       <main className="relative">
@@ -27,6 +27,7 @@ function App() {
           <Route path="/profile/:userId" element={<TraderProfile />} />
           <Route path="/auth/:step?" element={user ? <Navigate to="/" replace /> : <Auth />} />
           <Route path="/admin" element={<Admin />} />
+          {/* <Route path="/new-advertisement" element={user ? (user.accountRole == "trader" ? <NewAdvertisement /> : <Navigate to="/" replace />) : <Navigate to="/auth" replace />} /> */}
           <Route path="/new-advertisement" element={user ? <NewAdvertisement /> : <Navigate to="/auth" replace />} />
           <Route path="/advertisement/:advertisementId" element={<Advertisement />} />
           <Route path="*" element={<Navigate to="/error" replace />} />

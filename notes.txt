@@ -1,38 +1,6 @@
 
-Advertisement ime/opis u db
-koliko vidim, ad trenutno ima samo itemDescription koji sluzi kao ime.
-mi smo mislili da imamo i ime i opis odvojeno. dakle ime bi bilo doslovno ime proizvoda koji se iznajmljuje,
-a opis tekst u kojem iznajmljivac opisuje npr. stanje proizvoda, itd...
-dakle treba dodat da se u bazi storea i ime i opis proizvoda.
-
-
-
-Advertisement responses
-/api/advertisements/id
-- trenutno se trazi da user bude logged in, treba biti public
-- ako se ulogiram i odem na route, dobijem 500 Internal Server Error
-- u response dodati:
-	- ime kategorije
-  - rating (ocjena od 1 do 5)
-	- ime i opis proizvoda spomenut gore,
-	- ime tradera
-
-dodati rutu preko koje se mogu dobiti svi adovi nekog tradera
-  - za svaki ad neka vraca iste podatke kao i /api/advertisement/id
-
-opcenito kada god se vracaju podatci o adu (dakle ova dva routea gore ili kroz search) neka vraca sve spomenuto gore
-
-
-Search
-osim filtera, dodati da se i tekstom moze searchati
-
-
-Kategorije
-dodati rutu koja vraca sve kategorije (id i ime)
-
 
 Accounts
-- mozda dodati broj mobitela?
 - za kupca dodati sve rezervacije koje su trenutno aktivne i one koje su istekle (samo taj kupac ima pristup tome, dakle nije public)
 - za tradera dodati sve rezervacije njegovih advertisementa (samo taj trader ima pristup, nije public)
 rating tradera
