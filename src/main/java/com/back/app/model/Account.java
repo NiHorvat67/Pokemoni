@@ -40,10 +40,6 @@ public class Account {
     
     @Column(name = "user_contact")
     private String userContact;
-
-    @Column(name = "user_contact_email")
-    private String userContactEmail;
-    
     
     @Column(name = "user_location")
     private String userLocation;
