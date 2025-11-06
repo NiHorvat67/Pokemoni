@@ -23,7 +23,7 @@ public class PaymentService {
 
     public Session createPaymentLink(Account account, long amount) {
 
-        Stripe.apiKey = "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";
+        Stripe.apiKey = "";
         log.info("stripe api key {}", Stripe.apiKey);
         
         String CLIENT_BASE_URL = "http://localhost:8080"; 
