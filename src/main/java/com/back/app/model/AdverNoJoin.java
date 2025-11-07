@@ -92,4 +92,5 @@ public class AdverNoJoin {
     public LocalDate getAdvertisementEnd() {
         return advertisementEnd;
     }
+
 }

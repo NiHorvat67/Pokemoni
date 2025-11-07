@@ -119,9 +119,5 @@ public class AdvertisementController {
                     .body("Error: " + e.getMessage());
         }
     }
-<<<<<<< HEAD
     
 }
-=======
-}
->>>>>>> 998f48f38e7fc4100c89fce6a3d6afd7358cbd30

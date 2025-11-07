@@ -1,5 +1,6 @@
 package com.back.app.controller;
 
+import java.io.IOException;
 import java.net.URI;
 import java.time.LocalDate;
 import java.util.List;
@@ -35,7 +36,10 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -89,36 +93,33 @@ public class AccountController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<String> createAccount(
+    public void createAccount(
             @RequestBody String newAccountString,
-            @AuthenticationPrincipal OAuth2User oauth2User) {
+            @AuthenticationPrincipal OAuth2User oauth2User,
+            HttpServletRequest request,
+            HttpServletResponse response) {
 
         try {
-           
             String accessToken = getCurrentUserAccessToken();
 
             if (accessToken == null) {
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                        .body("No access token available");
+                return;
             }
 
-            
             String userEmail = fetchEmailWithAccessToken(oauth2User, accessToken);
 
             if (userEmail == null) {
-                return ResponseEntity.badRequest()
-                        .body("Could not determine user email from OAuth2 provider");
+                
+                return;
             }
 
             String oauth2Id = oauth2User.getName();
-
             log.info("Extracted - OAuth2 ID: {}, Email: {}", oauth2Id, userEmail);
 
             Account newAccount = Account.convertToAccount(newAccountString);
             newAccount.setOauth2Id(oauth2Id);
             newAccount.setUserEmail(userEmail);
 
-         
             if (newAccount.getRegistrationDate() == null) {
                 newAccount.setRegistrationDate(LocalDate.now());
             }
@@ -129,19 +130,27 @@ public class AccountController {
             accountService.saveAccount(newAccount);
             log.info("Account created successfully for: {}", userEmail);
 
-            return ResponseEntity.ok().body("Account created for: " + userEmail);
+            // Invalidate session and clear cookies
+            HttpSession session = request.getSession(false);
+            if (session != null) {
+                session.invalidate();
+            }
 
-        } catch (JsonProcessingException e) {
-            log.error("JSON parsing error: {}", e.getMessage());
-            return ResponseEntity.badRequest().body("Invalid JSON format: " + e.getMessage());
+            Cookie cookie = new Cookie("JSESSIONID", null);
+            cookie.setPath(request.getContextPath() + "/");
+            cookie.setHttpOnly(true);
+            cookie.setSecure(request.isSecure());
+            cookie.setMaxAge(0);
+            response.addCookie(cookie);
+
+            // Redirect to frontend
+            response.sendRedirect("http://localhost:8080/oauth2/authorization/github");
+
         } catch (Exception e) {
             log.error("Unexpected error: {}", e.getMessage(), e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Error: " + e.getMessage());
         }
     }
 
- 
     private String getCurrentUserAccessToken() {
         try {
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -149,7 +158,6 @@ public class AccountController {
             if (authentication instanceof OAuth2AuthenticationToken) {
                 OAuth2AuthenticationToken authToken = (OAuth2AuthenticationToken) authentication;
 
-                
                 OAuth2AuthorizedClient client = authorizedClientService.loadAuthorizedClient(
                         authToken.getAuthorizedClientRegistrationId(),
                         authToken.getName());
@@ -165,15 +173,13 @@ public class AccountController {
         return null;
     }
 
- 
     private String fetchEmailWithAccessToken(OAuth2User oAuth2User, String accessToken) {
-        
+
         String email = (String) oAuth2User.getAttributes().get("email");
         if (email != null) {
             return email;
         }
 
-    
         try {
             HttpHeaders headers = new HttpHeaders();
             headers.set("Authorization", "Bearer " + accessToken);
@@ -188,7 +194,7 @@ public class AccountController {
                     Map[].class);
 
             if (response.getBody() != null) {
-           
+
                 for (Map<String, Object> emailData : response.getBody()) {
                     Boolean primary = (Boolean) emailData.get("primary");
                     Boolean verified = (Boolean) emailData.get("verified");
@@ -199,7 +205,6 @@ public class AccountController {
                     }
                 }
 
-               
                 for (Map<String, Object> emailData : response.getBody()) {
                     Boolean verified = (Boolean) emailData.get("verified");
                     String emailAddress = (String) emailData.get("email");
