@@ -44,7 +44,7 @@ logging:
 
 stripe:
   api:
-    key: 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
+    key: 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
 
 app:
   frontend:

@@ -29,6 +29,7 @@ public class PaymentService {
 
 
         Stripe.apiKey = stripeApiKey;
+        log.info(stripeApiKey);
         log.info("stripe api key {}", Stripe.apiKey);
     
         String CLIENT_BASE_URL = "http://localhost:8080"; 
