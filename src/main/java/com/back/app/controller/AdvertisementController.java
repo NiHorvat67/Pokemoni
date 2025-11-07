@@ -95,10 +95,6 @@ public class AdvertisementController {
         return ResponseEntity.ok().body(advertisements);
     }
 
-    @PostMapping("/test")
-    public ResponseEntity<String> testEndpoint() {
-        return ResponseEntity.ok("Controller is working!");
-    }
 
     @PostMapping("/create")
     public ResponseEntity< String> createNewAdvertisement(@RequestBody String newAdvertisementString) {

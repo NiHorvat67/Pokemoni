@@ -14,6 +14,10 @@ import lombok.extern.slf4j.Slf4j;
 import com.back.app.repo.AccountRepo;
 
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 
 import com.back.app.model.Account;
 
@@ -99,13 +103,29 @@ public class AccountService {
             throw new IllegalArgumentException("Email address already in use");
         }
 
- 
-
         if (account.getRegistrationDate() == null) {
             account.setRegistrationDate(LocalDate.now());
         }
 
         return accountRepo.save(account);
+    }
+
+    public void deleteAccountById(Integer id) {
+        accountRepo.deleteById(id);
+    }
+
+    public void logoutUser(HttpServletRequest request,HttpServletResponse response) {
+        HttpSession session = request.getSession(false);
+        if (session != null) {
+            session.invalidate();
+        }
+
+        Cookie cookie = new Cookie("JSESSIONID", null);
+        cookie.setPath(request.getContextPath() + "/");
+        cookie.setHttpOnly(true);
+        cookie.setSecure(request.isSecure());
+        cookie.setMaxAge(0);
+        response.addCookie(cookie);
     }
 
 }

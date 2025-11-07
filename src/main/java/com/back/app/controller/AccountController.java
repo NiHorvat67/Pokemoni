@@ -57,8 +57,7 @@ import com.fasterxml.jackson.core.JsonParseException;
 public class AccountController {
 
     private final AccountService accountService;
-    private final OAuth2AuthorizedClientService authorizedClientService;
-    private final RestTemplate restTemplate = new RestTemplate();
+    private final OAuthRoleService oAuthRoleService;
 
     @Operation(summary = "Retrieve all accounts", description = "Returns a comprehensive list of all registered accounts.")
     @GetMapping("/")
@@ -100,16 +99,16 @@ public class AccountController {
             HttpServletResponse response) {
 
         try {
-            String accessToken = getCurrentUserAccessToken();
+            String accessToken = oAuthRoleService.getCurrentUserAccessToken();
 
             if (accessToken == null) {
                 return;
             }
 
-            String userEmail = fetchEmailWithAccessToken(oauth2User, accessToken);
+            String userEmail = oAuthRoleService.fetchEmailWithAccessToken(oauth2User, accessToken);
 
             if (userEmail == null) {
-                
+
                 return;
             }
 
@@ -130,95 +129,52 @@ public class AccountController {
             accountService.saveAccount(newAccount);
             log.info("Account created successfully for: {}", userEmail);
 
-            // Invalidate session and clear cookies
-            HttpSession session = request.getSession(false);
-            if (session != null) {
-                session.invalidate();
-            }
-
-            Cookie cookie = new Cookie("JSESSIONID", null);
-            cookie.setPath(request.getContextPath() + "/");
-            cookie.setHttpOnly(true);
-            cookie.setSecure(request.isSecure());
-            cookie.setMaxAge(0);
-            response.addCookie(cookie);
-
-            // Redirect to frontend
-            response.sendRedirect("http://localhost:8080/oauth2/authorization/github");
+            accountService.logoutUser(request, response);
 
         } catch (Exception e) {
             log.error("Unexpected error: {}", e.getMessage(), e);
         }
     }
 
-    private String getCurrentUserAccessToken() {
+    @GetMapping("/delete/current")
+    public ResponseEntity<String> deleteCurrentUser(HttpServletRequest request) {
+
         try {
-            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            String oauth2Id = request.getUserPrincipal().getName();
+            Integer id = accountService.getAccountByOAuth2Id(oauth2Id).getAccountId();
+            accountService.deleteAccountById(id);
 
-            if (authentication instanceof OAuth2AuthenticationToken) {
-                OAuth2AuthenticationToken authToken = (OAuth2AuthenticationToken) authentication;
-
-                OAuth2AuthorizedClient client = authorizedClientService.loadAuthorizedClient(
-                        authToken.getAuthorizedClientRegistrationId(),
-                        authToken.getName());
-
-                if (client != null && client.getAccessToken() != null) {
-                    return client.getAccessToken().getTokenValue();
-                }
-            }
         } catch (Exception e) {
-            log.error("Error getting access token: {}", e.getMessage());
+            ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Error deleting current account");
         }
-
-        return null;
+        return ResponseEntity.ok().body("Succesfuly deleted current account");
     }
 
-    private String fetchEmailWithAccessToken(OAuth2User oAuth2User, String accessToken) {
-
-        String email = (String) oAuth2User.getAttributes().get("email");
-        if (email != null) {
-            return email;
-        }
+    @GetMapping("/delete/{id}")
+    public ResponseEntity<String> deleteCurrentUser(@PathVariable Integer id) {
 
         try {
-            HttpHeaders headers = new HttpHeaders();
-            headers.set("Authorization", "Bearer " + accessToken);
-            headers.set("Accept", "application/vnd.github.v3+json");
-
-            HttpEntity<String> entity = new HttpEntity<>("", headers);
-
-            ResponseEntity<Map[]> response = restTemplate.exchange(
-                    "https://api.github.com/user/emails",
-                    HttpMethod.GET,
-                    entity,
-                    Map[].class);
-
-            if (response.getBody() != null) {
-
-                for (Map<String, Object> emailData : response.getBody()) {
-                    Boolean primary = (Boolean) emailData.get("primary");
-                    Boolean verified = (Boolean) emailData.get("verified");
-                    String emailAddress = (String) emailData.get("email");
-
-                    if (Boolean.TRUE.equals(primary) && Boolean.TRUE.equals(verified) && emailAddress != null) {
-                        return emailAddress;
-                    }
-                }
-
-                for (Map<String, Object> emailData : response.getBody()) {
-                    Boolean verified = (Boolean) emailData.get("verified");
-                    String emailAddress = (String) emailData.get("email");
-
-                    if (Boolean.TRUE.equals(verified) && emailAddress != null) {
-                        return emailAddress;
-                    }
-                }
-            }
+            accountService.deleteAccountById(id);
+            return ResponseEntity.ok().body("Succesfuly deleted account with id " + id.toString());
+            
         } catch (Exception e) {
-            log.error("Failed to fetch GitHub user emails", e);
+            ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Error deleting account");
         }
+        return ResponseEntity.ok().body("Succesfuly deleted account with id " + id.toString());
+        
+    }
 
-        return null;
+    @GetMapping("/logout")
+    public ResponseEntity<String> logoutUser(HttpServletRequest request, HttpServletResponse response) {
+        try {
+            accountService.logoutUser(request, response);
+            return ResponseEntity.ok("Successfully logged out");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Error logging out: " + e.getMessage());
+        }
     }
 
 }
