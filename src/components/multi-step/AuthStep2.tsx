@@ -51,7 +51,10 @@ const AuthStep2 = ({ step, setCurrentStep }: { step: number, currentStep: number
           console.log("error")
           console.log(err)
         })
-    },
+    },onSuccess: () => {
+        window.location.href = "http://localhost:8080/oauth2/authorization/github";
+
+    }
 
   })
 
