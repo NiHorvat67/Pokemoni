@@ -37,7 +37,7 @@ public class PaymentService {
         try {
             SessionCreateParams.Builder paramsBuilder = SessionCreateParams.builder()
                     .setMode(SessionCreateParams.Mode.PAYMENT)
-                    .setSuccessUrl(CLIENT_BASE_URL + "/finalize/trader")
+                    .setSuccessUrl(CLIENT_BASE_URL + "/")
                     .setCancelUrl(CLIENT_BASE_URL + "/error?failed");
 
             paramsBuilder.addLineItem(
