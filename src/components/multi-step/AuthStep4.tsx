@@ -4,15 +4,10 @@ import { useState } from "react";
 
 const AuthStep4 = ({ tl }: { step: number, currentStep: number, setCurrentStep: any, tl: any }) => {
 
-  const timeoutDelay = 5
-  const [timer, setTimer] = useState(timeoutDelay)
 
   setTimeout(() => {
-    window.location.pathname = "/"
-  }, timeoutDelay * 1000)
-  setInterval(() => {
-    setTimer(timer - 1)
-  }, 1000)
+    window.location.href = "http://localhost:8080/oauth2/authorization/github";
+  }, 2 * 1000)
 
 
   useGSAP(() => {
@@ -27,7 +22,7 @@ const AuthStep4 = ({ tl }: { step: number, currentStep: number, setCurrentStep: 
       rotateZ: 0,
       scale: 1,
       duration: .4,
-      delay: .3,
+      delay: .5,
       ease: "power1.inOut"
     }, 0)
   }, [])
@@ -36,9 +31,8 @@ const AuthStep4 = ({ tl }: { step: number, currentStep: number, setCurrentStep: 
     <div className="step-content flex max-lg:pb-19 max-lg:pt-10 flex-col items-center flex-1 md:justify-center md:mt-[-200px] gap-5 lg:gap-5">
       <img id="success-icon" src={checkIcon} alt="success icon" className="h-25 w-25 lg:h-30 lg:w-30" />
       <div>
-        <h1 id="heading" className="font-red-hat mb-5 text-white text-[28px] sm:text-[32px] font-medium text-center">Thank you</h1>
-        <p className="text-desc font-inter mb-4 max-w-[470px] text-center">Payment processed! You can now start listing equipment.</p>
-        <p className="text-desc font-inter mb-12 max-w-[470px] text-center">Redirecting you to homepage in {timer}</p>
+        <h1 id="heading" className="font-red-hat mb-5 text-white text-[28px] sm:text-[32px] font-medium text-center">Account created!</h1>
+        <p className="text-desc font-mediumx font-inter mb-12 max-w-[470px] text-center">Redirecting you to homepage</p>
       </div>
     </div>
   );

@@ -12,7 +12,7 @@ const MultiStepAuth = () => {
 
   const { step } = useParams()
 
-  const [currentStep, setCurrentStep] = useState(step == "2" ? 2 : 1)
+  const [currentStep, setCurrentStep] = useState(step == "2" || step == "4" ? Number(step) : 1)
   const stepComponents = [AuthStep1, AuthStep2, AuthStep3, AuthStep4]
 
 
