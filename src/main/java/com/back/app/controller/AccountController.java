@@ -8,6 +8,7 @@ import java.util.Map;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -15,24 +16,23 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.oauth2.client.OAuth2AuthorizedClient;
-import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
-import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
-import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
 import com.back.app.model.Account;
 import com.back.app.service.AccountService;
 import com.back.app.service.OAuthRoleService;
+import com.back.app.service.PaymentService;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.stripe.exception.StripeException;
+import com.stripe.model.checkout.Session;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -56,8 +56,13 @@ import com.fasterxml.jackson.core.JsonParseException;
 @Slf4j
 public class AccountController {
 
+
+    @Value("${app.frontend.url}")
+    String CLIENT_BASE_URL;
+
     private final AccountService accountService;
     private final OAuthRoleService oAuthRoleService;
+    private final PaymentService paymentService;
 
     @Operation(summary = "Retrieve all accounts", description = "Returns a comprehensive list of all registered accounts.")
     @GetMapping("/")
@@ -88,6 +93,95 @@ public class AccountController {
 
         String oauth2Id = request.getUserPrincipal().getName();
         return accountService.getAccountByOAuth2Id(oauth2Id).getAccountId();
+
+    }
+
+    @PostMapping("/create/buyer")
+    public void createBuyer(@RequestBody String newAccountString,
+            @AuthenticationPrincipal OAuth2User oauth2User,
+            HttpServletRequest request,
+            HttpServletResponse response) {
+
+        try {
+            String accessToken = oAuthRoleService.getCurrentUserAccessToken();
+
+            if (accessToken == null) {
+                return;
+            }
+
+            String userEmail = oAuthRoleService.fetchEmailWithAccessToken(oauth2User, accessToken);
+
+            if (userEmail == null) {
+
+                return;
+            }
+
+            String oauth2Id = oauth2User.getName();
+            log.info("Extracted - OAuth2 ID: {}, Email: {}", oauth2Id, userEmail);
+
+            Account newAccount = Account.convertToAccount(newAccountString);
+            newAccount.setOauth2Id(oauth2Id);
+            newAccount.setUserEmail(userEmail);
+
+            if (newAccount.getRegistrationDate() == null) {
+                newAccount.setRegistrationDate(LocalDate.now());
+            }
+
+            newAccount.setAccountRole("buyer");
+
+            accountService.saveAccount(newAccount);
+            log.info("Account created successfully for: {}", userEmail);
+
+            accountService.logoutUser(request, response);
+
+        } catch (Exception e) {
+            log.error("Unexpected error: {}", e.getMessage(), e);
+        }
+
+    }
+
+    @PostMapping("/create/trader")
+    public void createTrader(@RequestBody String newAccountString,
+            @AuthenticationPrincipal OAuth2User oauth2User,
+            HttpServletRequest request,
+            HttpServletResponse response) {
+
+        try {
+            String accessToken = oAuthRoleService.getCurrentUserAccessToken();
+
+            if (accessToken == null) {
+                return;
+            }
+
+            String userEmail = oAuthRoleService.fetchEmailWithAccessToken(oauth2User, accessToken);
+
+            if (userEmail == null) {
+
+                return;
+            }
+
+            String oauth2Id = oauth2User.getName();
+            log.info("Extracted - OAuth2 ID: {}, Email: {}", oauth2Id, userEmail);
+
+            Account newAccount = Account.convertToAccount(newAccountString);
+            newAccount.setOauth2Id(oauth2Id);
+            newAccount.setUserEmail(userEmail);
+
+            if (newAccount.getRegistrationDate() == null) {
+                newAccount.setRegistrationDate(LocalDate.now());
+            }
+
+            newAccount.setAccountRole("trader");
+            accountService.saveAccount(newAccount);
+
+
+            String paymentRedirectUrl = paymentService.createPaymentLink(newAccount, 0);
+
+            response.sendRedirect(paymentRedirectUrl);
+
+        } catch (Exception e) {
+            log.error("Unexpected error: {}", e.getMessage(), e);
+        }
 
     }
 
@@ -157,13 +251,13 @@ public class AccountController {
         try {
             accountService.deleteAccountById(id);
             return ResponseEntity.ok().body("Succesfuly deleted account with id " + id.toString());
-            
+
         } catch (Exception e) {
             ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("Error deleting account");
         }
         return ResponseEntity.ok().body("Succesfuly deleted account with id " + id.toString());
-        
+
     }
 
     @GetMapping("/logout")

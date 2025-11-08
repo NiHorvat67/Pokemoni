@@ -24,20 +24,21 @@ public class PaymentService {
     @Value("${stripe.api.key}") 
     private String stripeApiKey;
 
+    @Value("${app.frontend.url}")
+    String CLIENT_BASE_URL;
 
     public String createPaymentLink(Account account, long amount) {
 
 
         Stripe.apiKey = stripeApiKey;
         log.info("Stripe API key is set.");
-    
-        String CLIENT_BASE_URL = "http://localhost:8080"; 
+        
 
         try {
             SessionCreateParams.Builder paramsBuilder = SessionCreateParams.builder()
                     .setMode(SessionCreateParams.Mode.PAYMENT)
-                    .setSuccessUrl(CLIENT_BASE_URL + "/success?session_id={CHECKOUT_SESSION_ID}")
-                    .setCancelUrl(CLIENT_BASE_URL + "/failure");
+                    .setSuccessUrl(CLIENT_BASE_URL + "/finalize/trader")
+                    .setCancelUrl(CLIENT_BASE_URL + "/error?failed");
 
             paramsBuilder.addLineItem(
                     SessionCreateParams.LineItem.builder()
@@ -47,6 +48,7 @@ public class PaymentService {
                                             .setProductData(
                                                     PriceData.ProductData.builder()
                                                             .setName("Trader Subscription")
+                                                            .setDescription("PAY ME " + account.getUserFirstName())
                                                             .build())
                                             .setCurrency("usd")
                                             .setUnitAmount(Math.abs(amount)) 

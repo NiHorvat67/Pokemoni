@@ -34,7 +34,7 @@ public class PaymentController {
     
     // for testing
     
-    @PostMapping("/checkout/hosted")
+    @PostMapping("/trader/checkout")
     public ResponseEntity<String> hostedCheckout() throws StripeException {
         try{
             String link = paymentService.createPaymentLink(null, 100);
