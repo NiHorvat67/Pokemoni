@@ -150,14 +150,14 @@ public class AccountController {
             String accessToken = oAuthRoleService.getCurrentUserAccessToken();
 
             if (accessToken == null) {
-                return "redirect:/";
+                return "/";
             }
 
             String userEmail = oAuthRoleService.fetchEmailWithAccessToken(oauth2User, accessToken);
 
             if (userEmail == null) {
 
-                return "redirect:/";
+                return "/";
             }
 
             String oauth2Id = oauth2User.getName();
@@ -177,11 +177,11 @@ public class AccountController {
 
             String paymentRedirectUrl = paymentService.createPaymentLink(newAccount, 100);
             log.info(paymentRedirectUrl);
-            return "redirect:" + paymentRedirectUrl;
+            return paymentRedirectUrl;
 
         } catch (Exception e) {
             log.error("Unexpected error: {}", e.getMessage(), e); 
-            return "redirect:/";
+            return "/";
         }
 
     }
