@@ -12,6 +12,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -46,7 +47,6 @@ import lombok.extern.slf4j.Slf4j;
 public class AdvertisementController {
     @Autowired
     private final AdvertisementService advertisementService;
-
 
     @Operation(summary = "Retrieve all advertisements", description = "Returns a comprehensive, unfiltered list of all active advertisement listings.")
     @GetMapping("/")
@@ -95,9 +95,8 @@ public class AdvertisementController {
         return ResponseEntity.ok().body(advertisements);
     }
 
-
     @PostMapping("/create")
-    public ResponseEntity< String> createNewAdvertisement(@RequestBody String newAdvertisementString) {
+    public ResponseEntity<String> createNewAdvertisement(@RequestBody String newAdvertisementString) {
         try {
             log.info("Received advertisement: {}", newAdvertisementString);
 
@@ -112,8 +111,42 @@ public class AdvertisementController {
         } catch (Exception e) {
             log.error("Unexpected error: {}", e.getMessage(), e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+
                     .body("Error: " + e.getMessage());
         }
     }
-    
+
+    @PostMapping("/edit/{id}")
+    public ResponseEntity<String> editAdvertisement(@PathVariable Integer id,
+            @RequestBody String newAdvertisementString) {
+        try {
+            log.info("Received advertisement: {}", newAdvertisementString);
+
+            AdverNoJoin advertisement = AdverNoJoin.convertToAdverNoJoin(newAdvertisementString);
+
+            advertisementService.updateAdverNoJoin(id, advertisement);
+            return ResponseEntity.ok().body(advertisement.getAdvertisementId().toString());
+
+        } catch (JsonProcessingException e) {
+            log.error("JSON parsing error: {}", e.getMessage());
+            return ResponseEntity.badRequest().body("Invalid JSON format: " + e.getMessage());
+        } catch (Exception e) {
+            log.error("Unexpected error: {}", e.getMessage(), e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+
+                    .body("Error: " + e.getMessage());
+        }
+    }
+
+    @GetMapping("/delete/{id}")
+    public ResponseEntity<String> deleteAdvertisement(@PathVariable Integer id) {
+        try {
+            advertisementService.deleteAccountById(id);
+        } catch (Exception e) {
+            ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Error deleting advertisement");
+        }
+        return ResponseEntity.ok().body("Succesfuly deleted advertisement with id " + id.toString());
+    }
+
 }

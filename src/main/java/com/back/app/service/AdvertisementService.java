@@ -86,4 +86,13 @@ public class AdvertisementService {
     public AdverNoJoin saveAdverNoJoin(AdverNoJoin adverNoJoin) {
         return adverNoJoinRepo.save(adverNoJoin);
     }
+
+    public AdverNoJoin updateAdverNoJoin(Integer id, AdverNoJoin adverNoJoin) {
+        adverNoJoin.setAdvertisementId(id);
+        return adverNoJoinRepo.save(adverNoJoin);
+    }
+
+    public void deleteAccountById(Integer id) {
+        advertisementRepo.deleteById(id);
+    }
 }
