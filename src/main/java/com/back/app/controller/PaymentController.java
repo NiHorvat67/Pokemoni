@@ -37,12 +37,11 @@ public class PaymentController {
     @PostMapping("/checkout/hosted")
     public ResponseEntity<String> hostedCheckout() throws StripeException {
         try{
-            Session session = paymentService.createPaymentLink(null, 100);
+            String link = paymentService.createPaymentLink(null, 100);
 
-
-            log.info("Stripe Session created: {}", session.getId());
+            log.info("Stripe Session created: {}", link);
             
-            return ResponseEntity.ok(session.getUrl());
+            return ResponseEntity.ok(link);
 
         } catch (Exception e) {
             log.error("Unexpected error during checkout session creation: {}", e.getMessage(), e);
