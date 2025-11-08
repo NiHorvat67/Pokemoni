@@ -21,57 +21,56 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class PaymentService {
 
-    @Value("${stripe.api.key}") 
-    private String stripeApiKey;
+  @Value("${stripe.api.key}")
+  private String stripeApiKey;
 
-    @Value("${app.frontend.url}")
-    String CLIENT_BASE_URL;
+  @Value("${app.frontend.url}")
+  String CLIENT_BASE_URL;
 
-    @Value("${app.backend.url}")
-    String SERVER_BASE_URL;
-    public String createPaymentLink(Account account, long amount) {
+  @Value("${app.backend.url}")
+  String SERVER_BASE_URL;
 
+  public String createPaymentLink(Account account, long amount) {
 
-        Stripe.apiKey = stripeApiKey;
-        log.info("Stripe API key is set.");
-        
+    Stripe.apiKey = stripeApiKey;
+    log.info("Stripe API key is set.");
 
-        try {
-            SessionCreateParams.Builder paramsBuilder = SessionCreateParams.builder()
-                    .setMode(SessionCreateParams.Mode.PAYMENT)
-                    .setSuccessUrl(SERVER_BASE_URL + "/oauth2/authorization/github")
-                    .setCancelUrl(CLIENT_BASE_URL + "/error?failed");
+    try {
+      SessionCreateParams.Builder paramsBuilder = SessionCreateParams.builder()
+          .setMode(SessionCreateParams.Mode.PAYMENT)
+          .setSuccessUrl(CLIENT_BASE_URL + "/auth/4")
+          .setCancelUrl(CLIENT_BASE_URL + "/error?failed");
 
-            paramsBuilder.addLineItem(
-                    SessionCreateParams.LineItem.builder()
-                            .setQuantity(1L)
-                            .setPriceData(
-                                    PriceData.builder()
-                                            .setProductData(
-                                                    PriceData.ProductData.builder()
-                                                            .setName("Trader Subscription")
-                                                            .setDescription("PAY ME " + "User")
-                                                            .build())
-                                            .setCurrency("usd")
-                                            .setUnitAmount(Math.abs(amount)) 
-                                            .build())
-                            .build());
+      paramsBuilder.addLineItem(
+          SessionCreateParams.LineItem.builder()
+              .setQuantity(1L)
+              .setPriceData(
+                  PriceData.builder()
+                      .setProductData(
+                          PriceData.ProductData.builder()
+                              .setName("Trader Subscription")
+                              .setDescription("PAY ME " + "User")
+                              .build())
+                      .setCurrency("usd")
+                      .setUnitAmount(Math.abs(amount))
+                      .build())
+              .build());
 
-            Session session = Session.create(paramsBuilder.build());
-            log.info("Stripe Session created with ID: {}", session.getId());
-            
-            // Return the session URL for redirection
-            return session.getUrl();
+      Session session = Session.create(paramsBuilder.build());
+      log.info("Stripe Session created with ID: {}", session.getId());
 
-        } catch (StripeException e) {
-            log.error("Stripe API error during checkout session creation: {}", e.getMessage(), e);
-            return null;
-                    
-        } catch (Exception e) {
-            log.error("Unexpected error during checkout session creation: {}", e.getMessage(), e);
-            return null;
-        }
+      // Return the session URL for redirection
+      return session.getUrl();
 
+    } catch (StripeException e) {
+      log.error("Stripe API error during checkout session creation: {}", e.getMessage(), e);
+      return null;
+
+    } catch (Exception e) {
+      log.error("Unexpected error during checkout session creation: {}", e.getMessage(), e);
+      return null;
     }
+
+  }
 
 }
