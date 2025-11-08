@@ -5,11 +5,11 @@ export const CreateAccountContext = createContext({})
 export const CreateAccountContextProvider = ({ children }: { children: any }) => {
 
   const [userData, setUserData] = useState({
-    userFirstName: "sigma",
-    userLastName: "boy",
-    userLocation: "sigma street",
+    userFirstName: "",
+    userLastName: "",
+    userLocation: "",
     accountRole: "",
-    userContact: "123",
+    userContact: "",
   })
 
   function setUserDataField(field: any) {

@@ -75,7 +75,6 @@ const AuthStep2 = ({ step, setCurrentStep }: { step: number, currentStep: number
     } else {
       setCurrentStep(step + 1)
     }
-
   }
 
   return (
@@ -85,11 +84,10 @@ const AuthStep2 = ({ step, setCurrentStep }: { step: number, currentStep: number
         <p className="text-desc font-inter md:mb-23 mb-16 max-w-[470px] text-center">Trebamo nekoliko osnovnih informacija kako bismo dovršili tvoj profil i omogućili sigurno korištenje platforme.</p>
       </div>
       <div className="">
-
         <div className="mb-16 flex flex-col items-center gap-3">
           <Input state={userData.userFirstName} setState={setUserDataField("userFirstName")} placeholder="Ime" />
           <Input state={userData.userLastName} setState={setUserDataField("userLastName")} placeholder="Prezime" />
-          <Input state={userData.userLocation} setState={setUserDataField("userLocation")} placeholder="Address" />
+          <Input state={userData.userLocation} setState={setUserDataField("userLocation")} placeholder="Adresa" />
           <Input state={userData.userContact} setState={setUserDataField("userContact")} placeholder="Mobitel" />
           <Select onValueChange={(value: string) => {
             setUserDataField("accountRole")(value)
