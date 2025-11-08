@@ -58,7 +58,6 @@ public class Account {
 
         
         this.oauth2Id = tempAccount.getOauth2Id();
-        
         this.userEmail = tempAccount.getUserEmail();
         this.userFirstName = tempAccount.getUserFirstName();
         this.userLastName = tempAccount.getUserLastName();
