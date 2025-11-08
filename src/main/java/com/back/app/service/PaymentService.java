@@ -27,6 +27,8 @@ public class PaymentService {
     @Value("${app.frontend.url}")
     String CLIENT_BASE_URL;
 
+    @Value("${app.backend.url}")
+    String SERVER_BASE_URL;
     public String createPaymentLink(Account account, long amount) {
 
 
@@ -37,7 +39,7 @@ public class PaymentService {
         try {
             SessionCreateParams.Builder paramsBuilder = SessionCreateParams.builder()
                     .setMode(SessionCreateParams.Mode.PAYMENT)
-                    .setSuccessUrl(CLIENT_BASE_URL + "/")
+                    .setSuccessUrl(SERVER_BASE_URL + "/oauth2/authorization/github")
                     .setCancelUrl(CLIENT_BASE_URL + "/error?failed");
 
             paramsBuilder.addLineItem(
