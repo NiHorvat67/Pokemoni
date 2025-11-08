@@ -28,6 +28,7 @@ public class SecurityConfig {
         .authorizeHttpRequests(authorize -> authorize
             .requestMatchers("/", "/login", "/error", "/api/advertisements/**", "/api/itemtypes/**").permitAll()
             .requestMatchers("/api/accounts/{id}", "/api/accounts/", "/api/accounts/create").permitAll()
+            .requestMatchers("/checkout/hosted").permitAll()
             .anyRequest().authenticated())
         .oauth2Login(oauth2 -> oauth2
             .userInfoEndpoint(userInfo -> userInfo
