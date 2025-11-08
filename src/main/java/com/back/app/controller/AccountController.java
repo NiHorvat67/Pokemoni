@@ -141,7 +141,7 @@ public class AccountController {
     }
 
     @PostMapping("/create/trader")
-    public void createTrader(@RequestBody String newAccountString,
+    public String createTrader(@RequestBody String newAccountString,
             @AuthenticationPrincipal OAuth2User oauth2User,
             HttpServletRequest request,
             HttpServletResponse response) {
@@ -177,7 +177,8 @@ public class AccountController {
 
             String paymentRedirectUrl = paymentService.createPaymentLink(newAccount, 100);
             log.info(paymentRedirectUrl);
-            response.sendRedirect(paymentRedirectUrl);
+
+            return "redirect:" + paymentRedirectUrl;
 
         } catch (Exception e) {
             log.error("Unexpected error: {}", e.getMessage(), e);
