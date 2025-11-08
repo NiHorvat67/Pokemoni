@@ -1,13 +1,43 @@
 import { subscriptionBenefits } from "@/constants";
 import { checkIcon } from "@/assets/icons";
 import Button from "@/components/Button";
+import { useMutation } from "@tanstack/react-query";
+import axios from "axios";
+import useCreateAccountContext from "@/hooks/useCreateAccountContext";
 
 const AuthStep3 = ({ step, setCurrentStep }: { step: number, currentStep: number, setCurrentStep: any }) => {
 
+  const { userData, setUserDataField } = useCreateAccountContext()
+
+  const { mutate } = useMutation({
+    mutationFn: async () => {
+      return axios({
+        method: "post",
+        url: "/api/accounts/create/trader",
+        data: {
+          userFirstName: userData.userFirstName,
+          userLastName: userData.userLastName,
+          userLocation: userData.userLocation,
+          accountRole: userData.accountRole,
+          userContact: userData.userContact,
+
+        }
+      })
+        .then(res => {
+          return res.data
+        })
+        .catch(err => {
+          console.log(err)
+        })
+    }, onSuccess: () => {
+      // window.location.href = "http://localhost:8080/oauth2/authorization/github";
+    }
+
+  })
+
   const paymentOnClick = () => {
-    console.log("process payment")
-    console.log("payment successful")
-    setCurrentStep(step + 1)
+    console.log(userData)
+    mutate()
   }
 
   return (

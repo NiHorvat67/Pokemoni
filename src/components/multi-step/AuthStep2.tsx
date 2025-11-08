@@ -12,15 +12,12 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select-dropdown"
+import useCreateAccountContext from "@/hooks/useCreateAccountContext";
 
 
 const AuthStep2 = ({ step, setCurrentStep }: { step: number, currentStep: number, setCurrentStep: any }) => {
 
-  const [firstName, setFirstName] = useState("sigma")
-  const [lastName, setLastName] = useState("grindset")
-  const [address, setAddress] = useState("jdsaljdslka")
-  const [phoneNum, setPhoneNum] = useState("832901890321")
-  const [role, setRole] = useState("")
+  const { userData, setUserDataField } = useCreateAccountContext()
   const [errors, setErrors] = useState<any>([])
 
 
@@ -28,13 +25,13 @@ const AuthStep2 = ({ step, setCurrentStep }: { step: number, currentStep: number
     mutationFn: async () => {
       return axios({
         method: "post",
-        url: "/api/accounts/create",
+        url: "/api/accounts/create/buyer",
         data: {
-          userFirstName: firstName,
-          userLastName: lastName,
-          userLocation: address,
-          accountRole: "trader",
-          userContact: phoneNum,
+          userFirstName: userData.userFirstName,
+          userLastName: userData.userLastName,
+          userLocation: userData.userLocation,
+          accountRole: userData.accountRole,
+          userContact: userData.userContact,
         }
       })
         .then(res => {
@@ -52,7 +49,7 @@ const AuthStep2 = ({ step, setCurrentStep }: { step: number, currentStep: number
 
 
   const canProgress = () => {
-    const inputsFilled = firstName !== "" && lastName !== "" && address !== "" && phoneNum !== "" && role !== ""
+    const inputsFilled = userData.userFirstName !== "" && userData.userLastName !== "" && userData.userLocation !== "" && userData.userContact !== "" && userData.accountRole !== ""
     if (!inputsFilled) {
       setErrors((prev: string[]) => [...prev, "Fill out all the input fields"])
       setTimeout(() => {
@@ -90,12 +87,12 @@ const AuthStep2 = ({ step, setCurrentStep }: { step: number, currentStep: number
       <div className="">
 
         <div className="mb-16 flex flex-col items-center gap-3">
-          <Input state={firstName} setState={setFirstName} placeholder="Ime" />
-          <Input state={lastName} setState={setLastName} placeholder="Prezime" />
-          <Input state={address} setState={setAddress} placeholder="Email" />
-          <Input state={phoneNum} setState={setPhoneNum} placeholder="Mobitel" />
+          <Input state={userData.userFirstName} setState={setUserDataField("userFirstName")} placeholder="Ime" />
+          <Input state={userData.userLastName} setState={setUserDataField("userLastName")} placeholder="Prezime" />
+          <Input state={userData.userLocation} setState={setUserDataField("userLocation")} placeholder="Address" />
+          <Input state={userData.userContact} setState={setUserDataField("userContact")} placeholder="Mobitel" />
           <Select onValueChange={(value: string) => {
-            setRole(value)
+            setUserDataField("accountRole")(value)
           }}>
             <SelectTrigger className="">
               <SelectValue placeholder="Account type" />
@@ -107,10 +104,10 @@ const AuthStep2 = ({ step, setCurrentStep }: { step: number, currentStep: number
             </SelectContent>
           </Select>
         </div>
-        {role === "trader" &&
+        {userData.accountRole === "trader" &&
           <Button className="min-w-[300px]" long={true} text="Next" icon={true} onClick={nextOnClick} />
         }
-        {role !== "trader" &&
+        {userData.accountRole !== "trader" &&
           <Button className="min-w-[300px]" long={true} text="Finish" icon={true} onClick={finishOnClick} />
         }
       </div>
