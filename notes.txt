@@ -1,5 +1,4 @@
 
-
 Accounts
 - za kupca dodati sve rezervacije koje su trenutno aktivne i one koje su istekle (samo taj kupac ima pristup tome, dakle nije public)
 - za tradera dodati sve rezervacije njegovih advertisementa (samo taj trader ima pristup, nije public)

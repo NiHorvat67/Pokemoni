@@ -13,19 +13,15 @@ import {
   SelectValue,
 } from "@/components/ui/select-dropdown"
 
-import useAuthContext from "@/hooks/useAuthContext";
 
 const AuthStep2 = ({ step, setCurrentStep }: { step: number, currentStep: number, setCurrentStep: any }) => {
 
   const [firstName, setFirstName] = useState("sigma")
   const [lastName, setLastName] = useState("grindset")
   const [address, setAddress] = useState("jdsaljdslka")
-  const [email, setEmail] = useState("antoniobnoni@gmail.com")
   const [phoneNum, setPhoneNum] = useState("832901890321")
   const [role, setRole] = useState("")
   const [errors, setErrors] = useState<any>([])
-
-  const { dispatch } = useAuthContext()
 
 
   const { mutate } = useMutation({
@@ -34,7 +30,6 @@ const AuthStep2 = ({ step, setCurrentStep }: { step: number, currentStep: number
         method: "post",
         url: "/api/accounts/create",
         data: {
-          userEmail: email,
           userFirstName: firstName,
           userLastName: lastName,
           userLocation: address,
@@ -43,24 +38,21 @@ const AuthStep2 = ({ step, setCurrentStep }: { step: number, currentStep: number
         }
       })
         .then(res => {
-          console.log(res.data)
-          window.location.pathname = "/"
+          // window.location.pathname = "/"
           return res.data
         })
         .catch(err => {
-          console.log("error")
           console.log(err)
         })
-    },onSuccess: () => {
-        window.location.href = "http://localhost:8080/oauth2/authorization/github";
-
+    }, onSuccess: () => {
+      window.location.href = "http://localhost:8080/oauth2/authorization/github";
     }
 
   })
 
 
   const canProgress = () => {
-    const inputsFilled = firstName !== "" && lastName !== "" && address !== "" && email !== "" && phoneNum !== "" && role !== ""
+    const inputsFilled = firstName !== "" && lastName !== "" && address !== "" && phoneNum !== "" && role !== ""
     if (!inputsFilled) {
       setErrors((prev: string[]) => [...prev, "Fill out all the input fields"])
       setTimeout(() => {

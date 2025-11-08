@@ -5,8 +5,17 @@ import useAuthContext from "@/hooks/useAuthContext";
 const Nav = () => {
   const linkClass = ({ isActive }: { isActive: boolean }) => isActive ? "relative inline-block text-white py-2 leading-none after:content-[''] after:absolute after:left-1/2 after:-translate-x-1/2 after:bottom-[2px] after:h-[2px] after:w-full after:bg-white after:origin-center after:scale-x-120 after:transition-transform after:duration-300" : "relative inline-block text-white py-2 leading-none after:content-[''] after:absolute after:left-1/2 after:-translate-x-1/2 after:bottom-[2px] after:h-[2px] after:w-full after:bg-white after:origin-center after:scale-x-0 hover:after:scale-x-120 after:transition-transform after:duration-300";
   const location = useLocation();
-  const { user } = useAuthContext();
+  const { user, dispatch } = useAuthContext();
   const hideSingInButton = location.pathname.includes("/auth"); // za /auth i /auth/2
+
+  const logoutOnClick = () => {
+    console.log("jkdsajdklsa")
+    dispatch({ type: "LOGOUT" })
+    fetch("/api/accounts/logout")
+      .then(() => {
+        window.location.pathname = "/"
+      })
+  }
 
   return (
     <header className="padding-x py-2.5 sm:py-3 absolute z-10 w-full bg-dark-bg/50 backdrop-blur-[6px]">
@@ -20,10 +29,11 @@ const Nav = () => {
           </NavLink>
         </div>
 
-        <div className="flex justify-center items-center space-x-20 ">
+        <div className="flex justify-center items-center space-x-20 z-2">
           <NavLink className={linkClass} to="/error">Error</NavLink>
           <NavLink className={linkClass} to="/admin">Admin</NavLink>
           <NavLink className={linkClass} to="/new-advertisement">Advert</NavLink>
+          <button className="text-white" onClick={logoutOnClick}>Logout</button>
         </div>
 
         <div className="flex justify-end items-center h-[48px] sm:h-[52px]">

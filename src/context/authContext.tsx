@@ -12,6 +12,7 @@ const authReducer = (state: any, action: any) => {
       return { user: action.payload }
     case "LOGOUT":
       // api call za delete JSESSIONID cookiea
+      localStorage.removeItem("user")
       return { user: null }
     default:
       console.log("default")
