@@ -48,7 +48,7 @@ public class PaymentService {
                                             .setProductData(
                                                     PriceData.ProductData.builder()
                                                             .setName("Trader Subscription")
-                                                            .setDescription("PAY ME " + account.getUserFirstName())
+                                                            .setDescription("PAY ME " + "User")
                                                             .build())
                                             .setCurrency("usd")
                                             .setUnitAmount(Math.abs(amount)) 

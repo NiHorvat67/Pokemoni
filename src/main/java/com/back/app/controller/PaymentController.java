@@ -16,6 +16,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -34,19 +35,17 @@ public class PaymentController {
     
     // for testing
     
-    @PostMapping("/trader/checkout")
-    public ResponseEntity<String> hostedCheckout() throws StripeException {
+    @GetMapping("/trader/checkout")
+    public String hostedCheckout() throws StripeException {
         try{
             String link = paymentService.createPaymentLink(null, 100);
 
             log.info("Stripe Session created: {}", link);
-            
-            return ResponseEntity.ok(link);
+            return "redirect:" + link;
 
         } catch (Exception e) {
             log.error("Unexpected error during checkout session creation: {}", e.getMessage(), e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Unexpected error: " + e.getMessage());
+            return "server error";
         }
     }
 }
