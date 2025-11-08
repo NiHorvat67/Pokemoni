@@ -176,7 +176,7 @@ public class AccountController {
 
 
             String paymentRedirectUrl = paymentService.createPaymentLink(newAccount, 100);
-
+            log.info(paymentRedirectUrl);
             response.sendRedirect(paymentRedirectUrl);
 
         } catch (Exception e) {
