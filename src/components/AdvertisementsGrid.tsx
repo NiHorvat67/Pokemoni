@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import ProductCard from "./ProductCard";
+import { useEffect } from "react";
 
 
 const AdvertisementsGrid = ({ products }: { products: any[] }) => {
@@ -13,7 +14,9 @@ const AdvertisementsGrid = ({ products }: { products: any[] }) => {
 
 
   useGSAP(() => {
-    const cards = gsap.utils.toArray(".product-card").slice(numCards - increment < initialSize ? 0 : numCards - increment)
+    const sliceIndex = numCards - increment < initialSize ? 0 : numCards - increment
+    console.log(sliceIndex)
+    const cards = gsap.utils.toArray(".product-card").slice(sliceIndex)
     gsap.fromTo(cards, {
       opacity: 0,
       ease: "power1.inOut",
@@ -22,6 +25,10 @@ const AdvertisementsGrid = ({ products }: { products: any[] }) => {
       duration: .5,
     }, { opacity: 1, y: 0 })
   }, [products, numCards])
+
+  useEffect(() => {
+    setNumCards(initialSize)
+  }, [products])
 
 
   useGSAP(() => {
@@ -45,7 +52,7 @@ const AdvertisementsGrid = ({ products }: { products: any[] }) => {
     <>
       <section id="products-grid" className="grid min-[1250px]:grid-cols-4 min-[1000px]:grid-cols-3 min-[700px]:grid-cols-2 grid-cols-1 max-sm:justify-items-center gap-11">
         {products.map((product: any, index) => {
-          if (index < numCards)
+          if (index < numCards) {
             return (
               <div key={product.advertisementId} className="product-card opacity-0">
                 <ProductCard
@@ -59,6 +66,7 @@ const AdvertisementsGrid = ({ products }: { products: any[] }) => {
                 ></ProductCard>
               </div>
             )
+          }
         })}
       </section>
       {numCards < products.length &&
