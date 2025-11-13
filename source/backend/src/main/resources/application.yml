@@ -1,0 +1,53 @@
+spring:
+  application:
+    name: springboot
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5431/gsadmin
+    username: postgres
+    password: 1234
+    hikari:
+      maximum-pool-size: 10
+      connection-timeout: 30000
+      initialization-fail-timeout: 0
+  jpa:
+    hibernate:
+      ddl-auto: none
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        boot:
+          allow_jdbc_metadata_access: false
+    show-sql: false
+  sql:
+    init:
+      mode: never
+  security:
+    oauth2:
+      client:
+        registration:
+          github:
+            client-id: Ov23liwzLxCF1uF0IPKt
+            client-secret: 62f7ae3bd6ffee671e4ae73ebd31292271fc092c
+            scope: user:email,read:user
+          #google:
+            #client-id: GOOGLE_CLIENT_ID
+            #client-secret: GOOGLE_CLIENT_SECRET
+
+server:
+  forward-headers-strategy: native
+
+logging:
+  level:
+    root: INFO
+    com.back.app: INFO
+
+stripe:
+  api:
+    key: sk_test_51SQG7jJUCZ7JkCbcvmhBETWJQAahxavmFyqdVy94kKqNAsfq6XrhcIcyOKw52McNsECEFSTNg1zCVtWYhLMUlF5d00c6RHUEs7
+
+app:
+  frontend:
+    url: "http://localhost:5173"
+  backend:
+    url: "http://localhost:8080"

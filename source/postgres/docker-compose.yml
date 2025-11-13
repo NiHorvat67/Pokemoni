@@ -1,0 +1,14 @@
+version: '3'
+
+services:
+  db:
+    image: postgres
+    container_name: my_postgres
+    ports:
+      - "5431:5432"
+    environment:
+      POSTGRES_PASSWORD: 1234
+      POSTGRES_USER: postgres
+      POSTGRES_DB: gsadmin
+    volumes:
+      - ./gsadmin.sql:/docker-entrypoint-initdb.d/gsadmin.sql:ro
