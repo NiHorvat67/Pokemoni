@@ -1,0 +1,43 @@
+"use client"
+
+import { ChevronDownIcon } from "lucide-react"
+
+import { Button } from "@/components/ui/button"
+import { Calendar } from "@/components/ui/calendar"
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover"
+
+export default function Calendar23({ range, setRange }: { range: any, setRange: any }) {
+
+  return (
+    <div className="flex flex-col gap-3">
+      <Popover>
+        <PopoverTrigger asChild>
+          <Button
+            variant="default"
+            id="dates"
+            className="h-12 rounded-[8px] bg-input-bg font-inter text-neutral-600 text-[16px] justify-between font-normal"
+          >
+            {range?.from && range?.to
+              ? `${range.from.toLocaleDateString()} - ${range.to.toLocaleDateString()}`
+              : "Select date"}
+            <ChevronDownIcon />
+          </Button>
+        </PopoverTrigger>
+        <PopoverContent className="w-auto overflow-hidden p-0" align="start">
+          <Calendar
+            mode="range"
+            selected={range}
+            captionLayout="dropdown"
+            onSelect={(range) => {
+              setRange(range)
+            }}
+          />
+        </PopoverContent>
+      </Popover>
+    </div>
+  )
+}

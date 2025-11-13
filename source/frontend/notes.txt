@@ -1,0 +1,38 @@
+
+Accounts
+- za kupca dodati sve rezervacije koje su trenutno aktivne i one koje su istekle (samo taj kupac ima pristup tome, dakle nije public)
+- za tradera dodati sve rezervacije njegovih advertisementa (samo taj trader ima pristup, nije public)
+rating tradera
+  - KADA USERU PRODE PERIOD U KOJEM JE IZNAJMIO PROIZVOD,
+    moze rateati tradera sa zvjezdicama(1 - 5)
+  - mislim da smo u callu pricali da najvise smisla ima da ako user vise puta iznajmi od istog tradera,
+    moze napraviti novi rating za tog istog tradera nakon svakog iznajmljivanja.
+    dakle ako prvi put iznajmi moze ostaviti rating, pa ako opet iznajmi moze jos jedan rating ostaviti....
+  - treba dodati post rutu da user moze ocijeniti tradera
+  - u get za tradera dodati da vraca rating
+    (valjda se racuna preko prosjeka svih ocjena koje su mu useri ikada dali)
+
+
+Rating advertisement-a
+- slicno kao i rating tradera: ocjena 1-5
+- ako user vise puta iznajmi isti advertisement, nakon svakog puta moze ostaviti novi rating,
+  jer se oprema s vremenom mijenja
+- smije ostaviti rating tek kada mu zavrsi period u kojem iznajmljuje
+
+
+
+Reportanje kupaca
+- trader moze reportati kupca
+- cuvaju se: datum prijave, ime tradera, ime kupca, opis prijave (tekst koji trader opisuje)
+
+
+Admin
+- treba imati pristup listi svih prijava
+- treba imati mogucnost da blokira account kupca, te da onemogući da kupac iznajmljuje proizvode
+- moze updateati cijenu pretplate za tradere
+
+Cijena pretplate
+- get da se dobije trenutna cijena pretplata
+- post da admin moze mijenjati
+
+
