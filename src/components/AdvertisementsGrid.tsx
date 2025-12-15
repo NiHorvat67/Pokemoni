@@ -15,7 +15,6 @@ const AdvertisementsGrid = ({ products }: { products: any[] }) => {
 
   useGSAP(() => {
     const sliceIndex = numCards - increment < initialSize ? 0 : numCards - increment
-    console.log(sliceIndex)
     const cards = gsap.utils.toArray(".product-card").slice(sliceIndex)
     gsap.fromTo(cards, {
       opacity: 0,

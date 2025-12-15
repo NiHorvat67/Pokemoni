@@ -101,10 +101,13 @@ const Homepage = () => {
             <Select onValueChange={(value: string) => {
               setCategoryId(value)
             }}>
-              <SelectTrigger className="w-[130px] sm:w-[180px]">
+              <SelectTrigger value={undefined} className="w-[130px] sm:w-[180px]">
                 <SelectValue placeholder="Category" />
               </SelectTrigger>
               <SelectContent>
+                {categoryId != "" &&
+                  <SelectItem key={0} value={undefined}>Clear selection</SelectItem>
+                }
                 {categories && categories.map((category: any) => (
                   <SelectItem key={category.itemtypeId} value={category.itemtypeId.toString()}>{category.itemtypeName}</SelectItem>
                 ))}
