@@ -3,7 +3,7 @@ name: Deploy to EC2 via SSH
 on:
   push:
     branches:
-      - main
+      - master
 
 # Define environment variables used throughout the workflow
 env:
