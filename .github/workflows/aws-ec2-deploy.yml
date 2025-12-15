@@ -2,15 +2,15 @@ name: Deploy to EC2 via SSH
 
 on:
   push:
-    branches:
-      - master
+    branches: [master]
+  
 
 # Define environment variables used throughout the workflow
 env:
   AWS_REGION: eu-north-1            # Example region
   EC2_HOST: ec2-13-51-196-197.eu-north-1.compute.amazonaws.com            # Replace with your EC2 Public IP or DNS
   EC2_USER: ubuntu                # Replace with the user for your AMI (e.g., 'ubuntu', 'ec2-user')
-  TARGET_DIR: /home/ec2-user/app    # The directory on EC2 where code will be deployed
+  TARGET_DIR: /home/ubuntu/    # The directory on EC2 where code will be deployed
 
 jobs:
   deploy:
