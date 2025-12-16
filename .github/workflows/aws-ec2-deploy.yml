@@ -72,8 +72,7 @@ jobs:
 
             ./mvnw spring-boot:stop
             ./mvnw clean package
-            ./mvnw spring-boot:start
-
+            nohup java -jar target/app-0.0.1-SNAPSHOT.jar > backend.log 2>&1 &
             echo "Deployment to EC2 finished successfully."
 
 
@@ -84,8 +83,7 @@ jobs:
               else
                 echo "Backend may have failed to start. Check backend.log for details."
                 exit 1
-              fi
+            fi
               
 
-            echo "Deployment to EC2 finished successfully."
             exit 0
