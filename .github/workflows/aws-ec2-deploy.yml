@@ -43,7 +43,7 @@ jobs:
           script: |
             echo "Deployment complete. Running post-deploy commands..."
 
-            source ${{ env.TARGET_DIR }}/.bashrc
+            shell: bash -l {0}
 
             cd ${{ env.TARGET_DIR }}/source/frontend
             npm install
