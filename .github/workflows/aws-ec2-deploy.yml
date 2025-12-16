@@ -43,14 +43,19 @@ jobs:
           script: |
             echo "Deployment complete. Running post-deploy commands..."
 
-            shell: bash -l {0}
-
+            NPM_EXEC='/home/ubuntu/.nvm/versions/node/v24.12.0/bin/npm'
+            PM2_EXEC='/home/ubuntu/.nvm/versions/node/v24.12.0/bin/pm2'
+            
             cd ${{ env.TARGET_DIR }}/source/frontend
-            npm install
-            npm run build
-            pm2 stop frontend-prod || true
-            pm2 start npm --name frontend-prod -- run preview
+            
+            $NPM_EXEC install
+            $NPM_EXEC run build
+            
+            $PM2_EXEC stop frontend-prod || true
+            
+            $PM2_EXEC start $NPM_EXEC --name frontend-prod -- run preview
 
+            
             cd ${{ env.TARGET_DIR }}/source/backend
 
             ./mvnw spring-boot:stop
