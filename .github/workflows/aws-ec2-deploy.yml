@@ -73,6 +73,11 @@ jobs:
             ./mvnw spring-boot:stop
             ./mvnw clean package
             nohup java -jar target/app-0.0.1-SNAPSHOT.jar > backend.log 2>&1 &
+
+            echo "Backend starting in background. Waiting 20 seconds for startup..."
+            sleep 30
+
+
             echo "Deployment to EC2 finished successfully."
 
 
