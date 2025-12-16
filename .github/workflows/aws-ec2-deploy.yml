@@ -34,7 +34,7 @@ jobs:
             ${{ env.EC2_USER }}@${{ env.EC2_HOST }}:${{ env.TARGET_DIR }}
             
 
-      - name: Run remote commands npm install npm build
+      - name: Build and run the app
         uses: appleboy/ssh-action@v1.0.1
         with:
           host: ${{ env.EC2_HOST }}
@@ -42,6 +42,8 @@ jobs:
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
             echo "Deployment complete. Running post-deploy commands..."
+
+            source ${{ env.TARGET_DIR }}/.bashrc
 
             cd ${{ env.TARGET_DIR }}/source/frontend
             npm install
@@ -56,4 +58,3 @@ jobs:
             ./mvnw spring-boot:start
 
             echo "Deployment to EC2 finished successfully."
-
