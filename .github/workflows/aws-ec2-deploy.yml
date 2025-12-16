@@ -87,5 +87,5 @@ jobs:
               fi
               
 
-              echo "Deployment to EC2 finished successfully."
-              exit(0)
+            echo "Deployment to EC2 finished successfully."
+            exit 0
