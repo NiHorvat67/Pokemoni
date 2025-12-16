@@ -43,19 +43,32 @@ jobs:
           script: |
             echo "Deployment complete. Running post-deploy commands..."
 
-            NPM_EXEC='/home/ubuntu/.nvm/versions/node/v24.12.0/bin/npm'
-            PM2_EXEC='/home/ubuntu/.nvm/versions/node/v24.12.0/bin/pm2'
+            export NVM_DIR="$HOME/.nvm"
+            [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+            
+            nvm use v24.12.0
+            
+            echo "Node version: $(node --version)"
+            echo "NPM version: $(npm --version)"
             
             cd ${{ env.TARGET_DIR }}/source/frontend
             
-            $NPM_EXEC install
-            $NPM_EXEC run build
+            echo "Installing frontend dependencies..."
+            npm ci --only=production
             
-            $PM2_EXEC stop frontend-prod || true
+            echo "Building frontend..."
+            npm run build
             
-            $PM2_EXEC start $NPM_EXEC --name frontend-prod -- run preview
+            echo "Restarting frontend with PM2..."
+            pm2 stop frontend-prod 2>/dev/null || true
+            pm2 delete frontend-prod 2>/dev/null || true
+            pm2 start npm --name "frontend-prod" -- run preview
+            pm2 save
+            pm2 startup 2>/dev/null || true
 
-            
+
+
+
             cd ${{ env.TARGET_DIR }}/source/backend
 
             ./mvnw spring-boot:stop
@@ -63,3 +76,15 @@ jobs:
             ./mvnw spring-boot:start
 
             echo "Deployment to EC2 finished successfully."
+
+
+
+
+            if curl -s http://localhost:8080/health > /dev/null 2>&1; then
+                echo "Backend is running successfully"
+              else
+                echo "Backend may have failed to start. Check backend.log for details."
+                exit 1
+              fi
+              
+              echo "Deployment to EC2 finished successfully."
