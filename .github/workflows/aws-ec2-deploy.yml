@@ -53,8 +53,7 @@ jobs:
             
             cd ${{ env.TARGET_DIR }}/source/frontend
             
-            echo "Installing frontend dependencies..."
-            npm ci --only=production
+            npm ci
             
             echo "Building frontend..."
             npm run build
@@ -87,4 +86,6 @@ jobs:
                 exit 1
               fi
               
+
               echo "Deployment to EC2 finished successfully."
+              exit(0)
