@@ -46,13 +46,14 @@ jobs:
             cd ${{ env.TARGET_DIR }}/source/frontend
             npm install
             npm run build
-            pm2 stop frontend-prod
+            pm2 stop frontend-prod || true
             pm2 start npm --name frontend-prod -- run preview
 
             cd ${{ env.TARGET_DIR }}/source/backend
 
             ./mvnw spring-boot:stop
             ./mvnw clean package
-            ./mvnw compile
             ./mvnw spring-boot:start
+
+            echo "Deployment to EC2 finished successfully."
 
