@@ -35,7 +35,7 @@ jobs:
             ${{ env.EC2_USER }}@${{ env.EC2_HOST }}:${{ env.TARGET_DIR }}
             
 
-      - name: Run remote commands (Install, Restart Service, etc.)
+      - name: Run remote commands npm install npm build
         uses: appleboy/ssh-action@v1.0.1
         with:
           host: ${{ env.EC2_HOST }}
@@ -43,14 +43,17 @@ jobs:
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
             echo "Deployment complete. Running post-deploy commands..."
-            
-            # Example: Navigate to the application directory
-            cd ${{ env.TARGET_DIR }}
-            
-            # Example: Install dependencies for a Node.js app
-            # npm install --production
-            
-            # Example: Restart a service using systemd
-            # sudo systemctl restart my-web-service
-            
-            echo "Remote commands finished."
+
+            cd ${{ env.TARGET_DIR }}/source/frontend
+            npm install
+            npm run build
+            pm2 stop frontend-prod
+            pm2 start npm --name frontend-prod -- run preview
+
+            cd ${{ env.TARGET_DIR }}/source/backend
+
+            ./mvnw spring-boot:stop
+            ./mvnw clean package
+            ./mvnw compile
+            ./mvnw spring-boot:start
+
