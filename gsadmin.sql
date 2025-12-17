@@ -27,10 +27,9 @@ CREATE TABLE itemtype (
 CREATE TABLE reservation (
     reservation_id SERIAL PRIMARY KEY,
     reservation_start TIMESTAMPTZ NOT NULL,
-    reservation_end TIMESTAMPTZ NOT NULL,
-    reservation_trader_grade INT,
-    reservation_gear_grade INT,
-    
+    reservation_end TIMESTAMPTZ,
+    reservation_grade INT,
+
     buyer_id INT,
     FOREIGN KEY (buyer_id) REFERENCES account(account_id) ON DELETE SET NULL,
     
@@ -146,22 +145,22 @@ INSERT INTO advertisement (
 
 -- Insert into reservation (using buyers: 2, 5 and connecting to advertisements)
 INSERT INTO reservation (
-    reservation_start, reservation_end, reservation_trader_grade, reservation_gear_grade, buyer_id, advertisement_id
+    reservation_start, reservation_end, reservation_grade, buyer_id, advertisement_id
 ) VALUES
 -- Bob's reservations (account_id 2)
-('2024-02-10 09:00:00+00', '2024-02-17 18:00:00+00', 5, 4, 2, 1),
-('2024-03-15 10:00:00+00', '2024-03-22 17:00:00+00', 4, 5, 2, 5),
-('2024-06-10 08:00:00+00', '2024-06-12 20:00:00+00', 5, 5, 2, 6),
+('2024-02-10 09:00:00+00', '2024-02-17 18:00:00+00', 5, 2, 1),
+('2024-03-15 10:00:00+00', '2024-03-22 17:00:00+00', 4,2, 5),
+('2024-06-10 08:00:00+00', '2024-06-12 20:00:00+00', 5,2, 6),
 
 -- Jane's reservations (account_id 5)
-('2024-02-20 14:00:00+00', '2024-02-27 16:00:00+00', 4, 4, 5, 2),
-('2024-04-05 09:00:00+00', '2024-04-12 18:00:00+00', 5, 4, 5, 8),
-('2024-07-15 07:00:00+00', '2024-07-20 19:00:00+00', 4, 5, 5, 9),
+('2024-02-20 14:00:00+00', '2024-02-27 16:00:00+00', 4, 5, 2),
+('2024-04-05 09:00:00+00', '2024-04-12 18:00:00+00', 5, 5, 8),
+('2024-07-15 07:00:00+00', '2024-07-20 19:00:00+00', 4, 5, 9),
 
 -- Mixed reservations
-('2024-03-01 11:00:00+00', '2024-03-08 15:00:00+00', 5, 5, 2, 3),
-('2024-05-10 10:00:00+00', '2024-05-15 17:00:00+00', 4, 4, 5, 4),
-('2024-08-20 08:00:00+00', '2024-08-25 18:00:00+00', 5, 4, 2, 7);
+('2024-03-01 11:00:00+00', '2024-03-08 15:00:00+00', 5, 2, 3),
+('2024-05-10 10:00:00+00', '2024-05-15 17:00:00+00', 4,5, 4),
+('2024-08-20 08:00:00+00', '2024-08-25 18:00:00+00', 5, 2, 7);
 
 -- Update advertisement table to connect with reservations (circular reference)
 UPDATE advertisement SET reservation_id = 1 WHERE advertisement_id = 1;
@@ -207,20 +206,20 @@ INSERT INTO advertisement (
 
 -- Add more reservations from new buyers
 INSERT INTO reservation (
-    reservation_start, reservation_end, reservation_trader_grade, reservation_gear_grade, buyer_id, advertisement_id
+    reservation_start, reservation_end, reservation_grade ,buyer_id, advertisement_id
 ) VALUES
 -- Lisa's reservations (Madrid)
-('2024-02-25 10:00:00+00', '2024-03-03 18:00:00+00', 5, 5, 10, 10),
-('2024-06-15 09:00:00+00', '2024-06-20 17:00:00+00', 4, 4, 10, 11),
+('2024-02-25 10:00:00+00', '2024-03-03 18:00:00+00', 5, 10, 10),
+('2024-06-15 09:00:00+00', '2024-06-20 17:00:00+00', 4, 10, 11),
 
 -- David's reservations (Rome)
-('2024-03-10 08:00:00+00', '2024-03-17 19:00:00+00', 5, 4, 11, 12),
-('2024-07-01 07:00:00+00', '2024-07-07 20:00:00+00', 4, 5, 11, 13),
+('2024-03-10 08:00:00+00', '2024-03-17 19:00:00+00', 5, 11, 12),
+('2024-07-01 07:00:00+00', '2024-07-07 20:00:00+00', 4, 11, 13),
 
 -- More mixed reservations
-('2024-04-15 11:00:00+00', '2024-04-22 16:00:00+00', 5, 5, 2, 14),
-('2024-08-10 10:00:00+00', '2024-08-15 18:00:00+00', 4, 4, 5, 15),
-('2024-09-05 08:00:00+00', '2024-09-12 17:00:00+00', 5, 4, 10, 16);
+('2024-04-15 11:00:00+00', '2024-04-22 16:00:00+00', 5,2, 14),
+('2024-08-10 10:00:00+00', '2024-08-15 18:00:00+00', 4, 5, 15),
+('2024-09-05 08:00:00+00', '2024-09-12 17:00:00+00', 5,10, 16);
 -- Add more advertisements without reservations
 INSERT INTO advertisement (
     advertisement_price, advertisement_deposit,
