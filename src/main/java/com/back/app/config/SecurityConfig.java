@@ -7,8 +7,6 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.web.SecurityFilterChain;
 
-
-
 import com.back.app.service.OAuthRoleService;
 
 @Configuration
@@ -26,7 +24,7 @@ public class SecurityConfig {
   public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
     http
         .authorizeHttpRequests(authorize -> authorize
-            .requestMatchers("/", "/login", "/error", "/api/advertisements/**", "/api/itemtypes/**").permitAll()
+            .requestMatchers("/", "/login", "/error", "/api/advertisements/**", "/api/itemtypes/**","/api/reservations/**").permitAll()
             .requestMatchers("/api/accounts/{id}", "/api/accounts/", "/api/accounts/create").permitAll()
             .requestMatchers("/checkout/hosted").permitAll()
             .anyRequest().authenticated())
