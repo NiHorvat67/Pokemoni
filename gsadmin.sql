@@ -263,3 +263,30 @@ INSERT INTO advertisement (
 (27.25, 130.00, 'Berlin Tech Gear', 'Berlin Tech Gear', '2024-02-01', '2024-12-31', 4, 7, 'GPS Navigation Device', 'Rugged GPS with topographic maps and long battery life.', '/images/gps_device1.jpg'),
 (31.50, 160.00, 'Munich Winter Sports', 'Munich Winter Sports', '2024-11-15', '2025-03-15', 8, 8, 'Ice Climbing Gear', 'Complete ice climbing set with axes and crampons.', '/images/ice_climbing1.jpg'),
 (22.75, 115.00, 'Vienna Photography', 'Vienna Photography', '2024-04-01', '2024-10-31', 9, 7, 'Outdoor Photography Kit', 'Camera protection and accessories for outdoor photography.', '/images/photo_kit1.jpg');
+
+
+
+
+-- Migration script for Stripe Connect implementation
+-- This creates a separate mapping table for Account ID to Stripe Connect Account ID
+
+-- Create the stripe_connect_account mapping table
+CREATE TABLE IF NOT EXISTS stripe_connect_account (
+    stripe_connect_account_id SERIAL PRIMARY KEY,
+    account_id INTEGER NOT NULL UNIQUE,
+    stripe_account_id VARCHAR(255) NOT NULL UNIQUE,
+    account_status VARCHAR(50),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (account_id) REFERENCES account(account_id) ON DELETE CASCADE
+);
+
+-- Create indexes for better query performance
+CREATE INDEX IF NOT EXISTS idx_stripe_connect_account_id ON stripe_connect_account(account_id);
+CREATE INDEX IF NOT EXISTS idx_stripe_account_id ON stripe_connect_account(stripe_account_id);
+
+-- Optional: If you had existing data in account table, you would migrate it here
+-- INSERT INTO stripe_connect_account (account_id, stripe_account_id, account_status)
+-- SELECT account_id, stripe_connect_account_id, stripe_account_status
+-- FROM account
+-- WHERE stripe_connect_account_id IS NOT NULL;
