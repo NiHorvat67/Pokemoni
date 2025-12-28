@@ -56,6 +56,7 @@ public class ReservationController {
             reservation.setReservationStart(LocalDateTime.now());
 
             ReservationService.saveReservation(reservation);
+            
             return ResponseEntity.ok().body(reservation.getReservationId().toString());
 
         } catch (JsonProcessingException e) {

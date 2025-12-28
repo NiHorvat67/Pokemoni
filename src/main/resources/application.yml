@@ -45,6 +45,8 @@ logging:
 stripe:
   api:
     key: sk_test_51SQG7jJUCZ7JkCbcvmhBETWJQAahxavmFyqdVy94kKqNAsfq6XrhcIcyOKw52McNsECEFSTNg1zCVtWYhLMUlF5d00c6RHUEs7
+  connect:
+    platform_fee_percent: 10  # Platform fee percentage (10% default)
 
 app:
   frontend:

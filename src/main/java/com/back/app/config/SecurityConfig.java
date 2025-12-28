@@ -27,6 +27,8 @@ public class SecurityConfig {
             .requestMatchers("/", "/login", "/error", "/api/advertisements/**", "/api/itemtypes/**","/api/reservations/**").permitAll()
             .requestMatchers("/api/accounts/{id}", "/api/accounts/", "/api/accounts/create").permitAll()
             .requestMatchers("/checkout/hosted").permitAll()
+            .requestMatchers("/api/stripe/connect/**").permitAll()  
+            .requestMatchers("/api/payment/**").permitAll()  
             .anyRequest().authenticated())
         .oauth2Login(oauth2 -> oauth2
             .userInfoEndpoint(userInfo -> userInfo
