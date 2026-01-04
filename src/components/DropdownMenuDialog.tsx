@@ -20,10 +20,13 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { Field, FieldGroup, FieldLabel } from "@/components/ui/field"
 import { Textarea } from "@/components/ui/textarea"
+import RateService from "./RateService"
 
 export function DropdownMenuDialog() {
   const [showRateDialog, setShowRateDialog] = useState(false)
   const [showReportDialog, setShowReportDialog] = useState(false)
+
+  const [rating, setRating] = useState(null)
 
   const submitRating = () => {
     console.log("rating")
@@ -62,12 +65,13 @@ export function DropdownMenuDialog() {
               Your rental period is over—share your experience with the equipment.
             </DialogDescription>
           </DialogHeader>
-          <h1>stars</h1>
+          <RateService rating={rating} setRating={setRating} />
+
           <DialogFooter>
             <DialogClose asChild>
               <Button variant="outline">Cancel</Button>
             </DialogClose>
-            <Button type="submit" onClick={submitRating}>Confirm</Button>
+            <Button type="submit" className="hover:bg-primary" onClick={submitRating}>Confirm</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
@@ -94,7 +98,7 @@ export function DropdownMenuDialog() {
             <DialogClose asChild>
               <Button variant="outline">Cancel</Button>
             </DialogClose>
-            <Button type="submit" onClick={submitReport}>Confirm</Button>
+            <Button type="submit" className="hover:bg-primary" onClick={submitReport}>Confirm</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
