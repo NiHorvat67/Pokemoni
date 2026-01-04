@@ -1,0 +1,103 @@
+import { useState } from "react"
+import { MoreHorizontalIcon } from "lucide-react"
+
+import { Button } from "@/components/ui/button"
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog"
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
+import { Field, FieldGroup, FieldLabel } from "@/components/ui/field"
+import { Textarea } from "@/components/ui/textarea"
+
+export function DropdownMenuDialog() {
+  const [showRateDialog, setShowRateDialog] = useState(false)
+  const [showReportDialog, setShowReportDialog] = useState(false)
+
+  const submitRating = () => {
+    console.log("rating")
+  }
+  const submitReport = () => {
+    console.log("report")
+  }
+
+  return (
+    <>
+      <DropdownMenu modal={false}>
+        <DropdownMenuTrigger asChild>
+          <Button variant="transparent" className="hover:bg-[#444945] cursor-pointer" aria-label="Open menu" size="icon-sm">
+            <MoreHorizontalIcon />
+          </Button>
+        </DropdownMenuTrigger>
+
+        <DropdownMenuContent className="w-10 bg-input-bg" align="end">
+          <DropdownMenuGroup>
+            <DropdownMenuItem className="focus:bg-primary/7 transition duration-100 ease-in-out" onSelect={() => setShowRateDialog(true)}>
+              Rate
+            </DropdownMenuItem>
+            <DropdownMenuItem className="focus:bg-primary/7 transition duration-100 ease-in-out" onSelect={() => setShowReportDialog(true)}>
+              Report
+            </DropdownMenuItem>
+          </DropdownMenuGroup>
+        </DropdownMenuContent>
+
+      </DropdownMenu>
+
+      <Dialog open={showRateDialog} onOpenChange={setShowRateDialog}>
+        <DialogContent className="sm:max-w-[425px]">
+          <DialogHeader>
+            <DialogTitle>Rate service</DialogTitle>
+            <DialogDescription>
+              Your rental period is over—share your experience with the equipment.
+            </DialogDescription>
+          </DialogHeader>
+          <h1>stars</h1>
+          <DialogFooter>
+            <DialogClose asChild>
+              <Button variant="outline">Cancel</Button>
+            </DialogClose>
+            <Button type="submit" onClick={submitRating}>Confirm</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={showReportDialog} onOpenChange={setShowReportDialog}>
+        <DialogContent className="sm:max-w-[425px]">
+          <DialogHeader>
+            <DialogTitle>Report trader</DialogTitle>
+            <DialogDescription>
+              Let us know about any issues or concerns you had with the trader.
+            </DialogDescription>
+          </DialogHeader>
+          <FieldGroup className="py-3">
+            <Field>
+              <FieldLabel htmlFor="report-description">Tell us what happened</FieldLabel>
+              <Textarea
+                id="report-description"
+                name="report-description"
+                placeholder=""
+              />
+            </Field>
+          </FieldGroup>
+          <DialogFooter>
+            <DialogClose asChild>
+              <Button variant="outline">Cancel</Button>
+            </DialogClose>
+            <Button type="submit" onClick={submitReport}>Confirm</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+    </>
+  )
+}

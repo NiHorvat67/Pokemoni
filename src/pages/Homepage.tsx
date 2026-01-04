@@ -106,6 +106,7 @@ const Homepage = () => {
               </SelectTrigger>
               <SelectContent>
                 {categoryId != "" &&
+                  // @ts-ignore
                   <SelectItem key={0} value={undefined}>Clear selection</SelectItem>
                 }
                 {categories && categories.map((category: any) => (

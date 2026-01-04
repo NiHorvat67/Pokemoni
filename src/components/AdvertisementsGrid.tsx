@@ -69,7 +69,7 @@ const AdvertisementsGrid = ({ products }: { products: any[] }) => {
         })}
       </section>
       {numCards < products.length &&
-        <div className="flex justify-center mt-20">
+        <div className="flex justify-center mt-12">
           <button
             onClick={() => { setNumCards(numCards + increment) }}
             className="cursor-pointer text-primary bg-[#102B19] font-inter text-[16px] rounded-[8px] px-4 py-1.5">
