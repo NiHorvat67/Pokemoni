@@ -32,4 +32,8 @@ public interface AdvertisementRepo extends JpaRepository<Advertisement, Integer>
                      @Param("minPrice") BigDecimal minPrice,
                      @Param("maxPrice") BigDecimal maxPrice);
 
+
+       List<Advertisement> findAllByAdvertisementIdIn(List<Integer> ids);
+       Advertisement findByAdvertisementId(Integer id);
+
 }

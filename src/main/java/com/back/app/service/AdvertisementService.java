@@ -36,6 +36,8 @@ public class AdvertisementService {
         return advertisementRepo.findAllForTraderId(id);
     }
 
+
+
     public Advertisement hideSensitiveData(Advertisement ad) {
 
         if (ad.getTrader() != null) {
@@ -95,4 +97,20 @@ public class AdvertisementService {
     public void deleteAccountById(Integer id) {
         advertisementRepo.deleteById(id);
     }
+
+    public Advertisement getAdvertisementById(Integer id){
+        return advertisementRepo.findByAdvertisementId(id);
+    }
+
+
+    public List<Advertisement> getAdvertisementsByIds(List<Integer> ids) {
+        log.info("Fetching advertisements for IDs: {}", ids);
+        
+        List<Advertisement> ads = advertisementRepo.findAllByAdvertisementIdIn(ids);
+        
+        return ads.stream()
+                .map(this::hideSensitiveData)
+                .collect(Collectors.toList());
+    }
+
 }
