@@ -38,6 +38,9 @@ public class PaymentService {
   @Value("${stripe.connect.platform_fee_percent:10}")
   private Integer platformFeePercent; // Default 10% platform fee
 
+  private final SubscriptionPriceService subscriptionPriceService;
+
+
   public String getStripeApiKey() {
     return stripeApiKey;
   }
@@ -55,7 +58,7 @@ public class PaymentService {
 
       paramsBuilder.addLineItem(
           SessionCreateParams.LineItem.builder()
-              .setQuantity(1L)
+              .setQuantity(subscriptionPriceService.getPrice())
               .setPriceData(
                   PriceData.builder()
                       .setProductData(
