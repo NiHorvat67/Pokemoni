@@ -339,3 +339,11 @@ INSERT INTO report (reporter_id, reported_id, report_details, report_status) VAL
 
 -- Nikola (Admin) logs a report against a suspicious account
 (6, 13, 'Suspicious activity detected on this account. Investigating for fraud.', 'pending');
+
+
+
+CREATE TABLE subscription_price (
+    price INTEGER NOT NULL
+);
+
+INSERT INTO subscription_price (price) VALUES (100000);
