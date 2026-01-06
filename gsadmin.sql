@@ -290,3 +290,52 @@ CREATE INDEX IF NOT EXISTS idx_stripe_account_id ON stripe_connect_account(strip
 -- SELECT account_id, stripe_connect_account_id, stripe_account_status
 -- FROM account
 -- WHERE stripe_connect_account_id IS NOT NULL;
+CREATE TABLE payment (
+    payment_id SERIAL PRIMARY KEY,
+    payer_id INT NOT NULL,
+    payment_description VARCHAR(255),
+    payment_date TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP, -- Added for better tracking
+    
+    FOREIGN KEY (payer_id) REFERENCES account(account_id) ON DELETE SET NULL
+);
+
+-- 2. Table: report
+-- Allows users to report other users (e.g., for bad behavior or scams)
+CREATE TABLE report (
+    report_id SERIAL PRIMARY KEY,
+    reporter_id INT NOT NULL,  -- The user filing the report
+    reported_id INT NOT NULL,  -- The user being reported
+    report_details TEXT,
+    report_status VARCHAR(20) DEFAULT 'pending' CHECK (report_status IN ('pending', 'reviewed', 'resolved', 'dismissed')),
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+
+    FOREIGN KEY (reporter_id) REFERENCES account(account_id) ON DELETE CASCADE,
+    FOREIGN KEY (reported_id) REFERENCES account(account_id) ON DELETE CASCADE
+);
+
+
+
+INSERT INTO payment (payer_id, payment_description) VALUES
+(2, 'Payment for Skis rental (Reservation #1)'),           -- Bob paying
+(2, 'Security deposit for Hiking Gear'),                   -- Bob paying
+(5, 'Snowboard rental fee'),                               -- Jane paying
+(5, 'Late return fee for Camping Equipment'),              -- Jane paying
+(10, 'Payment for Madrid Ski rental'),                     -- Lisa paying
+(11, 'Full payment for Climbing Gear in Rome');            -- David paying
+
+-- Insert dummy data into report
+INSERT INTO report (reporter_id, reported_id, report_details, report_status) VALUES
+-- Bob (Buyer) reports George (Trader)
+(2, 4, 'The item description was misleading. The tent was not waterproof as stated.', 'pending'),
+
+-- Jane (Buyer) reports Alice (Trader)
+(5, 1, 'Trader was 45 minutes late for the handover meeting.', 'reviewed'),
+
+-- Alice (Trader) reports Bob (Buyer)
+(1, 2, 'returned the skis with significant scratch damage on the base.', 'resolved'),
+
+-- Charlie (Trader) reports Jane (Buyer)
+(3, 5, 'User cancelled last minute and refused to pay the cancellation fee.', 'dismissed'),
+
+-- Nikola (Admin) logs a report against a suspicious account
+(6, 13, 'Suspicious activity detected on this account. Investigating for fraud.', 'pending');
