@@ -20,9 +20,17 @@ public class ReportService {
     public Report createReport(Report report) {
         Objects.requireNonNull(report, "Report object cannot be null");
         
+        // Ensure the ID is null so the database SERIAL/IDENTITY handles generation
+        report.setReport_id(null);
+
+        // Basic validation for required fields
+        Objects.requireNonNull(report.getReporter_id(), "Reporter ID must be provided");
+        Objects.requireNonNull(report.getReported_id(), "Reported user ID must be provided");
+
         if (report.getReport_status() == null) {
             report.setReport_status("pending");
         }
+        
         return reportRepo.save(report);
     }
 
