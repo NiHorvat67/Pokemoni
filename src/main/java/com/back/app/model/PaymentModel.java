@@ -19,7 +19,7 @@ import java.time.LocalDate;
 @Data
 @Entity
 @Table(name = "payment")
-public class Payment {
+public class PaymentModel {
 
 
     @Id

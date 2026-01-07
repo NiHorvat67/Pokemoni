@@ -24,7 +24,6 @@ import com.back.app.service.AdvertisementService;
 import com.back.app.service.ReservationService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import io.swagger.v3.oas.annotations.Operation;

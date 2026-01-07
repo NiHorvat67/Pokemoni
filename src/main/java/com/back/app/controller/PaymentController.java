@@ -2,7 +2,6 @@ package com.back.app.controller;
 
 import com.back.app.model.Advertisement;
 import com.back.app.model.Reservation;
-import com.back.app.service.AccountService;
 import com.back.app.service.AdvertisementService;
 import com.back.app.service.PaymentService;
 import com.back.app.service.ReservationService;
@@ -10,9 +9,6 @@ import com.back.app.service.StripeConnectService;
 import com.stripe.Stripe;
 import com.stripe.exception.StripeException;
 import com.stripe.model.checkout.Session;
-import com.stripe.param.checkout.SessionCreateParams;
-import com.stripe.param.checkout.SessionCreateParams.LineItem.PriceData;
-
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -34,7 +30,6 @@ import io.swagger.v3.oas.annotations.Operation;
 @Slf4j
 public class PaymentController {
 
-    private final AccountService accountService;
     private final PaymentService paymentService;
     private final ReservationService reservationService;
     private final AdvertisementService advertisementService;

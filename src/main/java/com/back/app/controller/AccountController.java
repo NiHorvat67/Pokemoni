@@ -1,17 +1,9 @@
 package com.back.app.controller;
 
-import java.io.IOException;
-import java.net.URI;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Map;
-
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
@@ -22,31 +14,19 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.client.RestTemplate;
-
 import com.back.app.model.Account;
 import com.back.app.service.AccountService;
 import com.back.app.service.OAuthRoleService;
 import com.back.app.service.PaymentService;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.stripe.exception.StripeException;
-import com.stripe.model.checkout.Session;
-
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.web.bind.annotation.RequestBody;
-
-import com.fasterxml.jackson.core.JsonParseException;
 
 @Tag(name = "Accounts", description = "Manages user accounts, including retrieval by ID and for the currently authenticated user.")
 @RestController
