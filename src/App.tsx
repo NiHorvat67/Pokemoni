@@ -15,7 +15,6 @@ import useAuthContext from "./hooks/useAuthContext"
 function App() {
 
   const { user } = useAuthContext()
-  console.log(user)
   // zabraniti auth rute ako je user vec ulogiran. kasnije zbog lakseg testiranja
   return (
     <BrowserRouter>
