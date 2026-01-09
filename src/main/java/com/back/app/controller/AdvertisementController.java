@@ -1,11 +1,19 @@
 package com.back.app.controller;
 
-import java.util.List;
+import java.io.IOException;
 import java.math.BigDecimal;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.time.LocalDate;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,11 +23,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
+import org.springframework.web.multipart.MultipartFile;
 
 import com.back.app.model.AdverNoJoin;
 import com.back.app.model.Advertisement;
 import com.back.app.service.AdvertisementService;
+import com.back.app.service.ImageStorageService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -36,6 +45,7 @@ import lombok.extern.slf4j.Slf4j;
 public class AdvertisementController {
     @Autowired
     private final AdvertisementService advertisementService;
+    private final ImageStorageService imageStorageService;
 
     @Operation(summary = "Retrieve all advertisements", description = "Returns a comprehensive, unfiltered list of all active advertisement listings.")
     @GetMapping("/")
@@ -136,6 +146,76 @@ public class AdvertisementController {
                     .body("Error deleting advertisement");
         }
         return ResponseEntity.ok().body("Succesfuly deleted advertisement with id " + id.toString());
+    }
+
+    @GetMapping("/images/load/{id}")
+    public ResponseEntity<Resource> getImage(@PathVariable Integer id) {
+        try {
+            Advertisement ad = advertisementService.getAdvertisementbyId(id);
+            if (ad == null || ad.getItemImagePath() == null) {
+                log.error("Error loading image for advertisement {}: Advertisement doesnt exist", id);
+                return ResponseEntity.notFound().build();
+            }
+
+            String filename = ad.getItemImagePath().substring(8);
+            log.info("Loading image: {}", filename);
+
+            Resource resource = imageStorageService.loadImage(filename);
+
+            Path filePath = imageStorageService.getUploadDir().resolve(filename);
+            String contentType = Files.probeContentType(filePath);
+
+            return ResponseEntity.ok()
+                    .contentType(MediaType.parseMediaType(contentType))
+                    .header(HttpHeaders.CONTENT_DISPOSITION,
+                            "inline; filename=\"" + resource.getFilename() + "\"")
+                    .body(resource);
+        } catch (Exception ex) {
+            log.error("Error loading image for advertisement {}: {}", id, ex.getMessage());
+            return ResponseEntity.internalServerError().build();
+        }
+    }
+
+    @PostMapping("/images/store/{id}")
+    public ResponseEntity<Map<String, String>> uploadImage(@RequestParam("file") MultipartFile file,@PathVariable Integer id
+            ) {
+        try {
+            
+            Advertisement ad = advertisementService.getAdvertisementbyId(id);
+            if (ad == null) {
+                log.error("Error loading image for advertisement {}: Advertisement doesnt exist", id);
+                return ResponseEntity.notFound().build();
+            }
+            
+            String filename = "image" + id.toString();
+            String filename_ext = imageStorageService.storeImage(file,filename);
+            ad.setItemImagePath("/images/"+filename_ext);
+            advertisementService.saveAdvertisement(ad);
+            Map<String, String> response = new HashMap<>();
+            response.put("filename", filename);
+            response.put("originalName", file.getOriginalFilename());
+            response.put("size", String.valueOf(file.getSize()));
+            response.put("contentType", file.getContentType());
+            response.put("url", "/api/images/" + filename);
+
+            return ResponseEntity.ok(response);
+        } catch (IOException e) {
+            return ResponseEntity.badRequest()
+                    .body(Map.of("error", e.getMessage()));
+        }
+    }
+
+    @GetMapping("/path")
+    public Map<String, String> getPathInfo() {
+        Map<String, String> info = new HashMap<>();
+        info.put("workingDir", System.getProperty("user.dir"));
+        info.put("uploadPath", imageStorageService.getUploadDir().toString());
+
+        // Optional: Add more debug info
+        info.put("javaVersion", System.getProperty("java.version"));
+        info.put("os", System.getProperty("os.name"));
+
+        return info;
     }
 
 }

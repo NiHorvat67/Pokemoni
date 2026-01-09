@@ -1,21 +1,21 @@
 package com.back.app.service;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-import java.math.BigDecimal;
-import java.time.LocalDate;
 
 import org.springframework.stereotype.Service;
 
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-
-import com.back.app.repo.AdverNoJoinRepo;
-import com.back.app.repo.AdvertisementRepo;
 import com.back.app.model.Account;
 import com.back.app.model.AdverNoJoin;
 import com.back.app.model.Advertisement;
+import com.back.app.repo.AdverNoJoinRepo;
+import com.back.app.repo.AdvertisementRepo;
+
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @Service
 @RequiredArgsConstructor
@@ -85,6 +85,10 @@ public class AdvertisementService {
     public AdverNoJoin saveAdverNoJoin(AdverNoJoin adverNoJoin) {
         return adverNoJoinRepo.save(adverNoJoin);
     }
+    public Advertisement saveAdvertisement(Advertisement advertisement) {
+        log.info("I AM GAAAY");
+        return advertisementRepo.save(advertisement);
+    }
 
     public AdverNoJoin updateAdverNoJoin(Integer id, AdverNoJoin adverNoJoin) {
         adverNoJoin.setAdvertisementId(id);
@@ -98,6 +102,11 @@ public class AdvertisementService {
     public Advertisement getAdvertisementById(Integer id){
         return advertisementRepo.findByAdvertisementId(id);
     }
+
+    public Advertisement getAdvertisementImageById(Integer id){
+        return advertisementRepo.findByAdvertisementId(id);
+    }
+    
 
 
     public List<Advertisement> getAdvertisementsByIds(List<Integer> ids) {
