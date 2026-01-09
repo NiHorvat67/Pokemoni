@@ -9,6 +9,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import com.back.app.model.Report;
+import com.back.app.model.ReportAccountsTimestamp;
 import com.back.app.service.ReportService;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -32,6 +33,14 @@ public class ReportController {
     public ResponseEntity<List<Report>> getAllReports() {
         return ResponseEntity.ok().body(reportService.getAllReports());
     }
+
+    @Operation(summary = "Retrieve all reports with account", description = "Returns a list of all reports in the system. Typically used by admins.")
+    @Secured("ROLE_ADMIN")
+    @GetMapping("/with-accounts/")
+    public ResponseEntity<List<ReportAccountsTimestamp>> getAllReportsWithAccounts() {
+        return ResponseEntity.ok().body(reportService.getAllReportsWithAccounts());
+    }
+
 
     @Operation(summary = "Retrieve report by ID", description = "Returns details of a specific report.")
     @GetMapping("/{id}")
