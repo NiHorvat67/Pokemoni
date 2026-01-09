@@ -1,4 +1,6 @@
 package com.back.app.model;
+import java.time.LocalDate;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -43,5 +45,8 @@ public class Report {
 
     @Column(name = "report_status")
     private String report_status;
+
+    @Column(name = "created_at")
+    private LocalDate created_at;
     
 }

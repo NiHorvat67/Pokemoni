@@ -1,21 +1,27 @@
 package com.back.app.service;
 
+import com.back.app.model.Account;
 import com.back.app.model.Report;
+import com.back.app.model.ReportAccountsTimestamp;
 import com.back.app.repo.ReportRepo;
+
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
+@Slf4j
 public class ReportService {
 
     private final ReportRepo reportRepo;
-
-    public ReportService(ReportRepo reportRepo) {
-        this.reportRepo = reportRepo;
-    }
+    private final AccountService accountService;
 
     public Report createReport(Report report) {
         Objects.requireNonNull(report, "Report object cannot be null");
@@ -71,4 +77,37 @@ public class ReportService {
         }
         reportRepo.deleteById(id);
     }
+
+
+    public ReportAccountsTimestamp getReportWithUsernamesById(Integer id){
+        
+        Objects.requireNonNull(id, "Report ID cannot be null");
+        
+        if(!reportRepo.existsById(id)){
+            throw new RuntimeException("Report not found with id: " + id);
+        }
+        
+        Report report = this.getReportById(id);
+        Account reported = accountService.getUserbyId(report.getReported_id());
+        Account reporter = accountService.getUserbyId(report.getReporter_id());
+        
+
+        return new ReportAccountsTimestamp(
+            report,
+            reporter,
+            reported
+        );
+
+    }
+
+
+    public List<ReportAccountsTimestamp> getAllReportsWithAccounts(){
+
+        return this.getAllReports().stream()
+        .map(
+            report -> {return this.getReportWithUsernamesById(report.getReport_id());}
+        ).collect(Collectors.toList());
+
+    };
+
 }
