@@ -2,10 +2,53 @@ import Button from "@/components/Button";
 import Input from "@/components/Input";
 import { useState } from "react";
 import { dateRangeIcon } from "@/assets/icons";
+import { useQuery, useMutation } from "@tanstack/react-query";
+import axios from "axios";
 
 const Admin = () => {
 
-  const [price, setPrice] = useState("")
+  const [price, setPrice] = useState(undefined)
+
+  const { data } = useQuery({
+    queryKey: ["subscriptionPrice"],
+    queryFn: async () => {
+      return axios
+        .get(`/api/subscription-price/`)
+        .then(res => {
+          if (res.data == "") {
+            window.location.pathname = "/error"
+          }
+          return res.data
+        })
+        .catch(err => {
+          // console.log(err)
+          if (err.response.status === 400) {
+            window.location.pathname = "/error"
+          }
+        })
+    }
+  })
+
+  const { mutate } = useMutation({
+    mutationFn: async () => {
+      return axios({
+        method: "POST",
+        url: "/api/subscription-price/set",
+        data: price * 100
+        ,
+      })
+        .then(res => {
+          return res.data
+        })
+        .catch(err => console.log(err))
+    },
+    onSuccess: queryResult => {
+      console.log(queryResult)
+    }
+
+  })
+
+
 
   return (
     <section className="padding-x padding-t">
@@ -14,11 +57,11 @@ const Admin = () => {
         <h1 className="font-medium text-2xl text-white">Admin panel</h1>
 
         <section className="">
-          <h2 className="text-white text-xl font-medium mb-3">Yearly subscription — 5€</h2>
+          <h2 className="text-white text-xl font-medium mb-3">Yearly subscription — {data}€</h2>
           <p className="text-desc mb-7">Set the price of the yearly subscription</p>
           <form className="flex gap-4 sm:gap-7">
-            <Input placeholder="Price" state={price} setState={setPrice} />
-            <Button text="Update" icon={false} long={false} onClick={() => { }} />
+            <Input type="number" placeholder="Price" state={price} setState={setPrice} />
+            <Button text="Update" icon={false} long={false} onClick={() => { mutate() }} />
           </form>
 
         </section>
