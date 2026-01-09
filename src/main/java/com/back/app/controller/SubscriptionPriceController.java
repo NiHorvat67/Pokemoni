@@ -1,5 +1,6 @@
 package com.back.app.controller;
 
+import com.back.app.model.SubscriptionPrice;
 import com.back.app.service.SubscriptionPriceService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -27,11 +28,11 @@ public class SubscriptionPriceController {
     @Operation(summary = "Update global price", description = "Sets a new global subscription price. Restricted to Admin.")
     @Secured("ROLE_ADMIN")
     @PostMapping("/set")
-    public ResponseEntity<Long> setPrice(@RequestBody Long newPriceCents) {
+    public ResponseEntity<Long> setPrice(@RequestBody SubscriptionPrice subscriptionPrice) {
         try {
-            subscriptionPriceService.setPrice(newPriceCents);
-            log.info("Subscription price updated to: {} cents", newPriceCents);
-            return ResponseEntity.ok(newPriceCents);
+            subscriptionPriceService.setPrice(subscriptionPrice.getPrice());
+            log.info("Subscription price updated to: {} cents", subscriptionPrice.getPrice());
+            return ResponseEntity.ok(subscriptionPrice.getPrice());
         } catch (Exception e) {
             log.error("Error updating subscription price: {}", e.getMessage());
             return ResponseEntity.internalServerError().build();
