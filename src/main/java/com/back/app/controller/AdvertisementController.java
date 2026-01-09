@@ -28,6 +28,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.back.app.model.AdverNoJoin;
 import com.back.app.model.Advertisement;
 import com.back.app.service.AdvertisementService;
+import com.back.app.service.ImageFolder;
 import com.back.app.service.ImageStorageService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
@@ -148,21 +149,53 @@ public class AdvertisementController {
         return ResponseEntity.ok().body("Succesfuly deleted advertisement with id " + id.toString());
     }
 
-    @GetMapping("/images/load/{id}")
-    public ResponseEntity<Resource> getImage(@PathVariable Integer id) {
+    @PostMapping("/images/store/{id}")
+    public ResponseEntity<Map<String, String>> storeItemImage(
+            @RequestParam("file") MultipartFile file,
+            @PathVariable Integer id) {
+
         try {
             Advertisement ad = advertisementService.getAdvertisementbyId(id);
-            if (ad == null || ad.getItemImagePath() == null) {
-                log.error("Error loading image for advertisement {}: Advertisement doesnt exist", id);
+            if (ad == null) {
+                log.error("Error loading image for advertisement {}: Advertisement doesn't exist or has no image\"", id);
                 return ResponseEntity.notFound().build();
             }
 
-            String filename = ad.getItemImagePath().substring(8);
-            log.info("Loading image: {}", filename);
+            String filename = "item" + id.toString();
+            String filename_ext = imageStorageService.storeImage(file, filename, ImageFolder.ADVERTISEMENT);
 
-            Resource resource = imageStorageService.loadImage(filename);
+            ad.setItemImagePath("/"+ImageFolder.ADVERTISEMENT.getFolderName()+"/" + filename_ext);
+            advertisementService.saveAdvertisement(ad);
 
-            Path filePath = imageStorageService.getUploadDir().resolve(filename);
+            Map<String, String> response = new HashMap<>();
+            response.put("filename", filename_ext);
+            response.put("originalName", file.getOriginalFilename());
+            response.put("size", String.valueOf(file.getSize()));
+            response.put("contentType", file.getContentType());
+            response.put("url", "/api/advertisements/images/load/" + id);
+
+            return ResponseEntity.ok(response);
+        } catch (IOException e) {
+            return ResponseEntity.badRequest()
+                    .body(Map.of("error", e.getMessage()));
+        }
+    }
+
+    @GetMapping("/images/load/{id}")
+    public ResponseEntity<Resource> getItemImage(@PathVariable Integer id) {
+        try {
+            Advertisement ad = advertisementService.getAdvertisementbyId(id);
+            if (ad == null || ad.getItemImagePath() == null) {
+                log.error("Error loading image for advertisement {}: Advertisement doesn't exist", id);
+                return ResponseEntity.notFound().build();
+            }
+
+            String filename = ad.getItemImagePath().replace("/"+ImageFolder.ADVERTISEMENT.getFolderName()+"/", "");
+            log.info("Loading profile image: {}", filename);
+
+            Resource resource = imageStorageService.loadImage(filename, ImageFolder.ACCOUNT);
+
+            Path filePath = imageStorageService.getUploadDir(ImageFolder.ACCOUNT).resolve(filename);
             String contentType = Files.probeContentType(filePath);
 
             return ResponseEntity.ok()
@@ -174,48 +207,6 @@ public class AdvertisementController {
             log.error("Error loading image for advertisement {}: {}", id, ex.getMessage());
             return ResponseEntity.internalServerError().build();
         }
-    }
-
-    @PostMapping("/images/store/{id}")
-    public ResponseEntity<Map<String, String>> uploadImage(@RequestParam("file") MultipartFile file,@PathVariable Integer id
-            ) {
-        try {
-            
-            Advertisement ad = advertisementService.getAdvertisementbyId(id);
-            if (ad == null) {
-                log.error("Error loading image for advertisement {}: Advertisement doesnt exist", id);
-                return ResponseEntity.notFound().build();
-            }
-            
-            String filename = "image" + id.toString();
-            String filename_ext = imageStorageService.storeImage(file,filename);
-            ad.setItemImagePath("/images/"+filename_ext);
-            advertisementService.saveAdvertisement(ad);
-            Map<String, String> response = new HashMap<>();
-            response.put("filename", filename);
-            response.put("originalName", file.getOriginalFilename());
-            response.put("size", String.valueOf(file.getSize()));
-            response.put("contentType", file.getContentType());
-            response.put("url", "/api/images/" + filename);
-
-            return ResponseEntity.ok(response);
-        } catch (IOException e) {
-            return ResponseEntity.badRequest()
-                    .body(Map.of("error", e.getMessage()));
-        }
-    }
-
-    @GetMapping("/path")
-    public Map<String, String> getPathInfo() {
-        Map<String, String> info = new HashMap<>();
-        info.put("workingDir", System.getProperty("user.dir"));
-        info.put("uploadPath", imageStorageService.getUploadDir().toString());
-
-        // Optional: Add more debug info
-        info.put("javaVersion", System.getProperty("java.version"));
-        info.put("os", System.getProperty("os.name"));
-
-        return info;
     }
 
 }
