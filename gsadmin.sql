@@ -347,3 +347,21 @@ CREATE TABLE subscription_price (
 );
 
 INSERT INTO subscription_price (price) VALUES (100000);
+
+
+
+-- FIX
+
+ALTER TABLE reservation DROP CONSTRAINT reservation_buyer_id_fkey;
+ALTER TABLE reservation ADD CONSTRAINT reservation_buyer_id_fkey 
+    FOREIGN KEY (buyer_id) REFERENCES account(account_id) ON DELETE CASCADE;
+
+ALTER TABLE payment DROP CONSTRAINT payment_payer_id_fkey;
+ALTER TABLE payment ADD CONSTRAINT payment_payer_id_fkey 
+    FOREIGN KEY (payer_id) REFERENCES account(account_id) ON DELETE CASCADE;
+
+
+
+ALTER TABLE reservation DROP CONSTRAINT fk_advertisement;
+ALTER TABLE reservation ADD CONSTRAINT fk_advertisement 
+    FOREIGN KEY (advertisement_id) REFERENCES advertisement(advertisement_id) ON DELETE CASCADE;
