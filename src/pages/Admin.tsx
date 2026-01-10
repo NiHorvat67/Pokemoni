@@ -33,11 +33,8 @@ const Admin = () => {
     queryKey: ["reports"],
     queryFn: async () => {
       return axios
-        .get(`/api/reports/`)
+        .get(`/api/reports/with-accounts/`)
         .then(res => {
-          if (res.data == "") {
-            window.location.pathname = "/error"
-          }
           return res.data
         })
         .catch(err => {
@@ -81,7 +78,7 @@ const Admin = () => {
         .catch(err => console.log(err))
     },
     onSuccess: queryResult => {
-
+      window.location.reload()
     }
   })
 
@@ -108,26 +105,26 @@ const Admin = () => {
           <p className="text-desc mb-7">Displaying all customer-related reports from sellers.</p>
 
           <div className="flex flex-col gap-8 mb-32">
-            {reports?.map(report => (
-              <div key={report.report_id} className="flex gap-6 flex-col bg-[#222423] rounded-[8px] sm:px-7 py-4 px-5 sm:py-5 sm:px-9 sm:py-7 max-w-[670px]">
+            {reports?.map(reportData => (
+              <div key={reportData.report.report_id} className="flex gap-6 flex-col bg-[#222423] rounded-[8px] sm:px-7 py-4 px-5 sm:py-5 sm:px-9 sm:py-7 max-w-[670px]">
                 <div className="flex flex-wrap gap-5 justify-between text-white">
                   <h2 className="">
-                    <a href={`/profile/${report.reporter_id}`} className="font-bold">Craig George </a>
+                    <a href={`/profile/${reportData.reporter.accountId}`} className="font-bold">{reportData.reporter.userFirstName} {reportData.reporter.userLastName} </a>
                     reported
-                    <a href={`/profile/${report.reported_id}`} className="font-bold"> Jaydon Vetrovs</a>
+                    <a href={`/profile/${reportData.reported.accountId}`} className="font-bold"> {reportData.reported.userFirstName} {reportData.reported.userLastName}</a>
                   </h2>
                   <div className="flex items-center gap-2 font-medium">
                     <img src={dateRangeIcon} alt="date icon" />
-                    24.10.2025
+                    {new Date(reportData.report.created_at).toLocaleDateString("hr-HR")}
                   </div>
                 </div>
 
                 <p className="text-desc">
-                  {report.report_details}
+                  {reportData.report.report_details}
                 </p>
 
                 <div className="flex gap-5 sm:gap-7 flex-wrap">
-                  <Button icon={false} text="Delete account" className="!bg-[#E5002E] hover:shadow-[0_0_15px_#E5002E] text-white !py-2 !px-4" long={false} onClick={() => { deleteAccount(report.reported_id) }} />
+                  <Button icon={false} text="Delete account" className="!bg-[#E5002E] hover:shadow-[0_0_15px_#E5002E] text-white !py-2 !px-4" long={false} onClick={() => { deleteAccount(reportData.reported.accountId) }} />
                 </div>
               </div>
             )
