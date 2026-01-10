@@ -57,12 +57,10 @@ const NewAdvertisement = () => {
         }
       })
         .then(res => {
-          console.log(res.data)
           window.location.href = `/advertisement/${res.data}`
           return res.data
         })
         .catch(err => {
-          console.log("error")
           console.log(err)
         })
     }

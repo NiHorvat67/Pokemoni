@@ -15,7 +15,6 @@ const authReducer = (state: any, action: any) => {
       localStorage.removeItem("user")
       return { user: null }
     default:
-      console.log("default")
       return { user: null }
   }
 }
@@ -30,7 +29,6 @@ export const AuthContextProvider = ({ children }: { children: any }) => {
     mutationFn: async () => {
       return axios.get("/api/accounts/current")
         .then(res => {
-          console.log(res.data)
           return res.data
         })
         .catch(err => {

@@ -31,7 +31,7 @@ const ReservationHistory = ({ reservationsData, accountRole }: { reservationsDat
                     <a href={`/advertisement/${advertisementId}`} className="mr-8 max-w-[100ch] max-h-[6ch] text-nowrapx overflow-hidden text-ellipsis text-white font-medium text-base">{productName}</a>
                     {status === "not active" &&
                       <div className="text-white text-base">
-                        <DropdownMenuDialog reporterId={currentUserId} reportedId={userId} />
+                        <DropdownMenuDialog accountRole={accountRole} reservationGrade={reservationData.reservation.reservationGrade} reservationId={reservationData.reservation.reservationId} reporterId={currentUserId} reportedId={userId} />
                       </div>
                     }
                     {status === "active" &&
@@ -112,7 +112,7 @@ const ReservationHistory = ({ reservationsData, accountRole }: { reservationsDat
                         {status === "not active" &&
                           <div className="justify-self-end">
                             <div className="text-white text-base">
-                              <DropdownMenuDialog reporterId={currentUserId} reportedId={userId} />
+                              <DropdownMenuDialog accountRole={accountRole} reservationGrade={reservationData.reservation.reservationGrade} reservationId={reservationData.reservation.reservationId} reporterId={currentUserId} reportedId={userId} />
                             </div>
                           </div>
                         }

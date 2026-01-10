@@ -23,13 +23,18 @@ import { Textarea } from "@/components/ui/textarea"
 import RateService from "./RateService"
 import { useMutation } from "@tanstack/react-query"
 import axios from "axios"
+import { useEffect } from "react"
 
-export function DropdownMenuDialog({ reporterId, reportedId }: { reporterId: number, reportedId: number }) {
+export function DropdownMenuDialog({ reservationGrade, reporterId, reportedId, reservationId, accountRole }: { accountRole: string, reporterId: number, reportedId: number, reservationId: number, reservationGrade: number }) {
   const [showRateDialog, setShowRateDialog] = useState(false)
   const [showReportDialog, setShowReportDialog] = useState(false)
-
-  const [rating, setRating] = useState(null)
   const [reportDetails, setReportDetails] = useState("")
+  const [rating, setRating] = useState(reservationGrade)
+  // rating koji je trenutno odabran
+  const [lastValidRating, setLastValidRating] = useState(rating)
+  // zadnji submitani rating(onaj koji je trenutno u db)
+  // ako je pocetni rating 1, user updatea na 2, onda odabere 3 pa stisne cancel,
+  // ovo omogucava da se displaya rating 2 kada opet otvori dialog (inace bi se displayao 1)
 
   const { mutate: sendReport } = useMutation({
     mutationFn: async () => {
@@ -49,15 +54,34 @@ export function DropdownMenuDialog({ reporterId, reportedId }: { reporterId: num
         .catch(err => console.log(err))
     },
     onSuccess: queryResult => {
-      window.location.reload()
+      setShowReportDialog(!showReportDialog)
+    }
+  })
+  const { mutate: gradeReservation } = useMutation({
+    mutationFn: async () => {
+      return axios({
+        method: "POST",
+        url: `/api/reservations/grade/${reservationId}`,
+        data: {
+          grade: rating
+        }
+        ,
+      })
+        .then(res => {
+          return res.data
+        })
+        .catch(err => console.log(err))
+    },
+    onSuccess: queryResult => {
+      setLastValidRating(rating)
+      setShowRateDialog(!showRateDialog)
     }
   })
 
   const submitRating = () => {
-    console.log("rating")
+    gradeReservation()
   }
   const submitReport = () => {
-    console.log("jdklsajdklsaj")
     sendReport()
   }
 
@@ -72,9 +96,11 @@ export function DropdownMenuDialog({ reporterId, reportedId }: { reporterId: num
 
         <DropdownMenuContent className="w-10 bg-input-bg" align="end">
           <DropdownMenuGroup>
-            <DropdownMenuItem className="focus:bg-primary/7 transition duration-100 ease-in-out" onSelect={() => setShowRateDialog(true)}>
-              Rate
-            </DropdownMenuItem>
+            {accountRole.toLocaleLowerCase() === "buyer" &&
+              <DropdownMenuItem className="focus:bg-primary/7 transition duration-100 ease-in-out" onSelect={() => setShowRateDialog(true)}>
+                Rate
+              </DropdownMenuItem>
+            }
             <DropdownMenuItem className="focus:bg-primary/7 transition duration-100 ease-in-out" onSelect={() => setShowReportDialog(true)}>
               Report
             </DropdownMenuItem>
@@ -95,7 +121,7 @@ export function DropdownMenuDialog({ reporterId, reportedId }: { reporterId: num
 
           <DialogFooter>
             <DialogClose asChild>
-              <Button variant="outline">Cancel</Button>
+              <Button variant="outline" onClick={() => { setRating(lastValidRating) }}>Cancel</Button>
             </DialogClose>
             <Button type="submit" className="hover:bg-primary" onClick={submitRating}>Confirm</Button>
           </DialogFooter>

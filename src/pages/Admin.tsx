@@ -66,7 +66,6 @@ const Admin = () => {
 
   const { mutate: deleteAccount } = useMutation({
     mutationFn: async (userId) => {
-      console.log(`deleteing user of id: ${userId}`)
       return axios({
         method: "GET",
         url: `/api/accounts/delete/${userId}`,

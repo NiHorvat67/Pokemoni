@@ -9,7 +9,6 @@ const Nav = () => {
   const hideSingInButton = location.pathname.includes("/auth"); // za /auth i /auth/2
 
   const logoutOnClick = () => {
-    console.log("jkdsajdklsa")
     dispatch({ type: "LOGOUT" })
     fetch("/api/accounts/logout")
       .then(() => {
