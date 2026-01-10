@@ -20,6 +20,7 @@ export function parseReservationData(reservationData: any, accountRole: string) 
 
   return {
     userId: accountRole === "buyer" ? traderId : buyerId,
+    currentUserId: accountRole === "buyer" ? reservationData.reservation.buyerId : traderId,
     userName: accountRole === "buyer" ? traderName : buyerName,
     userRole: accountRole === "buyer" ? "trader" : "buyer",
     advertisementId,

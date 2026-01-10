@@ -21,18 +21,44 @@ import {
 import { Field, FieldGroup, FieldLabel } from "@/components/ui/field"
 import { Textarea } from "@/components/ui/textarea"
 import RateService from "./RateService"
+import { useMutation } from "@tanstack/react-query"
+import axios from "axios"
 
-export function DropdownMenuDialog() {
+export function DropdownMenuDialog({ reporterId, reportedId }: { reporterId: number, reportedId: number }) {
   const [showRateDialog, setShowRateDialog] = useState(false)
   const [showReportDialog, setShowReportDialog] = useState(false)
 
   const [rating, setRating] = useState(null)
+  const [reportDetails, setReportDetails] = useState("")
+
+  const { mutate: sendReport } = useMutation({
+    mutationFn: async () => {
+      return axios({
+        method: "POST",
+        url: "/api/reports/create",
+        data: {
+          "reporter_id": reporterId,
+          "reported_id": reportedId,
+          "report_details": reportDetails,
+        }
+        ,
+      })
+        .then(res => {
+          return res.data
+        })
+        .catch(err => console.log(err))
+    },
+    onSuccess: queryResult => {
+      window.location.reload()
+    }
+  })
 
   const submitRating = () => {
     console.log("rating")
   }
   const submitReport = () => {
-    console.log("report")
+    console.log("jdklsajdklsaj")
+    sendReport()
   }
 
   return (
@@ -91,6 +117,8 @@ export function DropdownMenuDialog() {
                 id="report-description"
                 name="report-description"
                 placeholder=""
+                value={reportDetails}
+                onChange={(e) => { setReportDetails(e.target.value) }}
               />
             </Field>
           </FieldGroup>

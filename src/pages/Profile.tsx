@@ -37,9 +37,6 @@ const Profile = () => {
       return axios
         .get(`/api/reservations/${accountData?.accountRole}/${userId}`)
         .then(res => {
-          if (res.data == "") {
-            window.location.pathname = "/error"
-          }
           return res.data
         })
         .catch(err => {
