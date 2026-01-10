@@ -1,6 +1,6 @@
 -- 1. Table: account (Independent)
 CREATE TABLE account (
-    account_id SERIAL PRIMARY KEY, 
+    account_id SERIAL PRIMARY KEY,
     oauth2_id VARCHAR(100) UNIQUE,
     user_email VARCHAR(255) NOT NULL UNIQUE,
     user_first_name VARCHAR(50),
@@ -9,6 +9,7 @@ CREATE TABLE account (
     user_contact_email VARCHAR(255) UNIQUE,
     user_location VARCHAR(255),
     registration_date DATE NOT NULL DEFAULT CURRENT_DATE,
+    profile_image_path VARCHAR(255),
     account_role VARCHAR(20) NOT NULL CHECK (account_role IN ('trader', 'buyer', 'admin')),
     account_rating DECIMAL(2, 1)
 );
@@ -32,7 +33,7 @@ CREATE TABLE reservation (
 
     buyer_id INT,
     FOREIGN KEY (buyer_id) REFERENCES account(account_id) ON DELETE SET NULL,
-    
+
     advertisement_id INT -- Column for the FK (Constraint added later)
 );
 
@@ -47,13 +48,13 @@ CREATE TABLE advertisement (
     advertisement_location_return VARCHAR(255),
     advertisement_start DATE NOT NULL,
     advertisement_end DATE NOT NULL,
-    
+
     trader_id INT NOT NULL,
     FOREIGN KEY (trader_id) REFERENCES account(account_id) ON DELETE CASCADE,
 
     itemtype_id INT,
     FOREIGN KEY (itemtype_id) REFERENCES itemtype(itemtype_id),
-    
+
     reservation_id INT UNIQUE, -- Column for the FK (Constraint added later)
     item_name VARCHAR(255),
     item_description TEXT,
@@ -66,14 +67,14 @@ CREATE TABLE advertisement (
 -- Add the Foreign Key from reservation to advertisement
 ALTER TABLE reservation
 ADD CONSTRAINT fk_advertisement
-    FOREIGN KEY (advertisement_id) 
+    FOREIGN KEY (advertisement_id)
     REFERENCES advertisement(advertisement_id)
     ON DELETE SET NULL;
 
 -- Add the Foreign Key from advertisement to reservation
 ALTER TABLE advertisement
 ADD CONSTRAINT fk_reservation
-    FOREIGN KEY (reservation_id) 
+    FOREIGN KEY (reservation_id)
     REFERENCES reservation(reservation_id)
     ON DELETE SET NULL;
 
@@ -295,7 +296,7 @@ CREATE TABLE payment (
     payer_id INT NOT NULL,
     payment_description VARCHAR(255),
     payment_date TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP, -- Added for better tracking
-    
+
     FOREIGN KEY (payer_id) REFERENCES account(account_id) ON DELETE SET NULL
 );
 
@@ -353,15 +354,15 @@ INSERT INTO subscription_price (price) VALUES (100000);
 -- FIX
 
 ALTER TABLE reservation DROP CONSTRAINT reservation_buyer_id_fkey;
-ALTER TABLE reservation ADD CONSTRAINT reservation_buyer_id_fkey 
+ALTER TABLE reservation ADD CONSTRAINT reservation_buyer_id_fkey
     FOREIGN KEY (buyer_id) REFERENCES account(account_id) ON DELETE CASCADE;
 
 ALTER TABLE payment DROP CONSTRAINT payment_payer_id_fkey;
-ALTER TABLE payment ADD CONSTRAINT payment_payer_id_fkey 
+ALTER TABLE payment ADD CONSTRAINT payment_payer_id_fkey
     FOREIGN KEY (payer_id) REFERENCES account(account_id) ON DELETE CASCADE;
 
 
 
 ALTER TABLE reservation DROP CONSTRAINT fk_advertisement;
-ALTER TABLE reservation ADD CONSTRAINT fk_advertisement 
+ALTER TABLE reservation ADD CONSTRAINT fk_advertisement
     FOREIGN KEY (advertisement_id) REFERENCES advertisement(advertisement_id) ON DELETE CASCADE;
