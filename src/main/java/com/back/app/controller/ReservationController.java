@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.back.app.model.Account;
 import com.back.app.model.Advertisement;
 import com.back.app.model.Reservation;
+import com.back.app.model.ReservationGrade;
 import com.back.app.model.ReservationWithStatusBuyerItemName;
 import com.back.app.model.ReservationWithStatusItemName;
 import com.back.app.service.AccountService;
@@ -110,7 +111,7 @@ public class ReservationController {
     @Operation(summary = "Grade reservation", description = "Grade reservation after it ends")
     @PostMapping("/grade/{id}")
     public ResponseEntity<String> gradeReservation(@PathVariable Integer id,
-            @RequestBody String grade) {
+            @RequestBody ReservationGrade reservationGrade) {
         try {
             log.info("Received Reservation: {}", id);
             Reservation reservation = reservationService.getReservationbyId(id);
@@ -125,7 +126,7 @@ public class ReservationController {
                         .body("Reservation has not ended yet");
             }
 
-            Integer grade1 = parseGrade(grade.trim());
+            Integer grade1 = reservationGrade.getGrade();
             if (grade1 == null) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                         .body("Invalid grade format. Must be an integer between 1-5");
