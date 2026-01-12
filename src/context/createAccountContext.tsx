@@ -1,10 +1,27 @@
 import { createContext, useState } from "react";
 
-export const CreateAccountContext = createContext({})
+interface UserDataType {
+  userFirstName: string;
+  userLastName: string;
+  userLocation: string;
+  accountRole: string;
+  userContact: string;
+}
+
+interface CreateAccountContextType {
+  userData: UserDataType,
+  setUserDataField: <K extends keyof UserDataType>(
+    field: K
+  ) => (value: UserDataType[K]) => void
+}
+
+
+
+export const CreateAccountContext = createContext<CreateAccountContextType | undefined>(undefined)
 
 export const CreateAccountContextProvider = ({ children }: { children: any }) => {
 
-  const [userData, setUserData] = useState({
+  const [userData, setUserData] = useState<UserDataType>({
     userFirstName: "",
     userLastName: "",
     userLocation: "",
@@ -12,7 +29,7 @@ export const CreateAccountContextProvider = ({ children }: { children: any }) =>
     userContact: "",
   })
 
-  function setUserDataField(field: any) {
+  function setUserDataField<K extends keyof UserDataType>(field: K) {
     return function (value: any) {
       const newUserData = { ...userData }
       newUserData[field] = value

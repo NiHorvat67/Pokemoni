@@ -17,7 +17,6 @@ const ReservationHistory = ({ reservationsData, accountRole }: { reservationsDat
                 userId,
                 currentUserId,
                 userName,
-                userRole,
                 advertisementId,
                 productName,
                 reservationStart,
@@ -48,7 +47,6 @@ const ReservationHistory = ({ reservationsData, accountRole }: { reservationsDat
                     <h3>{status}</h3>
                   </div>
                   <div className="grid grid-cols-2 border-b-[1px] border-[#3A403D] py-[8px]">
-                    <h3 className="capitalize">{userRole}</h3>
                     <a href={`/profile/${userId}`} className="break-words">{userName}</a>
                   </div>
                   <div className="grid grid-cols-2 border-b-[1px] border-[#3A403D] py-[8px]">
@@ -84,7 +82,6 @@ const ReservationHistory = ({ reservationsData, accountRole }: { reservationsDat
                     userId,
                     currentUserId,
                     userName,
-                    userRole,
                     advertisementId,
                     productName,
                     reservationStart,

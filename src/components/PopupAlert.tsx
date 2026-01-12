@@ -8,7 +8,7 @@ import {
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 
-const PopupAlert = ({ errors, className }: { errors: string[], className?: string }) => {
+const PopupAlert = ({ errors }: { errors: string[], className?: string }) => {
 
   useGSAP(() => {
     gsap.from(".error-container", {

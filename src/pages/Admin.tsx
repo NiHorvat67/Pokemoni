@@ -7,7 +7,7 @@ import axios from "axios";
 
 const Admin = () => {
 
-  const [price, setPrice] = useState("")
+  const [price, setPrice] = useState<number | "">("")
 
   const { data: subscriptionPrice } = useQuery({
     queryKey: ["subscriptionPrice"],
@@ -51,7 +51,7 @@ const Admin = () => {
       return axios({
         method: "POST",
         url: "/api/subscription-price/set",
-        data: { price: price * 100 }
+        data: { price: Number(price) * 100 }
         ,
       })
         .then(res => {
@@ -59,7 +59,7 @@ const Admin = () => {
         })
         .catch(err => console.log(err))
     },
-    onSuccess: queryResult => {
+    onSuccess: () => {
       window.location.reload()
     }
   })
@@ -76,7 +76,7 @@ const Admin = () => {
         })
         .catch(err => console.log(err))
     },
-    onSuccess: queryResult => {
+    onSuccess: () => {
       window.location.reload()
     }
   })
@@ -104,7 +104,7 @@ const Admin = () => {
           <p className="text-desc mb-7">Displaying all customer-related reports from sellers.</p>
 
           <div className="flex flex-col gap-8 mb-32">
-            {reports?.map(reportData => (
+            {reports?.map((reportData: any) => (
               <div key={reportData.report.report_id} className="flex gap-6 flex-col bg-[#222423] rounded-[8px] sm:px-7 py-4 px-5 sm:py-5 sm:px-9 sm:py-7 max-w-[670px]">
                 <div className="flex flex-wrap gap-5 justify-between text-white">
                   <h2 className="">

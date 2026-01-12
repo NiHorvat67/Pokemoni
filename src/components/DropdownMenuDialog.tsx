@@ -23,7 +23,6 @@ import { Textarea } from "@/components/ui/textarea"
 import RateService from "./RateService"
 import { useMutation } from "@tanstack/react-query"
 import axios from "axios"
-import { useEffect } from "react"
 
 export function DropdownMenuDialog({ reservationGrade, reporterId, reportedId, reservationId, accountRole }: { accountRole: string, reporterId: number, reportedId: number, reservationId: number, reservationGrade: number }) {
   const [showRateDialog, setShowRateDialog] = useState(false)
@@ -53,7 +52,7 @@ export function DropdownMenuDialog({ reservationGrade, reporterId, reportedId, r
         })
         .catch(err => console.log(err))
     },
-    onSuccess: queryResult => {
+    onSuccess: () => {
       setShowReportDialog(!showReportDialog)
     }
   })
@@ -72,7 +71,7 @@ export function DropdownMenuDialog({ reservationGrade, reporterId, reportedId, r
         })
         .catch(err => console.log(err))
     },
-    onSuccess: queryResult => {
+    onSuccess: () => {
       setLastValidRating(rating)
       setShowRateDialog(!showRateDialog)
     }

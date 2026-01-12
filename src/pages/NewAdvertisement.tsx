@@ -77,7 +77,7 @@ const NewAdvertisement = () => {
     return inputsFilled
   }
 
-  const onSubmit = (e) => {
+  const onSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     setErrors([])
     if (!canProgress()) {
@@ -136,7 +136,7 @@ const NewAdvertisement = () => {
       </section >
 
       {errors.length !== 0 &&
-        <PopupAlert className="" errors={errors} />
+        <PopupAlert errors={errors} />
       }
     </section >
   );

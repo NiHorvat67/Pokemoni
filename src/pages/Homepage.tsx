@@ -77,9 +77,8 @@ const Homepage = () => {
   })
 
 
-  const onSubmit = (e: React.FormEvent) => {
+  const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    e.target.query.blur()
     gsap.to(window, { duration: .7, ease: "power1.inOut", scrollTo: { y: "#search-form", offsetY: isMobile ? 50 : 200 } });
     mutate()
   }

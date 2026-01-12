@@ -1,9 +1,9 @@
 import ApiProvider from "@/components/ApiProvider";
-import { githubIcon, googleIcon } from "@/assets/icons";
+import { githubIcon } from "@/assets/icons";
 
 
 
-const AuthStep1 = ({ step, currentStep, setCurrentStep }: { step: number, currentStep: number, setCurrentStep: any }) => {
+const AuthStep1 = ({ }: { step: number, currentStep: number, setCurrentStep: any }) => {
 
 
   return (
