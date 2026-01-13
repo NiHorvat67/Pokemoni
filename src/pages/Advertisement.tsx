@@ -1,7 +1,7 @@
 import { locationIcon } from "@/assets/icons";
 import Button from "@/components/Button";
 import bikeImg from "@/assets/images/bike.jpeg"
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useMutation } from "@tanstack/react-query";
 import axios from "axios";
 import { useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
@@ -14,6 +14,21 @@ const Advertisement = () => {
   const [currentUserIsOwner, setCurrentUserIsOwner] = useState(false)
 
   const { user } = useAuthContext()
+
+  const rentFun = useMutation({
+  mutationFn: async () => {
+    if (!user?.accountId){
+      window.location.pathname = "/auth";
+    }
+    return axios.post(`/api/reservations/create`, {
+      buyerId: user.accountId,
+      advertisementId: advertisementId
+    });
+  },
+  onSuccess: () => {
+    window.location.pathname = "/";
+  }
+});
 
 
   const { data } = useQuery({
@@ -91,7 +106,7 @@ const Advertisement = () => {
                 <p className="text-desc text-sm">Kaucija {data?.advertisementDeposit}€</p>
               </div>
               {!currentUserIsOwner &&
-                <Button text="Rent" icon={true} long={false} onClick={() => { }} />
+                <Button text="Rent" icon={true} long={false} onClick={() => rentFun.mutate()} />
               }
             </div>
 
