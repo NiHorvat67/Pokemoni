@@ -14,6 +14,8 @@ import com.back.app.model.Advertisement;
 import com.back.app.repo.AdverNoJoinRepo;
 import com.back.app.repo.AdvertisementRepo;
 
+import com.back.app.service.GeocodingService;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -24,6 +26,7 @@ public class AdvertisementService {
 
     private final AdvertisementRepo advertisementRepo;
     private final AdverNoJoinRepo adverNoJoinRepo;
+    private final GeocodingService geocodingService;
 
     public List<Advertisement> getAllAdvertisements() {
         return advertisementRepo.findAll();
@@ -83,6 +86,19 @@ public class AdvertisementService {
     }
 
     public AdverNoJoin saveAdverNoJoin(AdverNoJoin adverNoJoin) {
+        //Leonard
+        try {
+            String address = adverNoJoin.getAdvertisementLocationTakeover();
+            Double[] latLon = geocodingService.searchLatLon(address);
+
+            if (latLon != null) {
+                adverNoJoin.setLatitude(latLon[0]);
+                adverNoJoin.setLongitude(latLon[1]);
+            }
+        } catch (Exception e) {
+            log.warn(e.getMessage());
+        }
+        //End
         return adverNoJoinRepo.save(adverNoJoin);
     }
     public Advertisement saveAdvertisement(Advertisement advertisement) {
@@ -92,6 +108,21 @@ public class AdvertisementService {
 
     public AdverNoJoin updateAdverNoJoin(Integer id, AdverNoJoin adverNoJoin) {
         adverNoJoin.setAdvertisementId(id);
+
+        //Leonard
+        //Upgrade: vidi da li je doslo do promjene u adresi samo onda radi request
+        try {
+            String address = adverNoJoin.getAdvertisementLocationTakeover();
+            Double[] latLon = geocodingService.searchLatLon(address);
+        
+            if (latLon != null) {
+                adverNoJoin.setLatitude(latLon[0]);
+                adverNoJoin.setLongitude(latLon[1]);
+            }
+        } catch (Exception e) {
+            log.warn(e.getMessage());
+        }
+        //End
         return adverNoJoinRepo.save(adverNoJoin);
     }
 
