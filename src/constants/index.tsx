@@ -12,16 +12,15 @@ const products = Array(15).fill({
 })
 
 const categories = [
-  { id: 1, name: "snowboarding gear" },
-  { id: 2, name: "skiing gear" },
-  { id: 3, name: "surfing gear" },
-  { id: 4, name: "cycling gear" },
-  { id: 5, name: "hiking gear" },
-  { id: 6, name: "climbing gear" },
-  { id: 7, name: "winter sports" },
-  { id: 8, name: "water sports" },
-  { id: 9, name: "fitness equipment" },
-  { id: 10, name: "team sports" }
+  { id: 1, name: "Skis" },
+  { id: 2, name: "Snowboard" },
+  { id: 3, name: "Climbing gear" },
+  { id: 4, name: "Camping equipment" },
+  { id: 5, name: "Cycling gear" },
+  { id: 6, name: "Water sports" },
+  { id: 7, name: "Hikinh gear" },
+  { id: 8, name: "Winter sports" },
+  { id: 9, name: "Mountain equipment" },
 ];
 
 const priceRanges: { start: number; end?: number }[] = [...generatePriceRanges(5, 20, 0), ...generatePriceRanges(1, 50, 1), { start: 150 }]

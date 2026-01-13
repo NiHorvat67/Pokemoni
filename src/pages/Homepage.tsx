@@ -8,6 +8,7 @@ import axios from "axios";
 import * as React from "react"
 import { checkAppendSearchParams } from "@/utils";
 import AdvertisementsGrid from "@/components/AdvertisementsGrid";
+import Map from "@/components/Map";
 
 import { useMediaQuery } from 'react-responsive'
 import gsap from "gsap";
@@ -134,6 +135,11 @@ const Homepage = () => {
 
 
         </form>
+        <div className="w-full mb-10 sm:mb-14 relative z-0">
+          <div className="rounded-2xl overflow-hidden relative z-0">
+            <Map products={products}/>
+          </div>
+        </div>
 
         {products?.length === 0 && status === "success" &&
           <div className="flex justify-center">
