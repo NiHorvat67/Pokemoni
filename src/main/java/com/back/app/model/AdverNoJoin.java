@@ -56,6 +56,20 @@ public class AdverNoJoin {
     @Column(name = "item_name")
     private String itemName;
 
+     
+    @Column(name = "advertisement_location_takeover_latitude")
+    private Double advertisement_location_takeover_latitude;
+
+    @Column(name = "advertisement_location_takeover_longitude")
+    private Double advertisement_location_takeover_longitude;
+
+    @Column(name = "advertisement_location_return_latitude")
+    private Double advertisement_location_return_latitude;
+
+    @Column(name = "advertisement_location_return_longitude")
+    private Double advertisement_location_return_longitude;
+
+
 
     @Column(name = "itemtype_id")
     private Integer itemTypeId;
