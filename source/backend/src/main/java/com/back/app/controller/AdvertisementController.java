@@ -1,39 +1,38 @@
 package com.back.app.controller;
 
+import java.io.IOException;
+import java.math.BigDecimal;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
-import java.math.BigDecimal;
-import java.time.LocalDate;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
-import com.back.app.model.Account;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.back.app.model.AdverNoJoin;
 import com.back.app.model.Advertisement;
-import com.back.app.model.ItemType;
-import com.back.app.service.AccountService;
 import com.back.app.service.AdvertisementService;
-import com.back.app.service.ItemTypeService;
+import com.back.app.service.ImageFolder;
+import com.back.app.service.ImageStorageService;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -47,6 +46,7 @@ import lombok.extern.slf4j.Slf4j;
 public class AdvertisementController {
     @Autowired
     private final AdvertisementService advertisementService;
+    private final ImageStorageService imageStorageService;
 
     @Operation(summary = "Retrieve all advertisements", description = "Returns a comprehensive, unfiltered list of all active advertisement listings.")
     @GetMapping("/")
@@ -147,6 +147,66 @@ public class AdvertisementController {
                     .body("Error deleting advertisement");
         }
         return ResponseEntity.ok().body("Succesfuly deleted advertisement with id " + id.toString());
+    }
+
+    @PostMapping("/images/store/{id}")
+    public ResponseEntity<Map<String, String>> storeItemImage(
+            @RequestParam("file") MultipartFile file,
+            @PathVariable Integer id) {
+
+        try {
+            Advertisement ad = advertisementService.getAdvertisementbyId(id);
+            if (ad == null) {
+                log.error("Error loading image for advertisement {}: Advertisement doesn't exist or has no image\"", id);
+                return ResponseEntity.notFound().build();
+            }
+
+            String filename = "item" + id.toString();
+            String filename_ext = imageStorageService.storeImage(file, filename, ImageFolder.ADVERTISEMENT);
+
+            ad.setItemImagePath("/"+ImageFolder.ADVERTISEMENT.getFolderName()+"/" + filename_ext);
+            advertisementService.saveAdvertisement(ad);
+
+            Map<String, String> response = new HashMap<>();
+            response.put("filename", filename_ext);
+            response.put("originalName", file.getOriginalFilename());
+            response.put("size", String.valueOf(file.getSize()));
+            response.put("contentType", file.getContentType());
+            response.put("url", "/api/advertisements/images/load/" + id);
+
+            return ResponseEntity.ok(response);
+        } catch (IOException e) {
+            return ResponseEntity.badRequest()
+                    .body(Map.of("error", e.getMessage()));
+        }
+    }
+
+    @GetMapping("/images/load/{id}")
+    public ResponseEntity<Resource> getItemImage(@PathVariable Integer id) {
+        try {
+            Advertisement ad = advertisementService.getAdvertisementbyId(id);
+            if (ad == null || ad.getItemImagePath() == null) {
+                log.error("Error loading image for advertisement {}: Advertisement doesn't exist", id);
+                return ResponseEntity.notFound().build();
+            }
+
+            String filename = ad.getItemImagePath().replace("/"+ImageFolder.ADVERTISEMENT.getFolderName()+"/", "");
+            log.info("Loading profile image: {}", filename);
+
+            Resource resource = imageStorageService.loadImage(filename, ImageFolder.ACCOUNT);
+
+            Path filePath = imageStorageService.getUploadDir(ImageFolder.ACCOUNT).resolve(filename);
+            String contentType = Files.probeContentType(filePath);
+
+            return ResponseEntity.ok()
+                    .contentType(MediaType.parseMediaType(contentType))
+                    .header(HttpHeaders.CONTENT_DISPOSITION,
+                            "inline; filename=\"" + resource.getFilename() + "\"")
+                    .body(resource);
+        } catch (Exception ex) {
+            log.error("Error loading image for advertisement {}: {}", id, ex.getMessage());
+            return ResponseEntity.internalServerError().build();
+        }
     }
 
 }

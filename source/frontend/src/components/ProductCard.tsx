@@ -12,13 +12,14 @@ const ProductCard = ({ category, img, productName, owner, desc, price, advertise
     advertisementId: number
   }) => {
 
+  img = bikeImg
 
   return (
     <article className="relative max-w-[320px] font-inter">
       <div className="absolute top-[12px] left-[24px] text-primary bg-[#102B19] rounded-[8px] px-2.5 py-1.25 text-[13px] font-inter">
         {category}
       </div>
-      <img src={bikeImg} alt="product image" className="w-full h-[225px] object-cover rounded-t-[8px]" />
+      <img src={img} alt="product image" className="w-full h-[225px] object-cover rounded-t-[8px]" />
 
       <div className="bg-[#222423] rounded-[8px] p-6 mt-[-8px] relative shadow-[0_-4px_4px_rgba(0,0,0,0.25)]">
         <h1 className="font-medium text-[20px] text-white mb-2 line-clamp-1">{productName}</h1>

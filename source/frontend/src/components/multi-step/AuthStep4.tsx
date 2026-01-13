@@ -1,6 +1,5 @@
 import { checkIcon } from "@/assets/icons";
 import { useGSAP } from "@gsap/react";
-import { useState } from "react";
 
 const AuthStep4 = ({ tl }: { step: number, currentStep: number, setCurrentStep: any, tl: any }) => {
 

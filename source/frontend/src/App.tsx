@@ -3,7 +3,7 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom"
 
 import Homepage from "./pages/Homepage"
 import ErrorPage from "./pages/ErrorPage"
-import TraderProfile from "./pages/TraderProfile"
+import Profile from "./pages/Profile"
 import Auth from "./pages/Auth"
 import Advertisement from "./pages/Advertisement"
 import Admin from "./pages/Admin"
@@ -15,7 +15,6 @@ import useAuthContext from "./hooks/useAuthContext"
 function App() {
 
   const { user } = useAuthContext()
-  console.log(user)
   // zabraniti auth rute ako je user vec ulogiran. kasnije zbog lakseg testiranja
   return (
     <BrowserRouter>
@@ -24,7 +23,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Homepage />} />
           <Route path="/error" element={<ErrorPage />} />
-          <Route path="/profile/:userId" element={<TraderProfile />} />
+          <Route path="/profile/:userId" element={<Profile />} />
           <Route path="/auth/:step?" element={user ? <Navigate to="/" replace /> : <Auth />} />
           <Route path="/admin" element={<Admin />} />
           {/* <Route path="/new-advertisement" element={user ? (user.accountRole == "trader" ? <NewAdvertisement /> : <Navigate to="/" replace />) : <Navigate to="/auth" replace />} /> */}

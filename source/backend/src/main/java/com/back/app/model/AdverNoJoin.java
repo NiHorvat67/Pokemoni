@@ -1,9 +1,5 @@
 package com.back.app.model;
 
-import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
@@ -11,6 +7,15 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Data;
 
 @AllArgsConstructor
 @Data
@@ -51,6 +56,20 @@ public class AdverNoJoin {
     @Column(name = "item_name")
     private String itemName;
 
+     
+    @Column(name = "advertisement_location_takeover_latitude")
+    private Double latitude;
+
+    @Column(name = "advertisement_location_takeover_longitude")
+    private Double longitude;
+
+    @Column(name = "advertisement_location_return_latitude")
+    private Double advertisement_location_return_latitude;
+
+    @Column(name = "advertisement_location_return_longitude")
+    private Double advertisement_location_return_longitude;
+
+
 
     @Column(name = "itemtype_id")
     private Integer itemTypeId;
@@ -61,23 +80,9 @@ public class AdverNoJoin {
     @Column(name = "item_image_path")
     private String itemImagePath;
 
-    // placeholder
-    public AdverNoJoin() {
-        this.advertisementPrice = new BigDecimal("25.00");
-        this.advertisementDeposit = new BigDecimal("100.00");
-        this.advertisementLocationTakeover = "London Sports Center";
-        this.advertisementLocationReturn = "London Sports Center";
-        this.advertisementStart = LocalDate.now().plusDays(1);
-        this.advertisementEnd = LocalDate.now().plusMonths(3);
-        this.reservationId = null;
-        this.itemTypeId=3;
-        this.traderId=3;
-        this.itemName = "Professional Skis Set";
-        this.itemDescription = "High-quality professional skis with poles, perfect for intermediate to advanced skiers.";
-        this.itemImagePath = "/images/jhdfsghfdhgkds1.jpg";
-
+    public AdverNoJoin(){
+        
     }
-
     public static AdverNoJoin convertToAdverNoJoin(String jsonString) throws JsonProcessingException {
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.registerModule(new JavaTimeModule()); 

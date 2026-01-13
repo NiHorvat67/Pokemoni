@@ -53,16 +53,14 @@ const NewAdvertisement = () => {
           itemName: heading,
           itemTypeId: Number(category),
           itemDescription: description,
-          itemImagePath: "/111111",
+          itemImagePath: `/img_${Date.now()}`,
         }
       })
         .then(res => {
-          console.log(res.data)
           window.location.href = `/advertisement/${res.data}`
           return res.data
         })
         .catch(err => {
-          console.log("error")
           console.log(err)
         })
     }
@@ -79,7 +77,7 @@ const NewAdvertisement = () => {
     return inputsFilled
   }
 
-  const onSubmit = (e) => {
+  const onSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     setErrors([])
     if (!canProgress()) {
@@ -138,7 +136,7 @@ const NewAdvertisement = () => {
       </section >
 
       {errors.length !== 0 &&
-        <PopupAlert className="" errors={errors} />
+        <PopupAlert errors={errors} />
       }
     </section >
   );

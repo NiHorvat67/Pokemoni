@@ -5,9 +5,9 @@ import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
 import useCreateAccountContext from "@/hooks/useCreateAccountContext";
 
-const AuthStep3 = ({ step, setCurrentStep }: { step: number, currentStep: number, setCurrentStep: any }) => {
+const AuthStep3 = ({ }: { step: number, currentStep: number, setCurrentStep: any }) => {
 
-  const { userData, setUserDataField } = useCreateAccountContext()
+  const { userData } = useCreateAccountContext()
 
   const { mutate } = useMutation({
     mutationFn: async () => {
@@ -30,7 +30,9 @@ const AuthStep3 = ({ step, setCurrentStep }: { step: number, currentStep: number
           console.log(err)
         })
     }, onSuccess: (redirectUrl) => {
-      window.location.href = redirectUrl;
+      setTimeout(() => {
+        window.location.href = redirectUrl;
+      }, 10000)
     }
 
   })

@@ -15,7 +15,6 @@ const AdvertisementsGrid = ({ products }: { products: any[] }) => {
 
   useGSAP(() => {
     const sliceIndex = numCards - increment < initialSize ? 0 : numCards - increment
-    console.log(sliceIndex)
     const cards = gsap.utils.toArray(".product-card").slice(sliceIndex)
     gsap.fromTo(cards, {
       opacity: 0,
@@ -70,7 +69,7 @@ const AdvertisementsGrid = ({ products }: { products: any[] }) => {
         })}
       </section>
       {numCards < products.length &&
-        <div className="flex justify-center mt-20">
+        <div className="flex justify-center mt-12">
           <button
             onClick={() => { setNumCards(numCards + increment) }}
             className="cursor-pointer text-primary bg-[#102B19] font-inter text-[16px] rounded-[8px] px-4 py-1.5">

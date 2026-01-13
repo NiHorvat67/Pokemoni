@@ -8,6 +8,7 @@ import axios from "axios";
 import * as React from "react"
 import { checkAppendSearchParams } from "@/utils";
 import AdvertisementsGrid from "@/components/AdvertisementsGrid";
+import Map from "@/components/Map";
 
 import { useMediaQuery } from 'react-responsive'
 import gsap from "gsap";
@@ -77,9 +78,8 @@ const Homepage = () => {
   })
 
 
-  const onSubmit = (e: React.FormEvent) => {
+  const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    e.target.query.blur()
     gsap.to(window, { duration: .7, ease: "power1.inOut", scrollTo: { y: "#search-form", offsetY: isMobile ? 50 : 200 } });
     mutate()
   }
@@ -101,10 +101,14 @@ const Homepage = () => {
             <Select onValueChange={(value: string) => {
               setCategoryId(value)
             }}>
-              <SelectTrigger className="w-[130px] sm:w-[180px]">
+              <SelectTrigger value={undefined} className="w-[130px] sm:w-[180px]">
                 <SelectValue placeholder="Category" />
               </SelectTrigger>
               <SelectContent>
+                {categoryId != "" &&
+                  // @ts-ignore
+                  <SelectItem key={0} value={undefined}>Clear selection</SelectItem>
+                }
                 {categories && categories.map((category: any) => (
                   <SelectItem key={category.itemtypeId} value={category.itemtypeId.toString()}>{category.itemtypeName}</SelectItem>
                 ))}
@@ -131,6 +135,11 @@ const Homepage = () => {
 
 
         </form>
+        <div className="w-full mb-10 sm:mb-14 relative z-0">
+          <div className="rounded-2xl overflow-hidden relative z-0">
+            <Map products={products}/>
+          </div>
+        </div>
 
         {products?.length === 0 && status === "success" &&
           <div className="flex justify-center">

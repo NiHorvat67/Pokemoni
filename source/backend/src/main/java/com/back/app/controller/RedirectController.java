@@ -1,6 +1,5 @@
 package com.back.app.controller;
 
-import org.hibernate.Internal;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;

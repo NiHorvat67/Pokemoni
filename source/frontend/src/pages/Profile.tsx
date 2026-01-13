@@ -1,6 +1,6 @@
 import profileImg from "../assets/images/profile.jpeg"
 import { locationIcon, mailIcon, starIcon, phoneIcon } from "../assets/icons"
-import "../styles/TraderProfile.css"
+import "../styles/Profile.css"
 
 import AdvertisementsGrid from "@/components/AdvertisementsGrid"
 import { useQuery } from "@tanstack/react-query"
@@ -8,15 +8,15 @@ import axios from 'axios';
 import { useParams } from "react-router-dom"
 import { useState, useEffect } from "react"
 import { useMutation } from "@tanstack/react-query"
+import ReservationHistory from "@/components/ReservationHistory"
 
-const TraderProfile = () => {
+const Profile = () => {
   const { userId } = useParams()
 
   const [products, setProducts] = useState([])
 
-
-  const { data } = useQuery({
-    queryKey: ["traderAccount"],
+  const { data: accountData } = useQuery({
+    queryKey: ["account"],
     queryFn: async () => {
       return axios
         .get(`/api/accounts/${userId}`)
@@ -27,6 +27,24 @@ const TraderProfile = () => {
           return res.data
         })
         .catch(err => console.log(err))
+    }
+  })
+
+  const { data: reservationsData } = useQuery({
+    queryKey: ["reservations"],
+    enabled: accountData !== undefined,
+    queryFn: async () => {
+      return axios
+        .get(`/api/reservations/${accountData?.accountRole}/${userId}`)
+        .then(res => {
+          return res.data
+        })
+        .catch(err => {
+          console.log(err)
+          if (err.response.status === 400) {
+            window.location.pathname = "/error"
+          }
+        })
     }
   })
 
@@ -51,11 +69,11 @@ const TraderProfile = () => {
   })
 
   const infoItems = [
-    { icon: mailIcon, text: data?.userEmail },
-    { icon: locationIcon, text: data?.userLocation },
-    { icon: phoneIcon, text: data?.userContact },
+    { icon: mailIcon, text: accountData?.userEmail },
+    { icon: locationIcon, text: accountData?.userLocation },
+    { icon: phoneIcon, text: accountData?.userContact },
   ]
-  if (data?.accountRating) infoItems.push({ icon: starIcon, text: `${data?.accountRating}/5` })
+  if (accountData?.accountRating) infoItems.push({ icon: starIcon, text: `${accountData?.accountRating}/5` })
 
 
   return (
@@ -70,8 +88,8 @@ const TraderProfile = () => {
             className="sm:ml-[-10px] ml-[-4px] rounded-full h-[110px] w-[110px] sm:h-[206px] sm:w-[206px] object-cover"
           />
           <div id="name" className="max-sm:ml-[-20px] ">
-            <h1 className="text-white text-2xl sm:text-[32px] font-medium mb-1">{data?.userFirstName} {data?.userLastName}</h1>
-            <p className="font-inter text-desc capitalize">{data?.accountRole}</p>
+            <h1 className="text-white text-2xl sm:text-[32px] font-medium mb-1">{accountData?.userFirstName} {accountData?.userLastName}</h1>
+            <p className="font-inter text-desc capitalize">{accountData?.accountRole}</p>
           </div>
 
           <div id="desc" className="flex gap-4 flex-col">
@@ -84,12 +102,14 @@ const TraderProfile = () => {
           </div>
         </section>
 
-        {data?.accountRole == "trader" &&
+        {accountData?.accountRole == "trader" &&
           <>
-            <h1 className="text-white font-inter font-medium text-xl sm:text-2xl mb-[54px]">{data?.userFirstName} {data?.userLastName} is renting</h1>
+            <h1 className="text-white font-inter font-medium text-xl sm:text-2xl mb-[54px]">{accountData?.userFirstName} {accountData?.userLastName} {products.length === 0 ? "is not renting any products" : "is renting"}</h1>
             <AdvertisementsGrid products={products} />
           </>
         }
+
+        <ReservationHistory reservationsData={reservationsData} accountRole={accountData?.accountRole} />
 
       </section>
     </section >
@@ -97,4 +117,4 @@ const TraderProfile = () => {
 }
 
 
-export default TraderProfile;
+export default Profile;

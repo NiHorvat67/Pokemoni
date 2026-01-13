@@ -1,0 +1,66 @@
+2025-12-28T15:05:16.743+01:00  INFO 45733 --- [springboot] [restartedMain] com.back.app.AppApplication              : Starting AppApplication using Java 21.0.9 with PID 45733 (/home/ld2/FAKS/PROGI/backend/target/classes started by ld2 in /home/ld2/FAKS/PROGI/backend)
+2025-12-28T15:05:16.743+01:00  INFO 45733 --- [springboot] [restartedMain] com.back.app.AppApplication              : No active profile set, falling back to 1 default profile: "default"
+2025-12-28T15:05:16.882+01:00  INFO 45733 --- [springboot] [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-12-28T15:05:16.891+01:00  INFO 45733 --- [springboot] [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 8 ms. Found 6 JPA repository interfaces.
+2025-12-28T15:05:16.996+01:00  INFO 45733 --- [springboot] [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8080 (http)
+2025-12-28T15:05:16.998+01:00  INFO 45733 --- [springboot] [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2025-12-28T15:05:16.998+01:00  INFO 45733 --- [springboot] [restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.46]
+2025-12-28T15:05:17.005+01:00  INFO 45733 --- [springboot] [restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2025-12-28T15:05:17.005+01:00  INFO 45733 --- [springboot] [restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 260 ms
+2025-12-28T15:05:17.060+01:00  INFO 45733 --- [springboot] [restartedMain] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-12-28T15:05:17.064+01:00  INFO 45733 --- [springboot] [restartedMain] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2025-12-28T15:05:17.074+01:00  INFO 45733 --- [springboot] [restartedMain] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-12-28T15:05:17.076+01:00  WARN 45733 --- [springboot] [restartedMain] org.hibernate.orm.deprecation            : HHH90000025: PostgreSQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2025-12-28T15:05:17.076+01:00  INFO 45733 --- [springboot] [restartedMain] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+	Database JDBC URL [undefined/unknown]
+	Database driver: undefined/unknown
+	Database version: 12.0
+	Autocommit mode: undefined/unknown
+	Isolation level: <unknown>
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2025-12-28T15:05:17.195+01:00  INFO 45733 --- [springboot] [restartedMain] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-12-28T15:05:17.196+01:00  INFO 45733 --- [springboot] [restartedMain] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-12-28T15:05:17.393+01:00  WARN 45733 --- [springboot] [restartedMain] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-12-28T15:05:17.635+01:00  INFO 45733 --- [springboot] [restartedMain] o.s.v.b.OptionalValidatorFactoryBean     : Failed to set up a Bean Validation provider: jakarta.validation.NoProviderFoundException: Unable to create a Configuration, because no Jakarta Bean Validation provider could be found. Add a provider like Hibernate Validator (RI) to your classpath.
+2025-12-28T15:05:17.776+01:00  INFO 45733 --- [springboot] [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2025-12-28T15:05:17.787+01:00  INFO 45733 --- [springboot] [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8080 (http) with context path '/'
+2025-12-28T15:05:17.790+01:00  INFO 45733 --- [springboot] [restartedMain] com.back.app.AppApplication              : Started AppApplication in 1.082 seconds (process running for 2481.577)
+2025-12-28T15:05:17.793+01:00  INFO 45733 --- [springboot] [restartedMain] .ConditionEvaluationDeltaLoggingListener : Condition evaluation unchanged
+2025-12-28T15:05:24.183+01:00  INFO 45733 --- [springboot] [File Watcher] rtingClassPathChangeChangedEventListener : Restarting due to 1 class path change (0 additions, 0 deletions, 1 modification)
+2025-12-28T15:05:24.186+01:00  INFO 45733 --- [springboot] [Thread-31] o.s.b.w.e.tomcat.GracefulShutdown        : Commencing graceful shutdown. Waiting for active requests to complete
+2025-12-28T15:05:24.187+01:00  INFO 45733 --- [springboot] [tomcat-shutdown] o.s.b.w.e.tomcat.GracefulShutdown        : Graceful shutdown complete
+2025-12-28T15:05:24.188+01:00  INFO 45733 --- [springboot] [Thread-31] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2025-12-28T15:05:24.280+01:00  INFO 45733 --- [springboot] [restartedMain] com.back.app.AppApplication              : Starting AppApplication using Java 21.0.9 with PID 45733 (/home/ld2/FAKS/PROGI/backend/target/classes started by ld2 in /home/ld2/FAKS/PROGI/backend)
+2025-12-28T15:05:24.280+01:00  INFO 45733 --- [springboot] [restartedMain] com.back.app.AppApplication              : No active profile set, falling back to 1 default profile: "default"
+2025-12-28T15:05:24.429+01:00  INFO 45733 --- [springboot] [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-12-28T15:05:24.438+01:00  INFO 45733 --- [springboot] [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 7 ms. Found 6 JPA repository interfaces.
+2025-12-28T15:05:24.526+01:00  INFO 45733 --- [springboot] [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8080 (http)
+2025-12-28T15:05:24.527+01:00  INFO 45733 --- [springboot] [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2025-12-28T15:05:24.527+01:00  INFO 45733 --- [springboot] [restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.46]
+2025-12-28T15:05:24.532+01:00  INFO 45733 --- [springboot] [restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2025-12-28T15:05:24.532+01:00  INFO 45733 --- [springboot] [restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 250 ms
+2025-12-28T15:05:24.601+01:00  INFO 45733 --- [springboot] [restartedMain] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-12-28T15:05:24.603+01:00  INFO 45733 --- [springboot] [restartedMain] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2025-12-28T15:05:24.608+01:00  INFO 45733 --- [springboot] [restartedMain] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-12-28T15:05:24.610+01:00  WARN 45733 --- [springboot] [restartedMain] org.hibernate.orm.deprecation            : HHH90000025: PostgreSQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2025-12-28T15:05:24.610+01:00  INFO 45733 --- [springboot] [restartedMain] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+	Database JDBC URL [undefined/unknown]
+	Database driver: undefined/unknown
+	Database version: 12.0
+	Autocommit mode: undefined/unknown
+	Isolation level: <unknown>
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2025-12-28T15:05:24.716+01:00  INFO 45733 --- [springboot] [restartedMain] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-12-28T15:05:24.717+01:00  INFO 45733 --- [springboot] [restartedMain] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-12-28T15:05:24.949+01:00  WARN 45733 --- [springboot] [restartedMain] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-12-28T15:05:25.205+01:00  INFO 45733 --- [springboot] [restartedMain] o.s.v.b.OptionalValidatorFactoryBean     : Failed to set up a Bean Validation provider: jakarta.validation.NoProviderFoundException: Unable to create a Configuration, because no Jakarta Bean Validation provider could be found. Add a provider like Hibernate Validator (RI) to your classpath.
+2025-12-28T15:05:25.344+01:00  INFO 45733 --- [springboot] [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2025-12-28T15:05:25.356+01:00  INFO 45733 --- [springboot] [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8080 (http) with context path '/'
+2025-12-28T15:05:25.360+01:00  INFO 45733 --- [springboot] [restartedMain] com.back.app.AppApplication              : Started AppApplication in 1.103 seconds (process running for 2489.146)
+2025-12-28T15:05:25.362+01:00  INFO 45733 --- [springboot] [restartedMain] .ConditionEvaluationDeltaLoggingListener : Condition evaluation unchanged
+2025-12-28T15:05:27.747+01:00  INFO 45733 --- [springboot] [File Watcher] rtingClassPathChangeChangedEventListener : Restarting due to 2 class path changes (0 additions, 0 deletions, 2 modifications)
+2025-12-28T15:05:27.749+01:00  INFO 45733 --- [springboot] [Thread-35] o.s.b.w.e.tomcat.GracefulShutdown        : Commencing graceful shutdown. Waiting for active requests to complete
+2025-12-28T15:05:27.750+01:00  INFO 45733 --- [springboot] [tomcat-shutdown] o.s.b.w.e.tomcat.GracefulShutdown        : Graceful shutdown complete
+2025-12-28T15:05:27.751+01:00  INFO 45733 --- [springboot] [Thread-35] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'

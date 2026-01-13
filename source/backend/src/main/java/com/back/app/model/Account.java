@@ -1,5 +1,10 @@
 package com.back.app.model;
 
+import java.time.LocalDate;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -9,10 +14,6 @@ import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import java.time.LocalDate;
-
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -37,10 +38,10 @@ public class Account {
 
     @Column(name = "user_last_name")
     private String userLastName;
-    
+
     @Column(name = "user_contact")
     private String userContact;
-    
+
     @Column(name = "user_location")
     private String userLocation;
 
@@ -51,12 +52,14 @@ public class Account {
     private String accountRole;
     @Column(name = "account_rating")
     private Double accountRating;
-    
+
+    @Column(name = "profile_image_path")
+    private String profileImagePath;
+
     public Account(String jsonString) throws JsonProcessingException {
         ObjectMapper objectMapper = new ObjectMapper();
         Account tempAccount = objectMapper.readValue(jsonString, Account.class);
 
-        
         this.oauth2Id = tempAccount.getOauth2Id();
         this.userEmail = tempAccount.getUserEmail();
         this.userFirstName = tempAccount.getUserFirstName();

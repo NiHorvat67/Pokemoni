@@ -1,11 +1,9 @@
 package com.back.app.service;
 
-import java.security.Principal;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
-import org.hibernate.mapping.UserDefinedObjectType;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
@@ -13,7 +11,6 @@ import lombok.extern.slf4j.Slf4j;
 
 import com.back.app.repo.AccountRepo;
 
-import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;

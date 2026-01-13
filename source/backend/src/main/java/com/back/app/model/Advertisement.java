@@ -3,7 +3,6 @@ package com.back.app.model;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
@@ -60,6 +59,19 @@ public class Advertisement {
 
     @Column(name = "item_image_path")
     private String itemImagePath;
+    
+    @Column(name = "advertisement_location_takeover_latitude")
+    private Double latitude;
+
+    @Column(name = "advertisement_location_takeover_longitude")
+    private Double longitude;
+
+    @Column(name = "advertisement_location_return_latitude")
+    private Double advertisement_location_return_latitude;
+
+    @Column(name = "advertisement_location_return_longitude")
+    private Double advertisement_location_return_longitude;
+
 
     // placeholder
     public Advertisement() {
