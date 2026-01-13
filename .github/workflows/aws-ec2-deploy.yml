@@ -7,7 +7,7 @@ on:
 
 env:
   AWS_REGION: eu-north-1            
-  EC2_HOST: ec2-13.61.26.65.eu-north-1.compute.amazonaws.com
+  EC2_HOST: ec2-13-61-26-65.eu-north-1.compute.amazonaws.com
   EC2_USER: ubuntu                
   TARGET_DIR: /home/ubuntu/gear_share    
 
