@@ -59,6 +59,19 @@ public class Advertisement {
 
     @Column(name = "item_image_path")
     private String itemImagePath;
+    
+    @Column(name = "advertisement_location_takeover_latitude")
+    private Double advertisement_location_takeover_latitude;
+
+    @Column(name = "advertisement_location_takeover_longitude")
+    private Double advertisement_location_takeover_longitude;
+
+    @Column(name = "advertisement_location_return_latitude")
+    private Double advertisement_location_return_latitude;
+
+    @Column(name = "advertisement_location_return_longitude")
+    private Double advertisement_location_return_longitude;
+
 
     // placeholder
     public Advertisement() {
