@@ -25,12 +25,12 @@ import { useMutation } from "@tanstack/react-query"
 import axios from "axios"
 
 export function DropdownMenuDialog({ reservationGrade, reporterId, reportedId, reservationId, accountRole }: { accountRole: string, reporterId: number, reportedId: number, reservationId: number, reservationGrade: number }) {
-  const [showRateDialog, setShowRateDialog] = useState(false)
-  const [showReportDialog, setShowReportDialog] = useState(false)
-  const [reportDetails, setReportDetails] = useState("")
-  const [rating, setRating] = useState(reservationGrade)
+  const [showRateDialog, setShowRateDialog] = useState<boolean>(false)
+  const [showReportDialog, setShowReportDialog] = useState<boolean>(false)
+  const [reportDetails, setReportDetails] = useState<string>("")
+  const [rating, setRating] = useState<number>(reservationGrade)
   // rating koji je trenutno odabran
-  const [lastValidRating, setLastValidRating] = useState(rating)
+  const [lastValidRating, setLastValidRating] = useState<number>(rating)
   // zadnji submitani rating(onaj koji je trenutno u db)
   // ako je pocetni rating 1, user updatea na 2, onda odabere 3 pa stisne cancel,
   // ovo omogucava da se displaya rating 2 kada opet otvori dialog (inace bi se displayao 1)

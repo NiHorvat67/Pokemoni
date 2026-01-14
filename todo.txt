@@ -1,3 +1,4 @@
-delete, edit? advertisementa
 rezervacije - kalendar + placanje
 upload slike za advertisement
+delete, edit? advertisementa
+fix auth error

@@ -5,7 +5,7 @@ import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
 import useCreateAccountContext from "@/hooks/useCreateAccountContext";
 
-const AuthStep3 = ({ }: { step: number, currentStep: number, setCurrentStep: any }) => {
+const AuthStep3 = ({ }: { step: number, currentStep: number, setCurrentStep: React.Dispatch<React.SetStateAction<number>> }) => {
 
   const { userData } = useCreateAccountContext()
 

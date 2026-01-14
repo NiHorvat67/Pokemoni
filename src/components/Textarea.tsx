@@ -1,4 +1,4 @@
-const Textarea = ({ placeholder, state, setState }: { placeholder: string, state: any, setState: any }) => {
+const Textarea = ({ placeholder, state, setState }: { placeholder: string, state: string, setState: React.Dispatch<React.SetStateAction<string>> }) => {
   return (
     <textarea
       value={state}

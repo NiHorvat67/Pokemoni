@@ -3,7 +3,7 @@ import { githubIcon } from "@/assets/icons";
 
 
 
-const AuthStep1 = ({ }: { step: number, currentStep: number, setCurrentStep: any }) => {
+const AuthStep1 = ({ }: { step: number, currentStep: number, setCurrentStep: React.Dispatch<React.SetStateAction<number>> }) => {
 
 
   return (

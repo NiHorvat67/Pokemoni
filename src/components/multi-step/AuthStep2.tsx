@@ -15,7 +15,7 @@ import {
 import useCreateAccountContext from "@/hooks/useCreateAccountContext";
 
 
-const AuthStep2 = ({ step, setCurrentStep }: { step: number, currentStep: number, setCurrentStep: any }) => {
+const AuthStep2 = ({ step, setCurrentStep }: { step: number, currentStep: number, setCurrentStep: React.Dispatch<React.SetStateAction<number>> }) => {
 
   const { userData, setUserDataField } = useCreateAccountContext()
   const [errors, setErrors] = useState<any>([])

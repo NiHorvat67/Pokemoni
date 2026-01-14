@@ -19,7 +19,7 @@ interface CreateAccountContextType {
 
 export const CreateAccountContext = createContext<CreateAccountContextType | undefined>(undefined)
 
-export const CreateAccountContextProvider = ({ children }: { children: any }) => {
+export const CreateAccountContextProvider = ({ children }: { children: React.ReactNode }) => {
 
   const [userData, setUserData] = useState<UserDataType>({
     userFirstName: "",

@@ -30,7 +30,7 @@ const Homepage = () => {
   const [query, setQuery] = useState("")
   const [categoryId, setCategoryId] = useState("")
   const [priceRange, setPriceRange] = useState<any>({ start: "", end: "" })
-  const [dateRange, setDateRange] = useState<any>({ from: "", to: "" })
+  const [dateRange, setDateRange] = useState<{ from: Date | undefined, to: Date | undefined }>({ from: undefined, to: undefined })
   const [products, setProducts] = useState([])
   const isMobile = useMediaQuery({ maxWidth: 640 })
 
@@ -137,7 +137,7 @@ const Homepage = () => {
         </form>
         <div className="w-full mb-10 sm:mb-14 relative z-0">
           <div className="rounded-2xl overflow-hidden relative z-0">
-            <Map products={products}/>
+            <Map products={products} />
           </div>
         </div>
 

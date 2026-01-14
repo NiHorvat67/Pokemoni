@@ -6,10 +6,9 @@ import { useEffect } from "react";
 
 
 const AdvertisementsGrid = ({ products }: { products: any[] }) => {
-
   const increment = 5
   const initialSize = 5
-  const [numCards, setNumCards] = useState(initialSize)
+  const [numCards, setNumCards] = useState<number>(initialSize)
 
 
 

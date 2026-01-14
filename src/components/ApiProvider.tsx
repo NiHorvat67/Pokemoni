@@ -1,5 +1,5 @@
 
-const ApiProvider = ({ icon, text }: { icon: any, text: string }) => {
+const ApiProvider = ({ icon, text }: { icon: string, text: string }) => {
   return (
     <>
       <a

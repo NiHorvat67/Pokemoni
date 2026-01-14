@@ -20,6 +20,11 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import useAuthContext from "@/hooks/useAuthContext";
 
+type DateRange = {
+  from: Date | undefined,
+  to: Date | undefined
+}
+
 const NewAdvertisement = () => {
 
   const [heading, setHeading] = useState("")
@@ -29,7 +34,7 @@ const NewAdvertisement = () => {
   const [deposit, setDeposit] = useState("")
   const [category, setCategory] = useState("")
   const [description, setDescription] = useState("")
-  const [dateRange, setDateRange] = useState<any>({ from: "", to: "" })
+  const [dateRange, setDateRange] = useState<DateRange>({ from: undefined, to: undefined })
 
   const { user } = useAuthContext()
   const [errors, setErrors] = useState<any>([])
@@ -46,8 +51,8 @@ const NewAdvertisement = () => {
           advertisementDeposit: deposit ? Number(deposit) : 0,
           advertisementLocationTakeover: pickupLocation,
           advertisementLocationReturn: returnLocation,
-          advertisementStart: dateRange?.from.toISOString().substring(0, 10),
-          advertisementEnd: dateRange?.to.toISOString().substring(0, 10),
+          advertisementStart: dateRange.from!.toISOString().substring(0, 10),
+          advertisementEnd: dateRange.to!.toISOString().substring(0, 10),
           traderId: user.accountId,
           itemName: heading,
           itemTypeId: Number(category),
@@ -71,7 +76,6 @@ const NewAdvertisement = () => {
       return axios
         .get("/api/itemtypes/")
         .then(res => {
-          console.log(res.data)
           return res.data
         })
         .catch(err => {
@@ -80,8 +84,9 @@ const NewAdvertisement = () => {
     }
   })
 
+
   const canProgress = () => {
-    const inputsFilled = heading !== "" && pickupLocation !== "" && returnLocation !== "" && price !== "" && category !== "" && description !== "" && dateRange.from !== "" && dateRange.to !== ""
+    const inputsFilled = heading !== "" && pickupLocation !== "" && returnLocation !== "" && price !== "" && category !== "" && description !== "" && dateRange.from !== undefined && dateRange.to !== undefined
     if (!inputsFilled) {
       setErrors((prev: string[]) => [...prev, "Fill out all the input fields"])
       setTimeout(() => {
@@ -93,6 +98,7 @@ const NewAdvertisement = () => {
 
   const onSubmit = (e: React.FormEvent) => {
     e.preventDefault()
+    console.log("jdklsajlkdsjal")
     setErrors([])
     if (!canProgress()) {
       console.log("cant finish")

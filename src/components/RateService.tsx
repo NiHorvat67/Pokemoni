@@ -1,7 +1,7 @@
 
 
 
-const RateService = ({ rating, setRating }: { rating: any, setRating: any }) => {
+const RateService = ({ rating, setRating }: { rating: number, setRating: React.Dispatch<React.SetStateAction<number>> }) => {
 
   const ratings = [1, 2, 3, 4, 5]
 

@@ -10,14 +10,14 @@ const Nav = () => {
 
   const hideSingInButton = location.pathname.includes("/auth");
 
-  const [desktopOpen, setDesktopOpen] = useState(false);
-  const [mobileOpen, setMobileOpen] = useState(false);
+  const [desktopOpen, setDesktopOpen] = useState<boolean>(false);
+  const [mobileOpen, setMobileOpen] = useState<boolean>(false);
 
   const desktopMenuRef = useRef<HTMLDivElement | null>(null);
 
   const logoutOnClick = () => {
     fetch("/api/accounts/logout", { credentials: "include" })
-      .catch(() => {})
+      .catch(() => { })
       .finally(() => {
         dispatch({ type: "LOGOUT" });
         window.location.pathname = "/";
@@ -42,7 +42,6 @@ const Nav = () => {
   const role = String((user as any)?.accountRole ?? "").toLowerCase();
   const isAdmin = !!user && role === "admin";
   const isTrader = !!user && role === "trader";
-  const isBuyer = !!user && role === "buyer";
 
   const userId = (user as any)?.accountId;
 

@@ -1,7 +1,7 @@
 import { checkIcon } from "@/assets/icons";
 import { useGSAP } from "@gsap/react";
 
-const AuthStep4 = ({ tl }: { step: number, currentStep: number, setCurrentStep: any, tl: any }) => {
+const AuthStep4 = ({ tl }: { step: number, currentStep: number, setCurrentStep: React.Dispatch<React.SetStateAction<number>>, tl: GSAPTimeline }) => {
 
 
   setTimeout(() => {

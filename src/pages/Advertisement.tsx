@@ -11,24 +11,24 @@ import { editIcon, deleteIcon } from "@/assets/icons";
 const Advertisement = () => {
 
   const { advertisementId } = useParams()
-  const [currentUserIsOwner, setCurrentUserIsOwner] = useState(false)
+  const [currentUserIsOwner, setCurrentUserIsOwner] = useState<boolean>(false)
 
   const { user } = useAuthContext()
 
   const rentFun = useMutation({
-  mutationFn: async () => {
-    if (!user?.accountId){
-      window.location.pathname = "/auth";
+    mutationFn: async () => {
+      if (!user?.accountId) {
+        window.location.pathname = "/auth";
+      }
+      return axios.post(`/api/reservations/create`, {
+        buyerId: user.accountId,
+        advertisementId: advertisementId
+      });
+    },
+    onSuccess: () => {
+      window.location.pathname = "/";
     }
-    return axios.post(`/api/reservations/create`, {
-      buyerId: user.accountId,
-      advertisementId: advertisementId
-    });
-  },
-  onSuccess: () => {
-    window.location.pathname = "/";
-  }
-});
+  });
 
 
   const { data } = useQuery({

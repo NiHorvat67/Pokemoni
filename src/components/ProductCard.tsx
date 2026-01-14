@@ -8,7 +8,7 @@ const ProductCard = ({ category, img, productName, owner, desc, price, advertise
     owner: { name: string, id: number },
     desc: string,
     price: number,
-    img: any,
+    img: string,
     advertisementId: number
   }) => {
 
