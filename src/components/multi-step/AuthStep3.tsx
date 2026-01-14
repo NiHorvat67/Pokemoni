@@ -30,9 +30,7 @@ const AuthStep3 = ({ }: { step: number, currentStep: number, setCurrentStep: any
           console.log(err)
         })
     }, onSuccess: (redirectUrl) => {
-      setTimeout(() => {
-        window.location.href = redirectUrl;
-      }, 10000)
+      window.location.href = redirectUrl;
     }
 
   })

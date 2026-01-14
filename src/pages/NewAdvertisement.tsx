@@ -13,11 +13,10 @@ import PopupAlert from "@/components/PopupAlert";
 import { Input as InputShadCn } from "@/components/ui/input"
 
 import { useState } from "react";
-import { categories } from "@/constants";
 import Button from "@/components/Button";
 import Textarea from "@/components/Textarea";
 import Calendar23 from "@/components/calendar-23-dropdown";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import useAuthContext from "@/hooks/useAuthContext";
 
@@ -58,6 +57,21 @@ const NewAdvertisement = () => {
       })
         .then(res => {
           window.location.href = `/advertisement/${res.data}`
+          return res.data
+        })
+        .catch(err => {
+          console.log(err)
+        })
+    }
+  })
+
+  const { data: categories } = useQuery({
+    queryKey: ["categories"],
+    queryFn: async () => {
+      return axios
+        .get("/api/itemtypes/")
+        .then(res => {
+          console.log(res.data)
           return res.data
         })
         .catch(err => {
@@ -108,8 +122,8 @@ const NewAdvertisement = () => {
                   <SelectValue placeholder="Category" />
                 </SelectTrigger>
                 <SelectContent>
-                  {categories.map((category) => (
-                    <SelectItem key={category.id} value={category.id.toString()}>{category.name}</SelectItem>
+                  {categories?.map((category: any) => (
+                    <SelectItem key={category.itemtypeId} value={category.itemtypeId.toString()}>{category.itemtypeName}</SelectItem>
                   ))}
 
                 </SelectContent>
