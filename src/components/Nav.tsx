@@ -111,6 +111,7 @@ const Nav = () => {
                     <NavLink
                       to={userId != null ? `/profile/${userId}` : "/error"}
                       className={`${menuLinkClass} after:bg-slate-300`}
+                      reloadDocument
                     >
                       My Profile
                     </NavLink>
@@ -159,6 +160,7 @@ const Nav = () => {
               to={userId != null ? `/profile/${userId}` : "/error"}
               onClick={() => setMobileOpen(false)}
               className={`${menuLinkClass} after:bg-white`}
+              reloadDocument
             >
               My Profile
             </NavLink>

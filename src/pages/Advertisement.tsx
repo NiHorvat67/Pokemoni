@@ -7,15 +7,37 @@ import { useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 import useAuthContext from "@/hooks/useAuthContext";
 import { editIcon, deleteIcon } from "@/assets/icons";
+import { useNavigate } from "react-router-dom";
 
 const Advertisement = () => {
-
+  const navigate = useNavigate()
   const { advertisementId } = useParams()
   const [currentUserIsOwner, setCurrentUserIsOwner] = useState<boolean>(false)
 
   const { user } = useAuthContext()
 
-  const rentFun = useMutation({
+  const { data } = useQuery({
+    queryKey: ["advertisementData"],
+    queryFn: async () => {
+      return axios
+        .get(`/api/advertisements/${advertisementId}`)
+        .then(res => {
+          console.log(res.data)
+          if (res.data == "") {
+            window.location.pathname = "/error"
+          }
+          return res.data
+        })
+        .catch(err => {
+          console.log(err)
+          if (err.response.status === 404) {
+            window.location.pathname = "/error"
+          }
+        })
+    }
+  })
+
+  const { mutate: rentFun } = useMutation({
     mutationFn: async () => {
       if (!user?.accountId) {
         window.location.pathname = "/auth";
@@ -30,26 +52,25 @@ const Advertisement = () => {
     }
   });
 
-
-  const { data } = useQuery({
-    queryKey: ["advertisementData"],
-    queryFn: async () => {
-      return axios
-        .get(`/api/advertisements/${advertisementId}`)
+  const { mutate: deleteAdvertisement } = useMutation({
+    mutationFn: async () => {
+      return axios.post(`/api/advertisements/delete/${data?.advertisementId}`)
         .then(res => {
-          if (res.data == "") {
-            window.location.pathname = "/error"
-          }
           return res.data
         })
-        .catch(err => {
-          console.log(err)
-          if (err.response.status === 400) {
-            window.location.pathname = "/error"
-          }
-        })
+        .catch(err => console.log(err));
+    },
+    onSuccess: () => {
+      navigate(`/profile/${data?.trader.accountId}`)
     }
-  })
+  });
+
+
+
+
+  function deleteOnClick() {
+    deleteAdvertisement()
+  }
 
   useEffect(() => {
     setCurrentUserIsOwner(data?.trader.accountId === user?.accountId && user?.accountId !== undefined)
@@ -72,13 +93,13 @@ const Advertisement = () => {
                       <img src={editIcon} alt="edit icon" className="w-4 h-4" />
                       Edit
                     </a>
-                    <a
-                      href={`/`}
-                      className="rounded-[8px] hover:shadow-[0_0_15px_#FF264A] transition-shadow duration-300 pl-2 pr-2.5 py-1.25 bg-[#FF1F44] text-black flex items-center gap-1 max-sm:text-[14px]"
+                    <span
+                      onClick={deleteOnClick}
+                      className="cursor-pointer selection:bg-transparent rounded-[8px] hover:shadow-[0_0_15px_#FF264A] transition-shadow duration-300 pl-2 pr-2.5 py-1.25 bg-[#FF1F44] text-black flex items-center gap-1 max-sm:text-[14px]"
                     >
                       <img src={deleteIcon} alt="edit icon" className="w-4 h-4" />
                       Delete
-                    </a>
+                    </span>
                   </>
                 }
 
@@ -106,7 +127,7 @@ const Advertisement = () => {
                 <p className="text-desc text-sm">Kaucija {data?.advertisementDeposit}€</p>
               </div>
               {!currentUserIsOwner &&
-                <Button text="Rent" icon={true} long={false} onClick={() => rentFun.mutate()} />
+                <Button text="Rent" icon={true} long={false} onClick={() => rentFun()} />
               }
             </div>
 
