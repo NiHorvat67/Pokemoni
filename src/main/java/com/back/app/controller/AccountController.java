@@ -268,7 +268,6 @@ public class AccountController {
     public ResponseEntity<Map<String, String>> storeProfileImage(
             @RequestParam("file") MultipartFile file,
             @PathVariable Integer id) {
-                log.info("brutal");
         try {
             Account account = accountService.getUserbyId(id);
             if (account == null) {

@@ -91,7 +91,7 @@ public class AdvertisementController {
 
         List<Advertisement> advertisements = advertisementService.getFilteredAdvertisements(
                 itemName, categoryId, beginDate, endDate, minPrice, maxPrice);
-
+        
         return ResponseEntity.ok().body(advertisements);
     }
 

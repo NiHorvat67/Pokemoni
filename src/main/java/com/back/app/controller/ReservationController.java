@@ -1,8 +1,10 @@
 package com.back.app.controller;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,10 +24,9 @@ import com.back.app.model.ReservationWithStatusBuyerItemName;
 import com.back.app.model.ReservationWithStatusItemName;
 import com.back.app.service.AccountService;
 import com.back.app.service.AdvertisementService;
+import com.back.app.service.DateInterval;
 import com.back.app.service.ReservationService;
 import com.fasterxml.jackson.core.JsonProcessingException;
-
-import java.util.stream.Collectors;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -65,11 +66,22 @@ public class ReservationController {
             log.info("Received Reservation: {}", newReservationString);
 
             Reservation reservation = Reservation.convertToReservation(newReservationString);
-            reservation.setReservationStart(LocalDateTime.now());
+            reservation.setReservationRequestStarted(LocalDateTime.now());
+            Integer adId = reservation.getAdvertisementId();
 
-            reservationService.saveReservation(reservation);
-            
-            return ResponseEntity.ok().body(reservation.getReservationId().toString());
+            LocalDate start = reservation.getReservationStart();
+            LocalDate end = reservation.getReservationEnd();
+       
+            DateInterval dateInterval = new DateInterval(start,end);
+
+            if (reservationService.isReservationIntervalFree(dateInterval, adId))
+                reservationService.saveReservation(reservation);
+
+            else {
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                        .body("dateInterval is not free or out of bounds");
+            }
+            return ResponseEntity.ok().body("created new reservation");
 
         } catch (JsonProcessingException e) {
             log.error("JSON parsing error: {}", e.getMessage());
@@ -89,12 +101,12 @@ public class ReservationController {
             log.info("Received Reservation: {}", id);
 
             Reservation reservation = reservationService.getReservationbyId(id);
-            
+
             if (reservation == null) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND)
                         .body("Reservation not found with ID: " + id);
             }
-            reservation.setReservationEnd(LocalDateTime.now());
+            reservation.setReservationRequestEnded(LocalDateTime.now());
 
             reservationService.updateReservation(id, reservation);
 
@@ -148,42 +160,58 @@ public class ReservationController {
         }
     }
 
+    @Operation(summary = "Returns list of reservations by ad id", description = "Returns list of reservations by ad id")
+    @GetMapping("/advertisement/{id}")
+    public ResponseEntity<List<Reservation>> getReservationsByAdId(@PathVariable Integer id) {
+        if (advertisementService.getAdvertisementById(id) != null) {
+            List<Reservation> reservations = reservationService.getByAdvertisementId(id);
+            return ResponseEntity.ok(reservations);
+        }
+        log.error("Ad with id {} doesnt exist", id);
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+    }
+
+    @Operation(summary = "List of taken intervals for advertisement", description = "Returns list of all taken intervals of an advertisement")
+    @GetMapping("/advertisement_intervals/{id}")
+    public ResponseEntity<List<DateInterval>> getTakenIntervals(@PathVariable Integer id) {
+        if (advertisementService.getAdvertisementById(id) != null) {
+            List<DateInterval> intervals = reservationService.getResvDateIntervalsForAdId(id);
+
+            return ResponseEntity.ok(intervals);
+        }
+        log.error("Ad with id {} doesnt exist", id);
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+    }
+
     @Operation(summary = "Get reservations by trader ID", description = "Retrieves all reservations for a trader with status (ACTIVE/NOT ACTIVE)")
     @GetMapping("/trader/{id}")
     public ResponseEntity<List<ReservationWithStatusBuyerItemName>> getTradersReservation(@PathVariable Integer id) {
         try {
             log.info("Retrieving reservations for trader ID: {}", id);
-            
+
             List<Reservation> reservations = reservationService.getReservationsByTraderId(id);
 
-            
             List<Account> buyers = reservations.stream()
-            .map(reservation -> {
-                return accountService.getUserbyId(reservation.getBuyerId());
-            }).collect(Collectors.toList());
-            
-            List<Advertisement> advertisements = reservations.stream()
-            .map(reservation -> {
-                return advertisementService.getAdvertisementbyId(reservation.getAdvertisementId());
-            }).collect(Collectors.toList());
+                    .map(reservation -> {
+                        return accountService.getUserbyId(reservation.getBuyerId());
+                    }).collect(Collectors.toList());
 
+            List<Advertisement> advertisements = reservations.stream()
+                    .map(reservation -> {
+                        return advertisementService.getAdvertisementbyId(reservation.getAdvertisementId());
+                    }).collect(Collectors.toList());
 
             List<ReservationWithStatusBuyerItemName> reservationWithContext = new LinkedList<>();
 
-            for(int i = 0; i < reservations.size(); i++){
+            for (int i = 0; i < reservations.size(); i++) {
                 reservationWithContext.add(
-                    new ReservationWithStatusBuyerItemName(
-                        reservations.get(i), buyers.get(i), advertisements.get(i), 
-                        reservationService.determineStatus(reservations.get(i)) 
-                    )
-                );
+                        new ReservationWithStatusBuyerItemName(
+                                reservations.get(i), buyers.get(i), advertisements.get(i),
+                                reservationService.determineStatus(reservations.get(i))));
             }
 
-
-            
             return ResponseEntity.ok().body(reservationWithContext);
-            
-            
+
         } catch (Exception e) {
             log.error("Unexpected error: {}", e.getMessage(), e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
@@ -195,38 +223,30 @@ public class ReservationController {
     public ResponseEntity<List<ReservationWithStatusItemName>> getBuyersReservation(@PathVariable Integer id) {
         try {
             log.info("Retrieving reservations for trader ID: {}", id);
-            
-            List<Reservation> reservations = reservationService.getReservationsByBuyerId(id);
-            
-            List<Advertisement> advertisements = reservations.stream()
-            .map(reservation -> {
-                return advertisementService.getAdvertisementbyId(reservation.getAdvertisementId());
-            }).collect(Collectors.toList());
 
+            List<Reservation> reservations = reservationService.getReservationsByBuyerId(id);
+
+            List<Advertisement> advertisements = reservations.stream()
+                    .map(reservation -> {
+                        return advertisementService.getAdvertisementbyId(reservation.getAdvertisementId());
+                    }).collect(Collectors.toList());
 
             List<ReservationWithStatusItemName> reservationWithContext = new LinkedList<>();
 
-            for(int i = 0; i < reservations.size(); i++){
+            for (int i = 0; i < reservations.size(); i++) {
                 reservationWithContext.add(
-                    new ReservationWithStatusItemName(
-                        reservations.get(i), advertisements.get(i), 
-                        reservationService.determineStatus(reservations.get(i)) 
-                    )
-                );
+                        new ReservationWithStatusItemName(
+                                reservations.get(i), advertisements.get(i),
+                                reservationService.determineStatus(reservations.get(i))));
             }
 
-
-            
             return ResponseEntity.ok().body(reservationWithContext);
-            
-            
+
         } catch (Exception e) {
             log.error("Unexpected error: {}", e.getMessage(), e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
-
-
 
     private Integer parseGrade(String gradeString) {
         try {
