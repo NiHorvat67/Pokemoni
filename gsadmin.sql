@@ -27,8 +27,12 @@ CREATE TABLE itemtype (
 -- 3. Table: reservation (Deferred FK to advertisement)
 CREATE TABLE reservation (
     reservation_id SERIAL PRIMARY KEY,
-    reservation_start TIMESTAMPTZ NOT NULL,
-    reservation_end TIMESTAMPTZ,
+
+    reservation_start DATE NOT NULL,
+    reservation_end DATE NOT NULL,
+
+    reservation_request_started TIMESTAMPTZ NOT NULL,
+    reservation_request_ended TIMESTAMPTZ,
     reservation_grade INT,
 
     buyer_id INT,
@@ -62,7 +66,6 @@ CREATE TABLE advertisement (
     itemtype_id INT,
     FOREIGN KEY (itemtype_id) REFERENCES itemtype(itemtype_id),
 
-    reservation_id INT UNIQUE, -- Column for the FK (Constraint added later)
     item_name VARCHAR(255),
     item_description TEXT,
     item_image_path VARCHAR(255) UNIQUE
@@ -78,12 +81,7 @@ ADD CONSTRAINT fk_advertisement
     REFERENCES advertisement(advertisement_id)
     ON DELETE SET NULL;
 
--- Add the Foreign Key from advertisement to reservation
-ALTER TABLE advertisement
-ADD CONSTRAINT fk_reservation
-    FOREIGN KEY (reservation_id)
-    REFERENCES reservation(reservation_id)
-    ON DELETE SET NULL;
+
 
 ---
 CREATE OR REPLACE FUNCTION check_trader_role()
@@ -160,35 +158,7 @@ INSERT INTO advertisement (
 (30.00, 180.00, 'FER', 'FER', '2024-12-01', '2025-03-31', 1, 1, 'Premium Ski Set', 'Top-of-the-line skis for expert skiers.', '/images/skis2.jpg', 45.80025, 15.97111, 45.80025, 15.97111),
 (40.00, 250.00, 'FER', 'FER', '2024-02-01', '2024-12-31', 3, 3, 'Complete Climbing Set', 'Harness, carabiners, and belay device.', '/images/climbing_set1.jpg', 45.80025, 15.97111, 45.80025, 15.97111),
 (24.00, 110.00, 'FER', 'FER', '2024-03-15', '2024-11-15', 4, 5, 'Road Bike', 'Lightweight road bike for city cycling.', '/images/road_bike1.jpg', 45.80025, 15.97111, 45.80025, 15.97111);
--- Insert into reservation (using buyers: 2, 5 and connecting to advertisements)
-INSERT INTO reservation (
-    reservation_start, reservation_end, reservation_grade, buyer_id, advertisement_id
-) VALUES
--- Bob's reservations (account_id 2)
-('2024-02-10 09:00:00+00', '2024-02-17 18:00:00+00', 5, 2, 1),
-('2024-03-15 10:00:00+00', '2024-03-22 17:00:00+00', 4,2, 5),
-('2024-06-10 08:00:00+00', '2024-06-12 20:00:00+00', 5,2, 6),
 
--- Jane's reservations (account_id 5)
-('2024-02-20 14:00:00+00', '2024-02-27 16:00:00+00', 4, 5, 2),
-('2024-04-05 09:00:00+00', '2024-04-12 18:00:00+00', 5, 5, 8),
-('2024-07-15 07:00:00+00', '2024-07-20 19:00:00+00', 4, 5, 9),
-
--- Mixed reservations
-('2024-03-01 11:00:00+00', '2024-03-08 15:00:00+00', 5, 2, 3),
-('2024-05-10 10:00:00+00', '2024-05-15 17:00:00+00', 4,5, 4),
-('2024-08-20 08:00:00+00', '2024-08-25 18:00:00+00', 5, 2, 7);
-
--- Update advertisement table to connect with reservations (circular reference)
-UPDATE advertisement SET reservation_id = 1 WHERE advertisement_id = 1;
-UPDATE advertisement SET reservation_id = 2 WHERE advertisement_id = 2;
-UPDATE advertisement SET reservation_id = 3 WHERE advertisement_id = 3;
-UPDATE advertisement SET reservation_id = 4 WHERE advertisement_id = 4;
-UPDATE advertisement SET reservation_id = 5 WHERE advertisement_id = 5;
-UPDATE advertisement SET reservation_id = 6 WHERE advertisement_id = 6;
-UPDATE advertisement SET reservation_id = 7 WHERE advertisement_id = 7;
-UPDATE advertisement SET reservation_id = 8 WHERE advertisement_id = 8;
-UPDATE advertisement SET reservation_id = 9 WHERE advertisement_id = 9;
 
 -- Add more accounts for a richer dataset
 INSERT INTO account (oauth2_id, user_email, user_first_name, user_last_name, user_contact,user_contact_email, user_location, account_role, account_rating) VALUES
@@ -229,23 +199,7 @@ INSERT INTO advertisement (
 (21.00, 100.00, 'Amsterdam Bike Central', 'Amsterdam Bike Central', '2024-02-15', '2024-11-30', 13, 5, 'City Bike', 'Comfortable city bike with basket and lock.', '/images/city_bike1.jpg', 52.3676, 4.9041, 52.3676, 4.9041),
 (16.50, 80.00, 'FER', 'FER', '2024-04-01', '2024-10-31', 13, 7, 'Day Hiking Pack', '25L daypack with hydration system.', '/images/daypack1.jpg', 45.8003, 15.9714, 45.8003, 15.9714);
 
--- Add more reservations from new buyers
-INSERT INTO reservation (
-    reservation_start, reservation_end, reservation_grade ,buyer_id, advertisement_id
-) VALUES
--- Lisa's reservations (Madrid)
-('2024-02-25 10:00:00+00', '2024-03-03 18:00:00+00', 5, 10, 10),
-('2024-06-15 09:00:00+00', '2024-06-20 17:00:00+00', 4, 10, 11),
 
--- David's reservations (Rome)
-('2024-03-10 08:00:00+00', '2024-03-17 19:00:00+00', 5, 11, 12),
-('2024-07-01 07:00:00+00', '2024-07-07 20:00:00+00', 4, 11, 13),
-
--- More mixed reservations
-('2024-04-15 11:00:00+00', '2024-04-22 16:00:00+00', 5,2, 14),
-('2024-08-10 10:00:00+00', '2024-08-15 18:00:00+00', 4, 5, 15),
-('2024-09-05 08:00:00+00', '2024-09-12 17:00:00+00', 5,10, 16);
--- Add more advertisements without reservations
 INSERT INTO advertisement (
     advertisement_price, 
     advertisement_deposit,
@@ -402,3 +356,19 @@ ALTER TABLE payment ADD CONSTRAINT payment_payer_id_fkey
 ALTER TABLE reservation DROP CONSTRAINT fk_advertisement;
 ALTER TABLE reservation ADD CONSTRAINT fk_advertisement
     FOREIGN KEY (advertisement_id) REFERENCES advertisement(advertisement_id) ON DELETE CASCADE;
+
+ALTER TABLE reservation
+ADD CONSTRAINT unique_advertisement_buyer
+UNIQUE (advertisement_id, buyer_id);
+
+-- Add check constraints for date validation
+
+-- For reservation table: reservation_start must be <= reservation_end
+ALTER TABLE reservation
+ADD CONSTRAINT check_reservation_dates
+CHECK (reservation_start <= reservation_end);
+
+-- For advertisement table: advertisement_start must be <= advertisement_end
+ALTER TABLE advertisement
+ADD CONSTRAINT check_advertisement_dates
+CHECK (advertisement_start <= advertisement_end);
