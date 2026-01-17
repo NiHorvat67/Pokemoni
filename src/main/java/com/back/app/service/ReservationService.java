@@ -52,7 +52,7 @@ public class ReservationService {
         return reservationRepo.findByAdvertisementId(advertisementId);
     }
 
-     public List<DateInterval> getResvDateIntervalsForAdId(Integer advertisementId) {
+    public List<DateInterval> getResvDateIntervalsForAdId(Integer advertisementId) {
         return getByAdvertisementId(advertisementId).stream()
                 .map(r -> new DateInterval(r.getReservationStart(), r.getReservationEnd()))
                 .toList();
@@ -60,18 +60,16 @@ public class ReservationService {
 
     public boolean isReservationIntervalFree(DateInterval dateInterval, Integer advertisementId) {
         List<DateInterval> existingIntervals = getResvDateIntervalsForAdId(advertisementId);
-        
-        
+
         Advertisement advertisement = advertisementService.getAdvertisementbyId(advertisementId);
         if (advertisement == null) {
             return false;
         }
-        
+
         DateInterval advertisementBounds = new DateInterval(
-            advertisement.getAdvertisementStart(),
-            advertisement.getAdvertisementEnd()
-        );
-        
+                advertisement.getAdvertisementStart(),
+                advertisement.getAdvertisementEnd());
+
         return isIntervalAvailable(dateInterval, existingIntervals, advertisementBounds);
     }
 
@@ -80,17 +78,35 @@ public class ReservationService {
             DateInterval advertisementBounds) {
 
         if (newInterval.getStartDate().isBefore(advertisementBounds.getStartDate()) ||
-            newInterval.getEndDate().isAfter(advertisementBounds.getEndDate())) {
+                newInterval.getEndDate().isAfter(advertisementBounds.getEndDate())) {
             return false;
         }
 
         for (DateInterval existing : existingIntervals) {
             if (newInterval.overlapsWith(existing)) {
-                return false; 
+                return false;
             }
         }
 
         return true;
+    }
+
+    public Integer getTraderIdForReservationId(Integer reservationId) {
+        Optional<Reservation> reservationOpt = reservationRepo.findById(reservationId);
+        if (reservationOpt.isEmpty()) {
+            log.info("Reservation with id {} not found", reservationId);
+            return null;
+        }
+
+        Reservation reservation = reservationOpt.get();
+
+        Advertisement advertisement = advertisementService.getAdvertisementbyId(reservation.getAdvertisementId());
+        if (advertisement == null) {
+            log.info("Advertisement not found for reservation {}", reservationId);
+            return null;
+        }
+
+        return advertisement.getTrader().getAccountId();
     }
 
     public List<Reservation> getReservationsByTraderId(Integer traderId) {

@@ -1,5 +1,11 @@
 package com.back.app.service;
 
+import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
+
+import org.springframework.stereotype.Service;
+
 import com.back.app.model.Account;
 import com.back.app.model.Report;
 import com.back.app.model.ReportAccountsTimestamp;
@@ -8,13 +14,6 @@ import com.back.app.repo.ReportRepo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import org.springframework.stereotype.Service;
-
-import java.util.List;
-
-import java.util.Objects;
-import java.util.stream.Collectors;
-
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -22,6 +21,9 @@ public class ReportService {
 
     private final ReportRepo reportRepo;
     private final AccountService accountService;
+    public Report saveReport(Report report){
+        return reportRepo.save(report);
+    }
 
     public Report createReport(Report report) {
         Objects.requireNonNull(report, "Report object cannot be null");
