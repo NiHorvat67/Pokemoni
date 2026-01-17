@@ -1,6 +1,5 @@
 import { locationIcon } from "@/assets/icons";
 import Button from "@/components/Button";
-import bikeImg from "@/assets/images/bike.jpeg"
 import { useQuery, useMutation } from "@tanstack/react-query";
 import axios from "axios";
 import { useParams } from "react-router-dom";
@@ -69,7 +68,7 @@ const Advertisement = () => {
 
 
   function deleteOnClick() {
-  deleteAdvertisement()
+    deleteAdvertisement()
   }
 
   useEffect(() => {
@@ -80,7 +79,7 @@ const Advertisement = () => {
     <section className="padding-x padding-t padding-b">
       <section className="max-container">
         <div className="flex gap-8 lg:gap-20 max-lg:flex-col">
-          <img src={bikeImg} alt="product image" className="lg:w-2/5 object-cover object-center rounded-[8px] w-full max-h-[300px] lg:max-h-[400px]" />
+          <img src={`/api/advertisements/images/load/${data?.advertisementId}`} alt="product image" className="lg:w-2/5 object-cover object-center rounded-[8px] w-full max-h-[300px] lg:max-h-[400px]" />
           <div className="flex flex-col items-start gap-10 lg:gap-12 flex-1">
             <div className="flex items-start gap-1 flex-col w-full">
               <div className="flex gap-2 items-center mb-3">

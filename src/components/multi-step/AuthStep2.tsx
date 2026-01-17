@@ -20,7 +20,6 @@ const AuthStep2 = ({ step, setCurrentStep }: { step: number, currentStep: number
   const { userData, setUserDataField } = useCreateAccountContext()
   const [errors, setErrors] = useState<any>([])
 
-
   const { mutate } = useMutation({
     mutationFn: async () => {
       return axios({

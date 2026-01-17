@@ -19,6 +19,8 @@ import Calendar23 from "@/components/calendar-23-dropdown";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import useAuthContext from "@/hooks/useAuthContext";
+import imageCompression from 'browser-image-compression';
+import { useNavigate } from "react-router-dom";
 
 type DateRange = {
   from: Date | undefined,
@@ -34,14 +36,27 @@ const NewAdvertisement = () => {
   const [deposit, setDeposit] = useState("")
   const [category, setCategory] = useState("")
   const [description, setDescription] = useState("")
+  const [image, setImage] = useState<any>("")
   const [dateRange, setDateRange] = useState<DateRange>({ from: undefined, to: undefined })
 
   const { user } = useAuthContext()
   const [errors, setErrors] = useState<any>([])
+  const navigate = useNavigate()
+
+  const { mutate: deleteAdvertisement } = useMutation({
+    mutationFn: async (advertisementId) => {
+      return axios.post(`/api/advertisements/delete/${advertisementId}`)
+        .then(res => {
+          return res.data
+        })
+        .catch(err => console.log(err));
+    },
+    onSuccess: () => {
+    }
+  });
 
 
-
-  const { mutate } = useMutation({
+  const { mutate: createAdvertisement } = useMutation({
     mutationFn: async () => {
       return axios({
         method: "post",
@@ -57,11 +72,10 @@ const NewAdvertisement = () => {
           itemName: heading,
           itemTypeId: Number(category),
           itemDescription: description,
-          itemImagePath: `/img_${Date.now()}`,
         }
       })
         .then(res => {
-          window.location.href = `/advertisement/${res.data}`
+          uploadImage(res.data)
           return res.data
         })
         .catch(err => {
@@ -69,6 +83,28 @@ const NewAdvertisement = () => {
         })
     }
   })
+
+  const { mutate: uploadImage } = useMutation({
+    mutationFn: async (advertisementId) => {
+      const formData = new FormData();
+      const compressedImage = await compressImage(image)
+      formData.append("file", compressedImage)
+      return axios({
+        method: "post",
+        url: `/api/advertisements/images/store/${advertisementId}`,
+        data: formData
+      })
+        .then(res => {
+          navigate(`/advertisement/${advertisementId}`)
+          return res.data
+        })
+        .catch(err => {
+          deleteAdvertisement(advertisementId)
+          console.log(err)
+        })
+    }
+  })
+
 
   const { data: categories } = useQuery({
     queryKey: ["categories"],
@@ -84,6 +120,32 @@ const NewAdvertisement = () => {
     }
   })
 
+  async function compressImage(imageFile: any) {
+    const options = {
+      maxSizeMB: 1,
+      useWebWorker: true
+    }
+    try {
+      const compressedFileBlob = await imageCompression(imageFile, options);
+      const compressedFile = new File(
+        [compressedFileBlob],
+        imageFile.name,
+        { type: compressedFileBlob.type }
+      );
+      // console.log(compressedFile)
+      // console.log(`compressedFile size ${compressedFileBlob.size / 1024 / 1024} MB`);
+      // console.log(`compressedFile size ${compressedFile.size / 1024 / 1024} MB`);
+      return compressedFile
+    } catch (err) {
+      console.log(err)
+      return imageFile
+    }
+  }
+
+  async function onImageChange(e: any) {
+    const imageFile = e.target.files[0]
+    setImage(imageFile)
+  }
 
   const canProgress = () => {
     const inputsFilled = heading !== "" && pickupLocation !== "" && returnLocation !== "" && price !== "" && category !== "" && description !== "" && dateRange.from !== undefined && dateRange.to !== undefined
@@ -98,14 +160,13 @@ const NewAdvertisement = () => {
 
   const onSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    console.log("jdklsajlkdsjal")
     setErrors([])
-    if (!canProgress()) {
-      console.log("cant finish")
-    } else {
-      mutate()
+    if (canProgress()) {
+      createAdvertisement()
     }
   }
+
+
 
   return (
     <section className="padding-x padding-t padding-b min-h-[100vh]">
@@ -134,7 +195,7 @@ const NewAdvertisement = () => {
 
                 </SelectContent>
               </Select>
-              <InputShadCn id="picture" type="file" className="file:text-[16px] file:text-black text-neutral-700 !text-[16px] !items-center rounded-[8px] outline-0 border-0 bg-input-bg" />
+              <InputShadCn id="picture" accept="image/*" required type="file" onChange={onImageChange} className="file:text-[16px] file:text-black text-neutral-700 !text-[16px] !items-center rounded-[8px] outline-0 border-0 bg-input-bg" />
             </div>
           </section>
 
