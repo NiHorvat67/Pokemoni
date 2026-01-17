@@ -3,10 +3,12 @@ import { useEffect, useRef, useState } from "react";
 import profileImg from "../assets/images/profile.jpeg";
 import useAuthContext from "@/hooks/useAuthContext";
 import Button from "@/components/Button";
+import { useNavigate } from "react-router-dom";
 
 const Nav = () => {
   const location = useLocation();
   const { user, dispatch } = useAuthContext();
+  const navigate = useNavigate()
 
   const hideSingInButton = location.pathname.includes("/auth");
 
@@ -20,7 +22,7 @@ const Nav = () => {
       .catch(() => { })
       .finally(() => {
         dispatch({ type: "LOGOUT" });
-        window.location.pathname = "/";
+        navigate("/")
       });
   };
 

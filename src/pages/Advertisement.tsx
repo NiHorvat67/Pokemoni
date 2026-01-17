@@ -7,6 +7,7 @@ import { useState, useEffect } from "react";
 import useAuthContext from "@/hooks/useAuthContext";
 import { editIcon, deleteIcon } from "@/assets/icons";
 import { useNavigate } from "react-router-dom";
+import Calendar14 from "@/components/calendar-14";
 
 const Advertisement = () => {
   const navigate = useNavigate()
@@ -15,56 +16,36 @@ const Advertisement = () => {
 
   const { user } = useAuthContext()
 
-  const { data } = useQuery({
+  const { data: advertisementData } = useQuery({
     queryKey: ["advertisementData"],
     queryFn: async () => {
       return axios
         .get(`/api/advertisements/${advertisementId}`)
         .then(res => {
-          console.log(res.data)
-          if (res.data == "") {
-            window.location.pathname = "/error"
-          }
           return res.data
         })
         .catch(err => {
           console.log(err)
           if (err.response.status === 404) {
-            window.location.pathname = "/error"
+            navigate("/error")
           }
         })
     }
   })
 
-  const { mutate: rentFun } = useMutation({
-    mutationFn: async () => {
-      if (!user?.accountId) {
-        window.location.pathname = "/auth";
-      }
-      return axios.post(`/api/reservations/create`, {
-        buyerId: user.accountId,
-        advertisementId: advertisementId
-      });
-    },
-    onSuccess: () => {
-      window.location.pathname = "/";
-    }
-  });
 
   const { mutate: deleteAdvertisement } = useMutation({
     mutationFn: async () => {
-      return axios.post(`/api/advertisements/delete/${data?.advertisementId}`)
+      return axios.post(`/api/advertisements/delete/${advertisementData?.advertisementId}`)
         .then(res => {
           return res.data
         })
         .catch(err => console.log(err));
     },
     onSuccess: () => {
-      navigate(`/profile/${data?.trader.accountId}`)
+      navigate(`/profile/${advertisementData?.trader.accountId}`)
     }
   });
-
-
 
 
   function deleteOnClick() {
@@ -72,14 +53,14 @@ const Advertisement = () => {
   }
 
   useEffect(() => {
-    setCurrentUserIsOwner(data?.trader.accountId === user?.accountId && user?.accountId !== undefined)
-  }, [data])
+    setCurrentUserIsOwner(advertisementData?.trader.accountId === user?.accountId && user?.accountId !== undefined)
+  }, [advertisementData])
 
   return (
     <section className="padding-x padding-t padding-b">
       <section className="max-container">
         <div className="flex gap-8 lg:gap-20 max-lg:flex-col">
-          <img src={`/api/advertisements/images/load/${data?.advertisementId}`} alt="product image" className="lg:w-2/5 object-cover object-center rounded-[8px] w-full max-h-[300px] lg:max-h-[400px]" />
+          <img src={`/api/advertisements/images/load/${advertisementData?.advertisementId}`} alt="product image" className="lg:w-2/5 object-cover object-center rounded-[8px] w-full max-h-[300px] lg:max-h-[400px]" />
           <div className="flex flex-col items-start gap-10 lg:gap-12 flex-1">
             <div className="flex items-start gap-1 flex-col w-full">
               <div className="flex gap-2 items-center mb-3">
@@ -103,32 +84,33 @@ const Advertisement = () => {
                 }
 
               </div>
-              <p className="text-primary bg-[#102B19] rounded-[8px] px-2.5 py-1.25 text-[13px] font-inter">{data?.itemType.itemtypeName}</p>
-              <h1 className="font-inter text-[24px] sm:text-[32px] font-medium text-white mr-8 mb-1">{data?.itemName}</h1>
-              <p className="font-inter text-white text-[14px]">by <a className="font-medium" href={`/profile/${data?.trader.accountId}`}>{data?.trader.userFirstName} {data?.trader.userLastName}</a></p>
+              <p className="text-primary bg-[#102B19] rounded-[8px] px-2.5 py-1.25 text-[13px] font-inter">{advertisementData?.itemType.itemtypeName}</p>
+              <h1 className="font-inter text-[24px] sm:text-[32px] font-medium text-white mr-8 mb-1">{advertisementData?.itemName}</h1>
+              <p className="font-inter text-white text-[14px]">by <a className="font-medium" href={`/profile/${advertisementData?.trader.accountId}`}>{advertisementData?.trader.userFirstName} {advertisementData?.trader.userLastName}</a></p>
             </div>
-            <p className="font-inter text-white text-[16px] max-w-[700px]"> {data?.itemDescription}</p>
+            <p className="font-inter text-white text-[16px] max-w-[700px]"> {advertisementData?.itemDescription}</p>
 
             <div className="text-white font-inter flex flex-col gap-5">
               <div className="flex items-start max-w-[700px] gap-1">
                 <img src={locationIcon} alt="location icon" />
-                <p>Preuzimanje — {data?.advertisementLocationTakeover}</p>
+                <p>Preuzimanje — {advertisementData?.advertisementLocationTakeover}</p>
               </div>
               <div className="flex items-start max-w-[700px] gap-1">
                 <img src={locationIcon} alt="location icon" />
-                <p>Povrat — {data?.advertisementLocationReturn}</p>
+                <p>Povrat — {advertisementData?.advertisementLocationReturn}</p>
               </div>
             </div>
 
             <div className="flex font-inter items-center gap-11">
               <div className="flex flex-col items-start flex-1 justify-start text-white min-w-[100px]">
-                <h1 className="font-medium text-[32px]">{data?.advertisementPrice}€</h1>
-                <p className="text-desc text-sm">Kaucija {data?.advertisementDeposit}€</p>
+                <h1 className="font-medium text-[32px]">{advertisementData?.advertisementPrice}€</h1>
+                <p className="text-desc text-sm">Kaucija {advertisementData?.advertisementDeposit}€</p>
               </div>
               {!currentUserIsOwner &&
-                <Button text="Rent" icon={true} long={false} onClick={() => rentFun()} />
+                <Button text="Rent" icon={true} long={false} onClick={() => { }} />
               }
             </div>
+            <Calendar14 />
 
           </div>
         </div>

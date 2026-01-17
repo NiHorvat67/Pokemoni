@@ -34,7 +34,6 @@ const AuthStep2 = ({ step, setCurrentStep }: { step: number, currentStep: number
         }
       })
         .then(res => {
-          // window.location.pathname = "/"
           return res.data
         })
         .catch(err => {

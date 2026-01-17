@@ -10,11 +10,12 @@ import { useState, useEffect } from "react"
 import { useMutation } from "@tanstack/react-query"
 import ReservationHistory from "@/components/ReservationHistory"
 import useAuthContext from "@/hooks/useAuthContext"
+import { useNavigate } from "react-router-dom"
 
 const Profile = () => {
   const { userId } = useParams()
   const { user } = useAuthContext()
-
+  const navigate = useNavigate()
   // jeli trenutno ulogirani user vlasnik otvorenog profile
   const currentUserIsOwner = userId == user.accountId ? true : false
 
@@ -27,11 +28,13 @@ const Profile = () => {
         .get(`/api/accounts/${userId}`)
         .then(res => {
           if (res.data == "") {
-            window.location.pathname = "/error"
+            navigate("/error")
           }
           return res.data
         })
-        .catch(err => console.log(err))
+        .catch(err => {
+          console.log(err)
+        })
     }
   })
 
@@ -48,7 +51,7 @@ const Profile = () => {
         .catch(err => {
           console.log(err)
           if (err.response.status === 400) {
-            window.location.pathname = "/error"
+            navigate("/error")
           }
         })
     }
