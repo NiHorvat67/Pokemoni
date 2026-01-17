@@ -1,4 +1,3 @@
-upload slike za advertisement
 rezervacije - kalendar + placanje
 
 stvari s roles - protectanje ruta

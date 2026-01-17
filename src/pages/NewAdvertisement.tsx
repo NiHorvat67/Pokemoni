@@ -41,7 +41,9 @@ const NewAdvertisement = () => {
 
   const { user } = useAuthContext()
   const [errors, setErrors] = useState<any>([])
+  const [processingRequest, setProcessingRequest] = useState(false)
   const navigate = useNavigate()
+
 
   const { mutate: deleteAdvertisement } = useMutation({
     mutationFn: async (advertisementId) => {
@@ -50,10 +52,9 @@ const NewAdvertisement = () => {
           return res.data
         })
         .catch(err => console.log(err));
-    },
-    onSuccess: () => {
     }
   });
+
 
 
   const { mutate: createAdvertisement } = useMutation({
@@ -80,6 +81,7 @@ const NewAdvertisement = () => {
         })
         .catch(err => {
           console.log(err)
+          setProcessingRequest(false)
         })
     }
   })
@@ -96,10 +98,12 @@ const NewAdvertisement = () => {
       })
         .then(res => {
           navigate(`/advertisement/${advertisementId}`)
+          setProcessingRequest(false)
           return res.data
         })
         .catch(err => {
           deleteAdvertisement(advertisementId)
+          setProcessingRequest(false)
           console.log(err)
         })
     }
@@ -162,6 +166,7 @@ const NewAdvertisement = () => {
     e.preventDefault()
     setErrors([])
     if (canProgress()) {
+      setProcessingRequest(true)
       createAdvertisement()
     }
   }
@@ -209,7 +214,7 @@ const NewAdvertisement = () => {
               <Input placeholder="Deposit" state={deposit} setState={setDeposit} type="number" />
             </div>
           </section>
-          <Button text="Submit" submit={true} icon={true} onClick={() => { }} long={true} />
+          <Button text={processingRequest ? "Creating advertisement" : "Submit"} disabled={processingRequest} submit={true} icon={true} onClick={() => { }} long={true} />
 
 
         </form >
