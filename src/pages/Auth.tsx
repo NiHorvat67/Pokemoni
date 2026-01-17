@@ -3,7 +3,6 @@ import MultiStepAuth from "@/components/multi-step/MultiStepAuth";
 
 const Auth = () => {
 
-
   return (
     <>
       <section className="flex lg:bg-linear-to-b from-[#141A17] to-[#121413]">

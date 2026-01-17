@@ -69,7 +69,7 @@ const Advertisement = () => {
 
 
   function deleteOnClick() {
-    deleteAdvertisement()
+  deleteAdvertisement()
   }
 
   useEffect(() => {

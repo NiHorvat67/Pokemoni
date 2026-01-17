@@ -4,7 +4,13 @@ import { githubIcon } from "@/assets/icons";
 
 
 const AuthStep1 = ({ }: { step: number, currentStep: number, setCurrentStep: React.Dispatch<React.SetStateAction<number>> }) => {
+  // ako je dosao do ovdje, znamo da user nije ulogiran, nemozemo znati imali li jsession cookie
+  // ali nesmije ga imati, pa ga zato mozemo uvijek brisati
 
+  fetch("/api/accounts/logout", { credentials: "include" })
+    .catch((err) => {
+      console.log(err)
+    })
 
   return (
     <div className="step-content flex max-lg:pb-19 flex-col items-center flex-1 md:justify-center md:mt-[-200px] justify-between">

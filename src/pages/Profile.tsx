@@ -9,9 +9,14 @@ import { useParams } from "react-router-dom"
 import { useState, useEffect } from "react"
 import { useMutation } from "@tanstack/react-query"
 import ReservationHistory from "@/components/ReservationHistory"
+import useAuthContext from "@/hooks/useAuthContext"
 
 const Profile = () => {
   const { userId } = useParams()
+  const { user } = useAuthContext()
+
+  // jeli trenutno ulogirani user vlasnik otvorenog profile
+  const currentUserIsOwner = userId == user.accountId ? true : false
 
   const [products, setProducts] = useState([])
 
@@ -32,6 +37,7 @@ const Profile = () => {
 
   const { data: reservationsData } = useQuery({
     queryKey: ["reservations"],
+    // enabled: accountData !== undefined && currentUserIsOwner,
     enabled: accountData !== undefined,
     queryFn: async () => {
       return axios
@@ -109,6 +115,8 @@ const Profile = () => {
           </>
         }
 
+        {/* {currentUserIsOwner &&
+        } */}
         <ReservationHistory reservationsData={reservationsData} accountRole={accountData?.accountRole} />
 
       </section>

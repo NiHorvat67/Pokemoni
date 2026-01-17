@@ -1,5 +1,10 @@
 rezervacije - kalendar + placanje
 upload slike za advertisement
+stvari s roles - protectanje ruta
+
+
 edit? advertisementa
+tweak mobile design
+
+
 fix auth error
-stvari s roles
