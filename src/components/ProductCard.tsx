@@ -1,18 +1,15 @@
-import bikeImg from "../assets/images/bike.jpeg"
+import noImage from "../assets/images/no-image.png"
 
-
-const ProductCard = ({ category, img, productName, owner, desc, price, advertisementId }:
+const ProductCard = ({ category, productName, owner, desc, price, advertisementId }:
   {
     category: string,
     productName: string,
     owner: { name: string, id: number },
     desc: string,
     price: number,
-    img: string,
     advertisementId: number
   }) => {
 
-  img = bikeImg
 
   return (
     <article className="relative max-w-[320px] font-inter">
@@ -20,7 +17,9 @@ const ProductCard = ({ category, img, productName, owner, desc, price, advertise
         {category}
       </div>
       <a href={`/advertisement/${advertisementId}`}>
-        <img src={img} alt="product image" className="w-full h-[225px] object-cover rounded-t-[8px]" />
+        <object data={`/api/advertisements/images/load/${advertisementId}`} className="w-full h-[225px] object-cover rounded-t-[8px]" type="image/jpg">
+          <img src={noImage} alt="no image available" className="w-full h-[225px] object-cover rounded-t-[8px]" />
+        </object>
       </a>
 
       <div className="bg-[#222423] rounded-[8px] p-6 mt-[-8px] relative shadow-[0_-4px_4px_rgba(0,0,0,0.25)]">

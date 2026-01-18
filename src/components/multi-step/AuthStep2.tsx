@@ -59,18 +59,14 @@ const AuthStep2 = ({ step, setCurrentStep }: { step: number, currentStep: number
 
   const finishOnClick = () => {
     setErrors([])
-    if (!canProgress()) {
-      console.log("cant finish")
-    } else {
+    if (canProgress()) {
       mutate()
     }
   }
 
   const nextOnClick = () => {
     setErrors([])
-    if (!canProgress()) {
-      console.log("cant progress")
-    } else {
+    if (canProgress()) {
       setCurrentStep(step + 1)
     }
   }

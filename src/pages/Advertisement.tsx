@@ -41,7 +41,6 @@ const Advertisement = () => {
       return axios
         .get(`/api/reservations/advertisement_intervals/${advertisementId}`)
         .then(res => {
-          console.log(res.data)
           return res.data
         })
         .catch(err => {
@@ -118,7 +117,7 @@ const Advertisement = () => {
     <section className="padding-x padding-t padding-b">
       <section className="max-container">
         <div className="flex gap-8 lg:gap-20 max-lg:flex-col">
-          <img src={`/ api / advertisements / images / load / ${advertisementData?.advertisementId} `} alt="product image" className="lg:w-2/5 object-cover object-center rounded-[8px] w-full max-h-[300px] lg:max-h-[400px]" />
+          <img src={`/api/advertisements/images/load/${advertisementData?.advertisementId}`} alt="product image" className="lg:w-2/5 object-cover object-center rounded-[8px] w-full max-h-[300px] lg:max-h-[400px]" />
           <div className="flex flex-col items-start gap-10 lg:gap-12 flex-1">
             <div className="flex items-start gap-1 flex-col w-full">
               <div className="flex gap-2 items-center mb-3">
@@ -159,6 +158,15 @@ const Advertisement = () => {
               </div>
             </div>
 
+            {reservationPeriods !== undefined &&
+              <Calendar14 range={dateRange}
+                setRange={setDateRange}
+                advertisementStart={advertisementData?.advertisementStart}
+                advertisementEnd={advertisementData?.advertisementEnd}
+                reservationPeriods={reservationPeriods}
+              />
+            }
+
             <div className="flex font-inter items-center gap-11">
               <div className="flex flex-col items-start flex-1 justify-start text-white min-w-[100px]">
                 <h1 className="font-medium text-[32px]">{advertisementData?.advertisementPrice}€</h1>
@@ -168,14 +176,7 @@ const Advertisement = () => {
                 <Button text="Rent" icon={true} long={false} onClick={rentOnClick} />
               }
             </div>
-            {reservationPeriods !== undefined &&
-              <Calendar14 range={dateRange}
-                setRange={setDateRange}
-                advertisementStart={advertisementData?.advertisementStart}
-                advertisementEnd={advertisementData?.advertisementEnd}
-                reservationPeriods={reservationPeriods}
-              />
-            }
+
 
           </div>
         </div>

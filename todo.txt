@@ -1,5 +1,5 @@
-rezervacije - kalendar + placanje
 mock payment for renting
+stavit da cijena bude per day?
 
 stvari s roles - protectanje ruta
 

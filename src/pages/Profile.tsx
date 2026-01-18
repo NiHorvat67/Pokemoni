@@ -46,7 +46,6 @@ const Profile = () => {
       return axios
         .get(`/api/reservations/${accountData?.accountRole}/${userId}`)
         .then(res => {
-          console.log(res.data)
           return res.data
         })
         .catch(err => {

@@ -36,7 +36,6 @@ const AuthStep3 = ({ }: { step: number, currentStep: number, setCurrentStep: Rea
   })
 
   const paymentOnClick = () => {
-    console.log(userData)
     mutate()
   }
 

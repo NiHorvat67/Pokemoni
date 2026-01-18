@@ -62,8 +62,8 @@ const Homepage = () => {
       checkAppendSearchParams(params, "categoryId", categoryId)
       checkAppendSearchParams(params, "minPrice", priceRange?.start)
       checkAppendSearchParams(params, "maxPrice", priceRange?.end)
-      checkAppendSearchParams(params, "beginDate", dateRange.from ? dateRange?.from.toISOString().substring(0, 10) : "")
-      checkAppendSearchParams(params, "endDate", dateRange.to ? dateRange?.to.toISOString().substring(0, 10) : "")
+      checkAppendSearchParams(params, "beginDate", dateRange.from ? dateRange?.from.toLocaleDateString("en-CA") : "")
+      checkAppendSearchParams(params, "endDate", dateRange.to ? dateRange?.to.toLocaleDateString("en-CA") : "")
       return axios
         .get(`/api/advertisements/search?${params.toString()}`)
         .then(res => {
