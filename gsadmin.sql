@@ -123,16 +123,16 @@ INSERT INTO itemtype (itemtype_name) VALUES
 ('Winter Sports'),          -- 8
 ('Mountain Equipment');     -- 9
 INSERT INTO advertisement (
-    advertisement_price, 
+    advertisement_price,
     advertisement_deposit,
-    advertisement_location_takeover, 
+    advertisement_location_takeover,
     advertisement_location_return,
-    advertisement_start, 
-    advertisement_end, 
-    trader_id, 
-    itemtype_id, 
-    item_name, 
-    item_description, 
+    advertisement_start,
+    advertisement_end,
+    trader_id,
+    itemtype_id,
+    item_name,
+    item_description,
     item_image_path,
     advertisement_location_takeover_latitude,
     advertisement_location_takeover_longitude,
@@ -140,24 +140,24 @@ INSERT INTO advertisement (
     advertisement_location_return_longitude
 ) VALUES
 -- Alice's items (account_id 1)
-(25.00, 100.00, 'FER', 'FER', '2024-01-15', '2024-04-15', 1, 1, 'Professional Skis Set', 'High-quality professional skis with poles.', '/images/skis1.jpg', 45.80025, 15.97111, 45.80025, 15.97111),
-(18.50, 75.00, 'FER', 'FER', '2024-01-10', '2024-12-31', 1, 2, 'Snowboard Package', 'Complete snowboard set with bindings.', '/images/snowboard1.jpg', 45.80025, 15.97111, 45.80025, 15.97111),
-(12.00, 50.00, 'FER', 'FER', '2024-02-01', '2024-11-30', 1, 7, 'Hiking Backpack 65L', 'Spacious hiking backpack with rain cover.', '/images/backpack1.jpg', 45.80025, 15.97111, 45.80025, 15.97111),
+(25.00, 100.00, 'FER', 'FER', '2026-01-15', '2026-04-15', 1, 1, 'Professional Skis Set', 'High-quality professional skis with poles.', '/images/skis1.jpg', 45.80025, 15.97111, 45.80025, 15.97111),
+(18.50, 75.00, 'FER', 'FER', '2026-01-15', '2026-12-31', 1, 2, 'Snowboard Package', 'Complete snowboard set with bindings.', '/images/snowboard1.jpg', 45.80025, 15.97111, 45.80025, 15.97111),
+(12.00, 50.00, 'FER', 'FER', '2026-01-20', '2026-11-30', 1, 7, 'Hiking Backpack 65L', 'Spacious hiking backpack with rain cover.', '/images/backpack1.jpg', 45.80025, 15.97111, 45.80025, 15.97111),
 
 -- Charlie's items (account_id 3)
-(35.00, 150.00, 'FER', 'FER', '2024-01-20', '2024-05-20', 3, 3, 'Professional Climbing Rope', '60m dynamic climbing rope, UIAA certified.', '/images/climbing_rope1.jpg', 45.80025, 15.97111, 45.80025, 15.97111),
-(22.50, 120.00, 'FER', 'FER', '2024-03-01', '2024-10-31', 3, 5, 'Mountain Bike', 'Full-suspension mountain bike, 27.5 wheels.', '/images/mountain_bike1.jpg', 45.80025, 15.97111, 45.80025, 15.97111),
-(15.00, 60.00, 'FER', 'FER', '2024-05-01', '2024-09-30', 3, 6, 'Kayak Single Person', 'Lightweight kayak with paddle and life vest.', '/images/kayak1.jpg', 45.80025, 15.97111, 45.80025, 15.97111),
+(35.00, 150.00, 'FER', 'FER', '2026-01-18', '2026-05-20', 3, 3, 'Professional Climbing Rope', '60m dynamic climbing rope, UIAA certified.', '/images/climbing_rope1.jpg', 45.80025, 15.97111, 45.80025, 15.97111),
+(22.50, 120.00, 'FER', 'FER', '2026-02-01', '2026-10-31', 3, 5, 'Mountain Bike', 'Full-suspension mountain bike, 27.5 wheels.', '/images/mountain_bike1.jpg', 45.80025, 15.97111, 45.80025, 15.97111),
+(15.00, 60.00, 'FER', 'FER', '2026-03-01', '2026-09-30', 3, 6, 'Kayak Single Person', 'Lightweight kayak with paddle and life vest.', '/images/kayak1.jpg', 45.80025, 15.97111, 45.80025, 15.97111),
 
 -- George's items (account_id 4)
-(28.00, 200.00, 'FER', 'FER', '2024-01-25', '2024-03-31', 4, 8, 'Winter Sports Package', 'Complete winter gear: skis, boots, helmet.', '/images/winter_package1.jpg', 45.80025, 15.97111, 45.80025, 15.97111),
-(20.00, 80.00, 'FER', 'FER', '2024-04-01', '2024-10-31', 4, 4, '4-Season Tent', 'High-quality 4-season tent for 2 people.', '/images/tent1.jpg', 45.80025, 15.97111, 45.80025, 15.97111),
-(10.50, 40.00, 'FER', 'FER', '2024-01-15', '2024-12-15', 4, 7, 'Hiking Boots', 'Waterproof hiking boots, size 42.', '/images/boots1.jpg', 45.80025, 15.97111, 45.80025, 15.97111),
+(28.00, 200.00, 'FER', 'FER', '2026-01-15', '2026-03-31', 4, 8, 'Winter Sports Package', 'Complete winter gear: skis, boots, helmet.', '/images/winter_package1.jpg', 45.80025, 15.97111, 45.80025, 15.97111),
+(20.00, 80.00, 'FER', 'FER', '2026-04-01', '2026-10-31', 4, 4, '4-Season Tent', 'High-quality 4-season tent for 2 people.', '/images/tent1.jpg', 45.80025, 15.97111, 45.80025, 15.97111),
+(10.50, 40.00, 'FER', 'FER', '2026-01-15', '2026-12-15', 4, 7, 'Hiking Boots', 'Waterproof hiking boots, size 42.', '/images/boots1.jpg', 45.80025, 15.97111, 45.80025, 15.97111),
 
 -- More items
-(30.00, 180.00, 'FER', 'FER', '2024-12-01', '2025-03-31', 1, 1, 'Premium Ski Set', 'Top-of-the-line skis for expert skiers.', '/images/skis2.jpg', 45.80025, 15.97111, 45.80025, 15.97111),
-(40.00, 250.00, 'FER', 'FER', '2024-02-01', '2024-12-31', 3, 3, 'Complete Climbing Set', 'Harness, carabiners, and belay device.', '/images/climbing_set1.jpg', 45.80025, 15.97111, 45.80025, 15.97111),
-(24.00, 110.00, 'FER', 'FER', '2024-03-15', '2024-11-15', 4, 5, 'Road Bike', 'Lightweight road bike for city cycling.', '/images/road_bike1.jpg', 45.80025, 15.97111, 45.80025, 15.97111);
+(30.00, 180.00, 'FER', 'FER', '2026-12-01', '2027-03-31', 1, 1, 'Premium Ski Set', 'Top-of-the-line skis for expert skiers.', '/images/skis2.jpg', 45.80025, 15.97111, 45.80025, 15.97111),
+(40.00, 250.00, 'FER', 'FER', '2026-01-20', '2026-12-31', 3, 3, 'Complete Climbing Set', 'Harness, carabiners, and belay device.', '/images/climbing_set1.jpg', 45.80025, 15.97111, 45.80025, 15.97111),
+(24.00, 110.00, 'FER', 'FER', '2026-03-15', '2026-11-15', 4, 5, 'Road Bike', 'Lightweight road bike for city cycling.', '/images/road_bike1.jpg', 45.80025, 15.97111, 45.80025, 15.97111);
 
 
 -- Add more accounts for a richer dataset
@@ -170,16 +170,16 @@ INSERT INTO account (oauth2_id, user_email, user_first_name, user_last_name, use
 ('13', 'tom.davis@bike.com', 'Tom', 'Davis', '555-1013','tom.davis@bike.com', 'Amsterdam', 'trader', 4.5);               -- 13
 
 INSERT INTO advertisement (
-    advertisement_price, 
+    advertisement_price,
     advertisement_deposit,
-    advertisement_location_takeover, 
+    advertisement_location_takeover,
     advertisement_location_return,
-    advertisement_start, 
-    advertisement_end, 
-    trader_id, 
-    itemtype_id, 
-    item_name, 
-    item_description, 
+    advertisement_start,
+    advertisement_end,
+    trader_id,
+    itemtype_id,
+    item_name,
+    item_description,
     item_image_path,
     advertisement_location_takeover_latitude,
     advertisement_location_takeover_longitude,
@@ -201,16 +201,16 @@ INSERT INTO advertisement (
 
 
 INSERT INTO advertisement (
-    advertisement_price, 
+    advertisement_price,
     advertisement_deposit,
-    advertisement_location_takeover, 
+    advertisement_location_takeover,
     advertisement_location_return,
-    advertisement_start, 
-    advertisement_end, 
-    trader_id, 
-    itemtype_id, 
-    item_name, 
-    item_description, 
+    advertisement_start,
+    advertisement_end,
+    trader_id,
+    itemtype_id,
+    item_name,
+    item_description,
     item_image_path,
     advertisement_location_takeover_latitude,
     advertisement_location_takeover_longitude,
