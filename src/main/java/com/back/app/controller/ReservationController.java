@@ -74,7 +74,7 @@ public class ReservationController {
        
             DateInterval dateInterval = new DateInterval(start,end);
 
-            if (reservationService.isReservationIntervalFree(dateInterval, adId))
+            if (reservationService.isReservationIntervalFreeForAd(dateInterval, adId))
                 reservationService.saveReservation(reservation);
 
             else {
@@ -164,7 +164,7 @@ public class ReservationController {
     @GetMapping("/advertisement/{id}")
     public ResponseEntity<List<Reservation>> getReservationsByAdId(@PathVariable Integer id) {
         if (advertisementService.getAdvertisementById(id) != null) {
-            List<Reservation> reservations = reservationService.getByAdvertisementId(id);
+            List<Reservation> reservations = reservationService.getResByAdvertisementId(id);
             return ResponseEntity.ok(reservations);
         }
         log.error("Ad with id {} doesnt exist", id);

@@ -1,6 +1,7 @@
 package com.back.app.service;
 
 import java.time.LocalDateTime;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -48,17 +49,57 @@ public class ReservationService {
         return reservationRepo.findByBuyerId(buyerId);
     }
 
-    public List<Reservation> getByAdvertisementId(Integer advertisementId) {
+    public List<Reservation> getResByAdvertisementId(Integer advertisementId) {
         return reservationRepo.findByAdvertisementId(advertisementId);
     }
 
     public List<DateInterval> getResvDateIntervalsForAdId(Integer advertisementId) {
-        return getByAdvertisementId(advertisementId).stream()
+        return getResByAdvertisementId(advertisementId).stream()
                 .map(r -> new DateInterval(r.getReservationStart(), r.getReservationEnd()))
                 .toList();
     }
 
-    public boolean isReservationIntervalFree(DateInterval dateInterval, Integer advertisementId) {
+    public boolean hasNoHoles(Integer advertisementId) {
+        Advertisement advertisement = advertisementService.getAdvertisementbyId(advertisementId);
+        if (advertisement == null) {
+            return true; 
+        }
+
+        DateInterval adBounds = new DateInterval(
+                advertisement.getAdvertisementStart(),
+                advertisement.getAdvertisementEnd());
+
+        List<DateInterval> existingIntervals = getResvDateIntervalsForAdId(advertisementId);
+
+
+        if (existingIntervals.isEmpty()) {
+            return false;
+        }
+        List<DateInterval> sortedIntervals = existingIntervals.stream()
+                .sorted(Comparator.comparing(DateInterval::getStartDate))
+                .toList();
+
+        if (adBounds.getStartDate().isBefore(sortedIntervals.get(0).getStartDate())) {
+            return false;
+        }
+
+        for (int i = 0; i < sortedIntervals.size() - 1; i++) {
+            DateInterval current = sortedIntervals.get(i);
+            DateInterval next = sortedIntervals.get(i + 1);
+            if (current.getEndDate().plusDays(1).isBefore(next.getStartDate())) {
+                return false;
+            }
+        }
+
+        DateInterval lastReservation = sortedIntervals.get(sortedIntervals.size() - 1);
+        if (lastReservation.getEndDate().isBefore(adBounds.getEndDate())) {
+            return false;
+        }
+        return true; 
+    }
+
+
+    public boolean isReservationIntervalFreeForAd(DateInterval dateInterval, Integer advertisementId) {
         List<DateInterval> existingIntervals = getResvDateIntervalsForAdId(advertisementId);
 
         Advertisement advertisement = advertisementService.getAdvertisementbyId(advertisementId);
@@ -72,6 +113,8 @@ public class ReservationService {
 
         return isIntervalAvailable(dateInterval, existingIntervals, advertisementBounds);
     }
+
+
 
     public boolean isIntervalAvailable(DateInterval newInterval,
             List<DateInterval> existingIntervals,

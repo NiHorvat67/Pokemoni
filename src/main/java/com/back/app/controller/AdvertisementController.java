@@ -8,6 +8,7 @@ import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
@@ -28,8 +29,10 @@ import org.springframework.web.multipart.MultipartFile;
 import com.back.app.model.AdverNoJoin;
 import com.back.app.model.Advertisement;
 import com.back.app.service.AdvertisementService;
+import com.back.app.service.DateInterval;
 import com.back.app.service.ImageFolder;
 import com.back.app.service.ImageStorageService;
+import com.back.app.service.ReservationService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -46,6 +49,7 @@ import lombok.extern.slf4j.Slf4j;
 public class AdvertisementController {
   @Autowired
   private final AdvertisementService advertisementService;
+  private final ReservationService reservationService;
   private final ImageStorageService imageStorageService;
 
   @Operation(summary = "Retrieve all advertisements", description = "Returns a comprehensive, unfiltered list of all active advertisement listings.")
@@ -85,13 +89,22 @@ public class AdvertisementController {
       @RequestParam(required = false) LocalDate endDate,
       @RequestParam(required = false) BigDecimal minPrice,
       @RequestParam(required = false) BigDecimal maxPrice) {
+    DateInterval interval = new DateInterval(beginDate, endDate);
 
     log.info("Received search request - categoryId: {}, beginDate: {}, endDate: {}, minPrice: {}, maxPrice: {}",
         categoryId, beginDate, endDate, minPrice, maxPrice);
 
+    if (endDate != null && beginDate != null) {
+      List<Advertisement> advertisements = advertisementService.getFilteredAdvertisements(
+          itemName, categoryId, beginDate, endDate, minPrice, maxPrice).stream()
+          .filter(ad -> reservationService.isReservationIntervalFreeForAd(interval, ad.getAdvertisementId()))
+          .collect(Collectors.toList());
+      return ResponseEntity.ok().body(advertisements);
+    }
     List<Advertisement> advertisements = advertisementService.getFilteredAdvertisements(
-        itemName, categoryId, beginDate, endDate, minPrice, maxPrice);
-
+        itemName, categoryId, beginDate, endDate, minPrice, maxPrice).stream()
+        .filter(ad -> !reservationService.hasNoHoles(ad.getAdvertisementId()))
+        .collect(Collectors.toList());
     return ResponseEntity.ok().body(advertisements);
   }
 
