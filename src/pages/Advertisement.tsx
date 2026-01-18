@@ -8,13 +8,15 @@ import useAuthContext from "@/hooks/useAuthContext";
 import { editIcon, deleteIcon } from "@/assets/icons";
 import { useNavigate } from "react-router-dom";
 import Calendar14 from "@/components/calendar-14";
+import PopupAlert from "@/components/PopupAlert";
 
 const Advertisement = () => {
   const navigate = useNavigate()
   const { advertisementId } = useParams()
   const [currentUserIsOwner, setCurrentUserIsOwner] = useState<boolean>(false)
-
+  const [dateRange, setDateRange] = useState<{ from: Date | undefined, to: Date | undefined }>({ from: undefined, to: undefined })
   const { user } = useAuthContext()
+  const [errors, setErrors] = useState<any>([])
 
   const { data: advertisementData } = useQuery({
     queryKey: ["advertisementData"],
@@ -33,6 +35,23 @@ const Advertisement = () => {
     }
   })
 
+  const { data: reservationPeriods } = useQuery({
+    queryKey: ["reservationPeriods"],
+    queryFn: async () => {
+      return axios
+        .get(`/api/reservations/advertisement_intervals/${advertisementId}`)
+        .then(res => {
+          console.log(res.data)
+          return res.data
+        })
+        .catch(err => {
+          console.log(err)
+          if (err.response.status === 404) {
+            navigate("/error")
+          }
+        })
+    }
+  })
 
   const { mutate: deleteAdvertisement } = useMutation({
     mutationFn: async () => {
@@ -47,6 +66,45 @@ const Advertisement = () => {
     }
   });
 
+  const { mutate: makeReservation } = useMutation({
+    mutationFn: async () => {
+      return axios({
+        method: "POST",
+        url: `/api/reservations/create`,
+        data: {
+          reservationStart: dateRange.from!.toLocaleDateString("en-CA"),
+          reservationEnd: dateRange.to!.toLocaleDateString("en-CA"),
+          advertisementId: advertisementData?.advertisementId,
+          buyerId: user.accountId
+        }
+      })
+        .then(res => {
+          return res.data
+        })
+        .catch(err => console.log(err));
+    },
+    onSuccess: () => {
+      navigate("/")
+    }
+  });
+
+
+  function rentOnClick() {
+    setErrors([])
+    if (datesSelected()) {
+      makeReservation()
+    } else {
+      setErrors((prev: string[]) => [...prev, "Please select start and end dates."])
+      setTimeout(() => {
+        setErrors([])
+      }, 7 * 1000)
+    }
+  }
+
+  function datesSelected() {
+    return dateRange.from !== undefined && dateRange.to !== undefined
+  }
+
 
   function deleteOnClick() {
     deleteAdvertisement()
@@ -60,14 +118,14 @@ const Advertisement = () => {
     <section className="padding-x padding-t padding-b">
       <section className="max-container">
         <div className="flex gap-8 lg:gap-20 max-lg:flex-col">
-          <img src={`/api/advertisements/images/load/${advertisementData?.advertisementId}`} alt="product image" className="lg:w-2/5 object-cover object-center rounded-[8px] w-full max-h-[300px] lg:max-h-[400px]" />
+          <img src={`/ api / advertisements / images / load / ${advertisementData?.advertisementId} `} alt="product image" className="lg:w-2/5 object-cover object-center rounded-[8px] w-full max-h-[300px] lg:max-h-[400px]" />
           <div className="flex flex-col items-start gap-10 lg:gap-12 flex-1">
             <div className="flex items-start gap-1 flex-col w-full">
               <div className="flex gap-2 items-center mb-3">
                 {currentUserIsOwner &&
                   <>
                     <a
-                      href={`/`}
+                      href={`/ `}
                       className="rounded-[8px] hover:shadow-[0_0_15px_#E51739] transition-shadow duration-300 pl-2 pr-2.5 py-1.25 bg-primary text-black flex items-center gap-1 max-sm:text-[14px]"
                     >
                       <img src={editIcon} alt="edit icon" className="w-4 h-4" />
@@ -107,15 +165,25 @@ const Advertisement = () => {
                 <p className="text-desc text-sm">Kaucija {advertisementData?.advertisementDeposit}€</p>
               </div>
               {!currentUserIsOwner &&
-                <Button text="Rent" icon={true} long={false} onClick={() => { }} />
+                <Button text="Rent" icon={true} long={false} onClick={rentOnClick} />
               }
             </div>
-            <Calendar14 />
+            {reservationPeriods !== undefined &&
+              <Calendar14 range={dateRange}
+                setRange={setDateRange}
+                advertisementStart={advertisementData?.advertisementStart}
+                advertisementEnd={advertisementData?.advertisementEnd}
+                reservationPeriods={reservationPeriods}
+              />
+            }
 
           </div>
         </div>
 
       </section>
+      {errors.length !== 0 &&
+        <PopupAlert errors={errors} />
+      }
     </section>
   );
 }

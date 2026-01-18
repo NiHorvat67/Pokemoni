@@ -1,27 +1,40 @@
 "use client"
 
-import * as React from "react"
-
 import { Calendar } from "@/components/ui/calendar"
+import { useEffect } from "react"
 
-export default function Calendar14() {
-  const [date, setDate] = React.useState<Date | undefined>(
-    new Date(2025, 5, 12)
-  )
-  const bookedDates = Array.from(
-    { length: 12 },
-    (_, i) => new Date(2025, 5, 15 + i)
-  )
+export default function Calendar14({ range, setRange, advertisementStart, advertisementEnd, reservationPeriods }: { range: { from: Date | undefined, to: Date | undefined }, setRange: any, advertisementStart: Date, advertisementEnd: Date, reservationPeriods: { endDate: string, startDate: string, durationInDays: number }[] }) {
 
 
+
+  const bookedDates: Date[] = []
+  reservationPeriods.forEach(reservationPeriod => {
+    const dates = Array.from(
+      { length: reservationPeriod.durationInDays },
+      (_, i) => {
+        const date = new Date(reservationPeriod.startDate)
+        date.setDate(date.getDate() + i)
+        return date
+      }
+    )
+    bookedDates.push(...dates)
+  })
 
   return (
     <Calendar
-      mode="single"
-      defaultMonth={date}
-      selected={date}
-      onSelect={setDate}
-      disabled={bookedDates}
+      excludeDisabled
+      mode="range"
+      selected={range}
+      defaultMonth={new Date()}
+      onSelect={(range) => {
+        setRange(range)
+      }}
+      disabled={[
+        { before: new Date() },
+        { before: advertisementStart },
+        { after: advertisementEnd },
+        bookedDates
+      ]}
       modifiers={{
         booked: bookedDates,
       }}
