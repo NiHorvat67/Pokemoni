@@ -1,4 +1,4 @@
-package com.back.app.service;
+package com.back.app;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -12,8 +12,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.mock.web.MockMultipartFile;
 
-public class ImageStorageServiceTest {
+import com.back.app.service.ImageFolder;
+import com.back.app.service.ImageStorageService;
 
+public class ImageStorageServiceTest {
     private ImageStorageService imageStorageService;
 
     @BeforeEach

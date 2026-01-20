@@ -1,4 +1,4 @@
-package com.back.app.service;
+package com.back.app;
 
 import java.time.LocalDate;
 import java.util.Optional;
@@ -15,6 +15,7 @@ import static org.mockito.Mockito.when;
 
 import com.back.app.model.Account;
 import com.back.app.repo.AccountRepo;
+import com.back.app.service.AccountService;
 
 public class AccountServiceTest {
 

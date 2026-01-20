@@ -1,5 +1,6 @@
-package com.back.app.controller;
+package com.back.app;
 
+import com.back.app.controller.ReservationController;
 import com.back.app.model.Reservation;
 import com.back.app.model.ReservationGrade;
 import com.back.app.service.AccountService;
@@ -45,8 +46,8 @@ public class ReservationControllerTest {
         reservation.setReservationId(1);
         reservation.setBuyerId(10);
         reservation.setAdvertisementId(20);
-        reservation.setReservationStart(LocalDateTime.now().minusDays(2));
-        reservation.setReservationEnd(LocalDateTime.now().minusDays(1)); // rezervacija završena
+        reservation.setReservationRequestStarted(LocalDateTime.now().minusDays(2));
+        reservation.setReservationRequestEnded(LocalDateTime.now().minusDays(1)); // rezervacija završena
     }
 
     // ocjena 5
@@ -79,7 +80,7 @@ public class ReservationControllerTest {
     // nije zavrseno
     @Test
     void testGradeReservation_ThrowsException_NotFinished() throws Exception {
-        reservation.setReservationEnd(null);
+        reservation.setReservationRequestEnded(null);
         when(reservationService.getReservationbyId(1)).thenReturn(reservation);
 
         mockMvc.perform(

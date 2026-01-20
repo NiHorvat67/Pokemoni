@@ -1,5 +1,6 @@
-package com.back.app.controller;
+package com.back.app;
 
+import com.back.app.controller.AccountController;
 import com.back.app.model.Account;
 import com.back.app.service.AccountService;
 import com.back.app.service.ImageStorageService;

@@ -133,7 +133,7 @@ public class ReservationController {
                         .body("Reservation not found with ID: " + id);
             }
 
-            if (reservation.getReservationEnd() == null) {
+            if (reservation.getReservationRequestEnded() == null) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                         .body("Reservation has not ended yet");
             }
@@ -248,7 +248,7 @@ public class ReservationController {
         }
     }
 
-    private Integer parseGrade(String gradeString) {
+    private Integer parseq(String gradeString) {
         try {
             return Integer.parseInt(gradeString.trim());
         } catch (NumberFormatException e) {

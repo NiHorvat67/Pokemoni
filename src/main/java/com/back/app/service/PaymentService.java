@@ -1,5 +1,11 @@
 package com.back.app.service;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.util.HashMap;
+import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
@@ -11,13 +17,7 @@ import com.stripe.param.checkout.SessionCreateParams;
 import com.stripe.param.checkout.SessionCreateParams.LineItem.PriceData;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import lombok.extern.slf4j.Slf4j;
-
-import java.math.BigDecimal;
-import java.math.RoundingMode;
-import java.util.HashMap;
-import java.util.Map;
 
 // receive payment in USD
 @Service
@@ -53,7 +53,7 @@ public class PaymentService {
     try {
       SessionCreateParams.Builder paramsBuilder = SessionCreateParams.builder()
           .setMode(SessionCreateParams.Mode.PAYMENT)
-          .setSuccessUrl(CLIENT_BASE_URL + "/auth/4")
+          .setSuccessUrl(SERVER_BASE_URL + "/succesful-payment")
           .setCancelUrl(CLIENT_BASE_URL + "/error?failed");
 
       paramsBuilder.addLineItem(
