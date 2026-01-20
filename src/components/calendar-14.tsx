@@ -24,7 +24,7 @@ export default function Calendar14({ range, setRange, advertisementStart, advert
 
       mode="range"
       selected={range}
-      defaultMonth={new Date()}
+      defaultMonth={range.to}
       onSelect={(range) => {
         if (range == undefined) {
           setRange({ from: undefined, to: undefined })
