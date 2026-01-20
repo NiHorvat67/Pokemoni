@@ -121,6 +121,7 @@ export interface CreditCardValue {
 
 export interface CreditCardProps {
   value?: CreditCardValue
+  backOnClick: any
   onChange?: (value: CreditCardValue) => void
   onValidationChange?: (isValid: boolean, errors: ValidationErrors) => void
   className?: string
@@ -265,6 +266,7 @@ const validateCreditCard = (
 function CreditCard({
   value,
   onChange,
+  backOnClick,
   onValidationChange,
   className,
   ref,
@@ -299,6 +301,7 @@ function CreditCard({
 
   const validateAndUpdate = (newValue: CreditCardValue) => {
     const validationErrors = validateCreditCard(newValue, cvvLabel)
+    console.log(validationErrors)
     setErrors(validationErrors)
 
     const isValid = Object.keys(validationErrors).length === 0
@@ -538,9 +541,10 @@ function CreditCard({
             onBlur={handleFieldBlur}
             className={cn(
               'transition-all duration-200 ',
+              inputClassName,
               focusedField === 'cardholderName' && 'ring-2 ring-primary',
               errors.cardholderName && 'border-destructive',
-            ) + inputClassName}
+            )}
           />
           {errors.cardholderName && (
             <p className="text-destructive text-xs mt-1">
@@ -561,9 +565,10 @@ function CreditCard({
             onBlur={handleFieldBlur}
             className={cn(
               'font-mono transition-all duration-200',
+              inputClassName,
               focusedField === 'cardNumber' && 'ring-2 ring-primary',
               errors.cardNumber && 'border-destructive',
-            ) + inputClassName}
+            )}
             maxLength={19}
           />
           {errors.cardNumber && (
@@ -571,7 +576,7 @@ function CreditCard({
           )}
         </div>
 
-        <div className="grid grid-cols-3 gap-4">
+        <div className="flex flex-wrap sm:grid sm:grid-cols-3 gap-4">
           <div>
             <label className="block text-white text-sm font-medium mb-2">Month</label>
             <Select
@@ -649,9 +654,10 @@ function CreditCard({
               onBlur={handleCvvBlur}
               className={cn(
                 'font-mono text-center transition-all duration-200',
+                inputClassName,
                 focusedField === 'cvv' && 'ring-2 ring-primary',
                 errors.cvv && 'border-destructive',
-              ) + inputClassName}
+              )}
               maxLength={cardType === 'amex' ? 4 : 3}
             />
             {errors.cvv && (
@@ -661,12 +667,15 @@ function CreditCard({
         </div>
       </div>
 
-      <Button text="Pay" icon={true} long={false} onClick={() => {
-        const valid = validateAndUpdate(currentValue)
-        if (valid) {
-          processPayment()
-        }
-      }} />
+      <div className='flex gap-4'>
+        <Button text="Back" icon={false} long={false} onClick={backOnClick} className='text-white bg-neutral-700! hover:shadow-[0_0_15px_#222]' />
+        <Button text="Pay" icon={true} long={false} onClick={() => {
+          const valid = validateAndUpdate(currentValue)
+          if (valid) {
+            processPayment()
+          }
+        }} />
+      </div>
 
     </div>
   )

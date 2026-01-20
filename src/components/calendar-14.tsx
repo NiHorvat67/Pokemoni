@@ -21,7 +21,7 @@ export default function Calendar14({ range, setRange, advertisementStart, advert
 
   return (
     <Calendar
-      excludeDisabled
+
       mode="range"
       selected={range}
       defaultMonth={new Date()}

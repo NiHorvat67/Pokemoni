@@ -220,13 +220,24 @@ const Advertisement = () => {
                 cvv: '',
                 cvvLabel: 'CVC' as const
               })
+              const reservationStart = dateRange.from?.toLocaleDateString("hr-RH")
+              const reservationEnd = dateRange.to?.toLocaleDateString("hr-HR")
+
               return (
                 <>
                   <div className="step-content">
+                    <h1 className="text-white text-xl sm:text-2xl font-medium mb-8">Payment</h1>
+                    <div className="flex flex-col gap-1 mb-8">
+                      <h1 className="font-inter text-md font-medium text-white">{advertisementData?.itemName}</h1>
+                      <p className="text-white">Total {advertisementData?.advertisementDeposit + numberOfDays(dateRange.from!, dateRange.to!) * advertisementData?.advertisementPrice}€</p>
+                      <h3 className="text-white">{reservationStart} - {reservationEnd}</h3>
+                    </div>
+
                     <CreditCard
                       value={creditCard}
                       onChange={setCreditCard}
                       processPayment={processPayment}
+                      backOnClick={() => { setCurrentStep(1) }}
                     />
                   </div>
                 </>
