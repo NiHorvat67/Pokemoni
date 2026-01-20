@@ -1,7 +1,5 @@
 mock payment for renting
-stavit da cijena bude per day?
 
 stvari s roles - protectanje ruta
 
-edit? advertisementa
 tweak mobile design

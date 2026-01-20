@@ -17,16 +17,20 @@ export default function Map({ products }: { products: any[] }) {
       />
 
       {products?.filter((p) => p?.latitude != null && p?.longitude != null).map((p) => (
+
         <Marker
           key={p.advertisementId}
           position={[p.latitude, p.longitude]}
         >
           <Popup>
-            <strong>{p.itemName ?? "Oglas"}</strong>
+            <a href={`/advertisement/${p.advertisementId}`}>
+              <strong className="text-black">{p.itemName ?? "Oglas"}</strong>
+            </a>
             <br />
             {p.advertisementLocationTakeover ?? ""}
           </Popup>
         </Marker>
+
       ))}
     </MapContainer>
   );

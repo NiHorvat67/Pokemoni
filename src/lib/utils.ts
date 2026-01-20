@@ -30,3 +30,12 @@ export function parseReservationData(reservationData: any, accountRole: string) 
     status
   }
 }
+
+
+export function numberOfDays(from: Date, to: Date) {
+  if (from == undefined || to == undefined) {
+    return 0;
+  }
+  const MS_PER_DAY = 1000 * 60 * 60 * 24
+  return Math.round((to.getTime() - from.getTime()) / MS_PER_DAY) + 1
+}

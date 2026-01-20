@@ -1,7 +1,6 @@
 "use client"
 
 import { Calendar } from "@/components/ui/calendar"
-import { useEffect } from "react"
 
 export default function Calendar14({ range, setRange, advertisementStart, advertisementEnd, reservationPeriods }: { range: { from: Date | undefined, to: Date | undefined }, setRange: any, advertisementStart: Date, advertisementEnd: Date, reservationPeriods: { endDate: string, startDate: string, durationInDays: number }[] }) {
 
@@ -27,7 +26,11 @@ export default function Calendar14({ range, setRange, advertisementStart, advert
       selected={range}
       defaultMonth={new Date()}
       onSelect={(range) => {
-        setRange(range)
+        if (range == undefined) {
+          setRange({ from: undefined, to: undefined })
+        } else {
+          setRange(range)
+        }
       }}
       disabled={[
         { before: new Date() },
