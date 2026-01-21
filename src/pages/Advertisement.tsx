@@ -12,6 +12,8 @@ import PopupAlert from "@/components/PopupAlert";
 import { numberOfDays } from "@/lib/utils";
 import StepItem from "@/components/multi-step-auth/StepItem";
 import { CreditCard } from "@/components/CreditCard";
+import noImage from "../assets/images/no-image.png"
+
 
 const Advertisement = () => {
   const navigate = useNavigate()
@@ -29,6 +31,7 @@ const Advertisement = () => {
       return axios
         .get(`/api/advertisements/${advertisementId}`)
         .then(res => {
+          console.log(res.data)
           return res.data
         })
         .catch(err => {
@@ -135,7 +138,13 @@ const Advertisement = () => {
     <section className="padding-x padding-t padding-b">
       <section className="max-container">
         <div className="flex gap-6 lg:gap-20 max-lg:flex-col">
-          <img src={`/api/advertisements/images/load/${advertisementData?.advertisementId}`} alt="product image" className="lg:w-2/5 object-cover object-center rounded-[8px] w-full max-h-[300px] lg:max-h-[400px]" />
+
+          <img
+            src={`/api/advertisements/images/load/${advertisementData?.advertisementId}`}
+            onError={(e) => (e.currentTarget.src = noImage)}
+            alt="no image available"
+            className="lg:w-2/5 object-cover object-center rounded-[8px] w-full max-h-[300px] lg:max-h-[400px]"
+          />
 
           <StepItem step={1} setCurrentStep={setCurrentStep} currentStep={currentStep} StepContent={
             () => (
@@ -182,7 +191,7 @@ const Advertisement = () => {
                     />
                   }
 
-                  <div className="flex font-inter items-center gap-11">
+                  <div className="flex font-inter flex-wrap items-center gap-x-11 gap-y-4">
                     <div className="relative flex flex-col items-start flex-1 justify-start text-white min-w-[100px]">
                       <h1 className="font-medium text-[32px]">
                         {advertisementData?.advertisementPrice}€
