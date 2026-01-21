@@ -151,7 +151,7 @@ public class AdvertisementController {
     }
   }
 
-  @GetMapping("/delete/{id}")
+  @PostMapping("/delete/{id}")
   public ResponseEntity<String> deleteAdvertisement(@PathVariable Integer id) {
     try {
       advertisementService.deleteAccountById(id);
