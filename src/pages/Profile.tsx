@@ -1,4 +1,3 @@
-import profileImg from "../assets/images/profile.jpeg"
 import { locationIcon, mailIcon, starIcon, phoneIcon } from "../assets/icons"
 import "../styles/Profile.css"
 
@@ -11,6 +10,8 @@ import { useMutation } from "@tanstack/react-query"
 import ReservationHistory from "@/components/ReservationHistory"
 import useAuthContext from "@/hooks/useAuthContext"
 import { useNavigate } from "react-router-dom"
+import noImage from "../assets/images/no-image.png"
+
 
 const Profile = () => {
   const { userId } = useParams()
@@ -92,7 +93,8 @@ const Profile = () => {
         <section id="info-container" className="mb-19 sm:mb-34 max-sm:!gap-x-[0px]">
           <img
             id="profile-image"
-            src={profileImg}
+            onError={(e) => (e.currentTarget.src = noImage)}
+            src={`/api/accounts/images/load/${userId}`}
             alt="profile"
             className="sm:ml-[-10px] ml-[-4px] rounded-full h-[110px] w-[110px] sm:h-[206px] sm:w-[206px] object-cover"
           />

@@ -1,9 +1,9 @@
 import { NavLink, useLocation } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
-import profileImg from "../assets/images/profile.jpeg";
 import useAuthContext from "@/hooks/useAuthContext";
 import Button from "@/components/Button";
 import { useNavigate } from "react-router-dom";
+import noImage from "../assets/images/no-image.png"
 
 const Nav = () => {
   const location = useLocation();
@@ -84,7 +84,12 @@ const Nav = () => {
                 aria-expanded={desktopOpen || mobileOpen}
                 className="flex items-center justify-center cursor-pointer"
               >
-                <img src={profileImg} alt="profile" className={profileImgClass} />
+                <img
+                  src={`/api/accounts/images/load/${user.accountId}`}
+                  onError={(e) => (e.currentTarget.src = noImage)}
+                  alt="no image available"
+                  className={profileImgClass}
+                />
               </button>
 
               <div
@@ -116,6 +121,10 @@ const Nav = () => {
                       reloadDocument
                     >
                       My Profile
+                    </NavLink>
+
+                    <NavLink to="/settings" className={`${menuLinkClass} after:bg-slate-300`}>
+                      Settings
                     </NavLink>
 
                     {isTrader && (
@@ -166,6 +175,11 @@ const Nav = () => {
             >
               My Profile
             </NavLink>
+
+            <NavLink to="/settings" className={`${menuLinkClass} after:bg-slate-300`}>
+              Settings
+            </NavLink>
+
 
             {isTrader && (
               <NavLink

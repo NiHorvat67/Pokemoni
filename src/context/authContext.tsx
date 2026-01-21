@@ -13,7 +13,7 @@ interface AuthContextType extends AuthState {
 export const AuthContext = createContext<AuthContextType>({ user: null, dispatch: undefined })
 
 
-const authReducer = (_: any, action: { payload: any, type: "LOGIN" | "LOGOUT" }) => {
+const authReducer = (state: any, action: { payload: any, type: "LOGIN" | "LOGOUT" }) => {
   switch (action.type) {
     case "LOGIN":
       localStorage.setItem("user", JSON.stringify(action.payload))
@@ -30,7 +30,6 @@ const authReducer = (_: any, action: { payload: any, type: "LOGIN" | "LOGOUT" })
 export const AuthContextProvider = ({ children }: { children: React.ReactNode }) => {
 
   const user = JSON.parse(localStorage.getItem("user") || "null")
-  console.log(user)
   const [state, dispatch] = useReducer(authReducer, { user: user })
 
   const { mutate } = useMutation({
