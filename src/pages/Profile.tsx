@@ -17,7 +17,7 @@ const Profile = () => {
   const { user } = useAuthContext()
   const navigate = useNavigate()
   // jeli trenutno ulogirani user vlasnik otvorenog profile
-  const currentUserIsOwner = userId == user.accountId ? true : false
+  const currentUserIsOwner = userId == user?.accountId ? true : false
 
   const [products, setProducts] = useState([])
 

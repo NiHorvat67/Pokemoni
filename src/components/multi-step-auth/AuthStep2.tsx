@@ -34,13 +34,12 @@ const AuthStep2 = ({ step, setCurrentStep }: { step: number, currentStep: number
       })
         .then(res => {
           console.log(res.data)
+          window.location.href = "/api/oauth2/authorization/github"
           return res.data
         })
         .catch(err => {
           console.log(err)
         })
-    }, onSuccess: () => {
-      window.location.href = "/api/oauth2/authorization/github"
     }
   })
 

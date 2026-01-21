@@ -30,6 +30,7 @@ const authReducer = (_: any, action: { payload: any, type: "LOGIN" | "LOGOUT" })
 export const AuthContextProvider = ({ children }: { children: React.ReactNode }) => {
 
   const user = JSON.parse(localStorage.getItem("user") || "null")
+  console.log(user)
   const [state, dispatch] = useReducer(authReducer, { user: user })
 
   const { mutate } = useMutation({
