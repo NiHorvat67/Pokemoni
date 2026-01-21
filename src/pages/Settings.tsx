@@ -3,14 +3,12 @@ import { Input as InputShadCn } from "@/components/ui/input"
 import { useState } from "react";
 import { compressImage } from "@/lib/utils";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
 import Button from "@/components/Button";
 import useAuthContext from "@/hooks/useAuthContext";
 
 const Settings = () => {
   const [image, setImage] = useState<any>("")
   const [processingRequest, setProcessingRequest] = useState(false)
-  const navigate = useNavigate()
   const { user } = useAuthContext()
 
   const { mutate: uploadImage } = useMutation({
