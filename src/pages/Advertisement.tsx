@@ -5,7 +5,7 @@ import axios from "axios";
 import { useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 import useAuthContext from "@/hooks/useAuthContext";
-import { editIcon, deleteIcon } from "@/assets/icons";
+import { deleteIcon } from "@/assets/icons";
 import { useNavigate } from "react-router-dom";
 import Calendar14 from "@/components/calendar-14";
 import PopupAlert from "@/components/PopupAlert";
@@ -95,7 +95,11 @@ const Advertisement = () => {
 
 
   function processPayment() {
-    makeReservation()
+    if (user.accountRole === "buyer") {
+      makeReservation()
+    } else {
+      navigate("/")
+    }
   }
 
   function proceedToPayment() {
@@ -131,8 +135,7 @@ const Advertisement = () => {
     <section className="padding-x padding-t padding-b">
       <section className="max-container">
         <div className="flex gap-6 lg:gap-20 max-lg:flex-col">
-          {/* <img src={`/api/advertisements/images/load/${advertisementData?.advertisementId}`} alt="product image" className="lg:w-2/5 object-cover object-center rounded-[8px] w-full max-h-[300px] lg:max-h-[400px]" /> */}
-          <img src={`https://images.unsplash.com/photo-1449426468159-d96dbf08f19f?fm=jpg&q=60&w=3000&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8bW90b3JiaWtlfGVufDB8fDB8fHww`} alt="product image" className="lg:w-2/5 object-cover object-center rounded-[8px] w-full max-h-[200px] md:max-h-[300px] lg:max-h-[400px]" />
+          <img src={`/api/advertisements/images/load/${advertisementData?.advertisementId}`} alt="product image" className="lg:w-2/5 object-cover object-center rounded-[8px] w-full max-h-[300px] lg:max-h-[400px]" />
 
           <StepItem step={1} setCurrentStep={setCurrentStep} currentStep={currentStep} StepContent={
             () => (
@@ -142,13 +145,6 @@ const Advertisement = () => {
                     <div className="flex gap-2 items-center mb-3">
                       {currentUserIsOwner &&
                         <>
-                          <a
-                            href={`/ `}
-                            className="rounded-[8px] hover:shadow-[0_0_15px_#E51739] transition-shadow duration-300 pl-2 pr-2.5 py-1.25 bg-primary text-black flex items-center gap-1 max-sm:text-[14px]"
-                          >
-                            <img src={editIcon} alt="edit icon" className="w-4 h-4" />
-                            Edit
-                          </a>
                           <span
                             onClick={deleteOnClick}
                             className="cursor-pointer selection:bg-transparent rounded-[8px] hover:shadow-[0_0_15px_#FF264A] transition-shadow duration-300 pl-2 pr-2.5 py-1.25 bg-[#FF1F44] text-black flex items-center gap-1 max-sm:text-[14px]"

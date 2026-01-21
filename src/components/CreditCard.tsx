@@ -122,7 +122,7 @@ export interface CreditCardValue {
 export interface CreditCardProps {
   value?: CreditCardValue
   backOnClick: any
-  onChange?: (value: CreditCardValue) => void
+  onChange?: any
   onValidationChange?: (isValid: boolean, errors: ValidationErrors) => void
   className?: string
   ref?: React.RefObject<CreditCardRef>
@@ -301,7 +301,6 @@ function CreditCard({
 
   const validateAndUpdate = (newValue: CreditCardValue) => {
     const validationErrors = validateCreditCard(newValue, cvvLabel)
-    console.log(validationErrors)
     setErrors(validationErrors)
 
     const isValid = Object.keys(validationErrors).length === 0

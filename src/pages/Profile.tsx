@@ -40,8 +40,8 @@ const Profile = () => {
 
   const { data: reservationsData } = useQuery({
     queryKey: ["reservations"],
-    // enabled: accountData !== undefined && currentUserIsOwner,
-    enabled: accountData !== undefined,
+    enabled: accountData !== undefined && currentUserIsOwner && user.accountRole !== "admin",
+    //enabled: accountData !== undefined,
     queryFn: async () => {
       return axios
         .get(`/api/reservations/${accountData?.accountRole}/${userId}`)
@@ -118,9 +118,9 @@ const Profile = () => {
           </>
         }
 
-        {/* {currentUserIsOwner &&
-        } */}
-        <ReservationHistory reservationsData={reservationsData} accountRole={accountData?.accountRole} />
+        {currentUserIsOwner && user.accountRole !== "admin" &&
+          <ReservationHistory reservationsData={reservationsData} accountRole={accountData?.accountRole} />
+        }
 
       </section>
     </section >
