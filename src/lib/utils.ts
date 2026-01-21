@@ -1,5 +1,6 @@
 import { clsx, type ClassValue } from "clsx"
 import { twMerge } from "tailwind-merge"
+import imageCompression from 'browser-image-compression';
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
@@ -38,4 +39,27 @@ export function numberOfDays(from: Date, to: Date) {
   }
   const MS_PER_DAY = 1000 * 60 * 60 * 24
   return Math.round((to.getTime() - from.getTime()) / MS_PER_DAY) + 1
+}
+
+
+export async function compressImage(imageFile: any) {
+  const options = {
+    maxSizeMB: 1,
+    useWebWorker: true
+  }
+  try {
+    const compressedFileBlob = await imageCompression(imageFile, options);
+    const compressedFile = new File(
+      [compressedFileBlob],
+      imageFile.name,
+      { type: compressedFileBlob.type }
+    );
+    // console.log(compressedFile)
+    // console.log(`compressedFile size ${compressedFileBlob.size / 1024 / 1024} MB`);
+    // console.log(`compressedFile size ${compressedFile.size / 1024 / 1024} MB`);
+    return compressedFile
+  } catch (err) {
+    console.log(err)
+    return imageFile
+  }
 }

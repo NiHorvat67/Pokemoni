@@ -1,12 +1,11 @@
 import { checkIcon } from "@/assets/icons";
 import { useGSAP } from "@gsap/react";
 
-
 const AuthStep4 = ({ tl }: { step: number, currentStep: number, setCurrentStep: React.Dispatch<React.SetStateAction<number>>, tl: GSAPTimeline }) => {
 
-
   setTimeout(() => {
-    window.location.href = "http://localhost:8080/oauth2/authorization/github";
+    window.location.href = "/api/oauth2/authorization/github"
+
   }, 2 * 1000)
 
 

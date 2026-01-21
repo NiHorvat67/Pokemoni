@@ -14,13 +14,12 @@ import {
 } from "@/components/ui/select-dropdown"
 import useCreateAccountContext from "@/hooks/useCreateAccountContext";
 
-
 const AuthStep2 = ({ step, setCurrentStep }: { step: number, currentStep: number, setCurrentStep: React.Dispatch<React.SetStateAction<number>> }) => {
 
   const { userData, setUserDataField } = useCreateAccountContext()
   const [errors, setErrors] = useState<any>([])
 
-  const { mutate } = useMutation({
+  const { mutate: createBuyer } = useMutation({
     mutationFn: async () => {
       return axios({
         method: "post",
@@ -34,15 +33,15 @@ const AuthStep2 = ({ step, setCurrentStep }: { step: number, currentStep: number
         }
       })
         .then(res => {
+          console.log(res.data)
           return res.data
         })
         .catch(err => {
           console.log(err)
         })
     }, onSuccess: () => {
-      window.location.href = "http://localhost:8080/oauth2/authorization/github";
+      window.location.href = "/api/oauth2/authorization/github"
     }
-
   })
 
 
@@ -60,7 +59,7 @@ const AuthStep2 = ({ step, setCurrentStep }: { step: number, currentStep: number
   const finishOnClick = () => {
     setErrors([])
     if (canProgress()) {
-      mutate()
+      createBuyer()
     }
   }
 

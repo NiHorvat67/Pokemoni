@@ -19,8 +19,8 @@ import Calendar23 from "@/components/calendar-23-dropdown";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import useAuthContext from "@/hooks/useAuthContext";
-import imageCompression from 'browser-image-compression';
 import { useNavigate } from "react-router-dom";
+import { compressImage } from "@/lib/utils";
 
 type DateRange = {
   from: Date | undefined,
@@ -124,27 +124,6 @@ const NewAdvertisement = () => {
     }
   })
 
-  async function compressImage(imageFile: any) {
-    const options = {
-      maxSizeMB: 1,
-      useWebWorker: true
-    }
-    try {
-      const compressedFileBlob = await imageCompression(imageFile, options);
-      const compressedFile = new File(
-        [compressedFileBlob],
-        imageFile.name,
-        { type: compressedFileBlob.type }
-      );
-      // console.log(compressedFile)
-      // console.log(`compressedFile size ${compressedFileBlob.size / 1024 / 1024} MB`);
-      // console.log(`compressedFile size ${compressedFile.size / 1024 / 1024} MB`);
-      return compressedFile
-    } catch (err) {
-      console.log(err)
-      return imageFile
-    }
-  }
 
   async function onImageChange(e: any) {
     const imageFile = e.target.files[0]
