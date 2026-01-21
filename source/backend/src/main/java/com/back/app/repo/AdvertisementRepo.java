@@ -1,12 +1,14 @@
 package com.back.app.repo;
 
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
-import com.back.app.model.Advertisement;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+
+import com.back.app.model.Advertisement;
 
 public interface AdvertisementRepo extends JpaRepository<Advertisement, Integer> {
 
@@ -22,8 +24,8 @@ public interface AdvertisementRepo extends JpaRepository<Advertisement, Integer>
                      +
                      "(CAST(:maxPrice AS DECIMAL) IS NULL OR a.advertisement_price <= CAST(:maxPrice AS DECIMAL)) AND "
                      +
-                     "(:itemName IS NULL OR a.item_name ILIKE '%' || :itemName || '%') AND " +
-                     "a.reservation_id IS NULL", nativeQuery = true)
+                     "(:itemName IS NULL OR a.item_name ILIKE '%' || :itemName || '%') " 
+                     , nativeQuery = true)
        List<Advertisement> findFilteredAdvertisements(
                      @Param("itemName") String itemName,
                      @Param("categoryId") Integer categoryId,

@@ -50,9 +50,6 @@ public class AdverNoJoin {
     @Column(name = "trader_id")
     private Integer traderId;
 
-    @Column(name = "reservation_id")
-    private Integer reservationId;
-
     @Column(name = "item_name")
     private String itemName;
 

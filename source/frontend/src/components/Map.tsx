@@ -1,7 +1,7 @@
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 
-const position: [number, number] = [45.8150, 15.9819]; // Zagreb 
+const position: [number, number] = [45.8150, 15.9819]; // Zagreb
 
 export default function Map({ products }: { products: any[] }) {
   return (
@@ -16,18 +16,22 @@ export default function Map({ products }: { products: any[] }) {
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
 
-      {products ?.filter((p) => p?.latitude != null && p?.longitude != null).map((p) => (
-          <Marker
-            key={p.advertisementId}
-            position={[p.latitude, p.longitude]}
-          >
-            <Popup>
-              <strong>{p.itemName ?? "Oglas"}</strong>
-              <br />
-              {p.advertisementLocationTakeover ?? ""}
-            </Popup>
-          </Marker>
-        ))}
+      {products?.filter((p) => p?.latitude != null && p?.longitude != null).map((p) => (
+
+        <Marker
+          key={p.advertisementId}
+          position={[p.latitude, p.longitude]}
+        >
+          <Popup>
+            <a href={`/advertisement/${p.advertisementId}`}>
+              <strong className="text-black">{p.itemName ?? "Oglas"}</strong>
+            </a>
+            <br />
+            {p.advertisementLocationTakeover ?? ""}
+          </Popup>
+        </Marker>
+
+      ))}
     </MapContainer>
   );
 }

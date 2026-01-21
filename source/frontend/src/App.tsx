@@ -8,6 +8,7 @@ import Auth from "./pages/Auth"
 import Advertisement from "./pages/Advertisement"
 import Admin from "./pages/Admin"
 import NewAdvertisement from "./pages/NewAdvertisement"
+import Settings from "./pages/Settings"
 
 import useAuthContext from "./hooks/useAuthContext"
 
@@ -24,10 +25,10 @@ function App() {
           <Route path="/" element={<Homepage />} />
           <Route path="/error" element={<ErrorPage />} />
           <Route path="/profile/:userId" element={<Profile />} />
+          <Route path="settings" element={user ? <Settings /> : <Navigate to="/auth" replace />} />
           <Route path="/auth/:step?" element={user ? <Navigate to="/" replace /> : <Auth />} />
-          <Route path="/admin" element={<Admin />} />
-          {/* <Route path="/new-advertisement" element={user ? (user.accountRole == "trader" ? <NewAdvertisement /> : <Navigate to="/" replace />) : <Navigate to="/auth" replace />} /> */}
-          <Route path="/new-advertisement" element={user ? <NewAdvertisement /> : <Navigate to="/auth" replace />} />
+          <Route path="/admin" element={user?.accountRole === "admin" ? <Admin /> : <Navigate to="/" replace />} />
+          <Route path="/new-advertisement" element={user ? (user.accountRole === "trader" ? <NewAdvertisement /> : <Navigate to="/" replace />) : <Navigate to="/auth" replace />} />
           <Route path="/advertisement/:advertisementId" element={<Advertisement />} />
           <Route path="*" element={<Navigate to="/error" replace />} />
         </Routes>

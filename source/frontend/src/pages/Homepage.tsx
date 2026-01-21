@@ -30,7 +30,7 @@ const Homepage = () => {
   const [query, setQuery] = useState("")
   const [categoryId, setCategoryId] = useState("")
   const [priceRange, setPriceRange] = useState<any>({ start: "", end: "" })
-  const [dateRange, setDateRange] = useState<any>({ from: "", to: "" })
+  const [dateRange, setDateRange] = useState<{ from: Date | undefined, to: Date | undefined }>({ from: undefined, to: undefined })
   const [products, setProducts] = useState([])
   const isMobile = useMediaQuery({ maxWidth: 640 })
 
@@ -62,8 +62,8 @@ const Homepage = () => {
       checkAppendSearchParams(params, "categoryId", categoryId)
       checkAppendSearchParams(params, "minPrice", priceRange?.start)
       checkAppendSearchParams(params, "maxPrice", priceRange?.end)
-      checkAppendSearchParams(params, "beginDate", dateRange.from ? dateRange?.from.toISOString().substring(0, 10) : "")
-      checkAppendSearchParams(params, "endDate", dateRange.to ? dateRange?.to.toISOString().substring(0, 10) : "")
+      checkAppendSearchParams(params, "beginDate", dateRange.from ? dateRange?.from.toLocaleDateString("en-CA") : "")
+      checkAppendSearchParams(params, "endDate", dateRange.to ? dateRange?.to.toLocaleDateString("en-CA") : "")
       return axios
         .get(`/api/advertisements/search?${params.toString()}`)
         .then(res => {
@@ -137,7 +137,7 @@ const Homepage = () => {
         </form>
         <div className="w-full mb-10 sm:mb-14 relative z-0">
           <div className="rounded-2xl overflow-hidden relative z-0">
-            <Map products={products}/>
+            <Map products={products} />
           </div>
         </div>
 

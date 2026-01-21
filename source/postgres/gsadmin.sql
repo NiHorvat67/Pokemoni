@@ -27,8 +27,12 @@ CREATE TABLE itemtype (
 -- 3. Table: reservation (Deferred FK to advertisement)
 CREATE TABLE reservation (
     reservation_id SERIAL PRIMARY KEY,
-    reservation_start TIMESTAMPTZ NOT NULL,
-    reservation_end TIMESTAMPTZ,
+
+    reservation_start DATE NOT NULL,
+    reservation_end DATE NOT NULL,
+
+    reservation_request_started TIMESTAMPTZ NOT NULL,
+    reservation_request_ended TIMESTAMPTZ,
     reservation_grade INT,
 
     buyer_id INT,
@@ -62,7 +66,6 @@ CREATE TABLE advertisement (
     itemtype_id INT,
     FOREIGN KEY (itemtype_id) REFERENCES itemtype(itemtype_id),
 
-    reservation_id INT UNIQUE, -- Column for the FK (Constraint added later)
     item_name VARCHAR(255),
     item_description TEXT,
     item_image_path VARCHAR(255) UNIQUE
@@ -78,12 +81,7 @@ ADD CONSTRAINT fk_advertisement
     REFERENCES advertisement(advertisement_id)
     ON DELETE SET NULL;
 
--- Add the Foreign Key from advertisement to reservation
-ALTER TABLE advertisement
-ADD CONSTRAINT fk_reservation
-    FOREIGN KEY (reservation_id)
-    REFERENCES reservation(reservation_id)
-    ON DELETE SET NULL;
+
 
 ---
 CREATE OR REPLACE FUNCTION check_trader_role()
@@ -125,16 +123,16 @@ INSERT INTO itemtype (itemtype_name) VALUES
 ('Winter Sports'),          -- 8
 ('Mountain Equipment');     -- 9
 INSERT INTO advertisement (
-    advertisement_price, 
+    advertisement_price,
     advertisement_deposit,
-    advertisement_location_takeover, 
+    advertisement_location_takeover,
     advertisement_location_return,
-    advertisement_start, 
-    advertisement_end, 
-    trader_id, 
-    itemtype_id, 
-    item_name, 
-    item_description, 
+    advertisement_start,
+    advertisement_end,
+    trader_id,
+    itemtype_id,
+    item_name,
+    item_description,
     item_image_path,
     advertisement_location_takeover_latitude,
     advertisement_location_takeover_longitude,
@@ -142,53 +140,25 @@ INSERT INTO advertisement (
     advertisement_location_return_longitude
 ) VALUES
 -- Alice's items (account_id 1)
-(25.00, 100.00, 'FER', 'FER', '2024-01-15', '2024-04-15', 1, 1, 'Professional Skis Set', 'High-quality professional skis with poles.', '/images/skis1.jpg', 45.80025, 15.97111, 45.80025, 15.97111),
-(18.50, 75.00, 'FER', 'FER', '2024-01-10', '2024-12-31', 1, 2, 'Snowboard Package', 'Complete snowboard set with bindings.', '/images/snowboard1.jpg', 45.80025, 15.97111, 45.80025, 15.97111),
-(12.00, 50.00, 'FER', 'FER', '2024-02-01', '2024-11-30', 1, 7, 'Hiking Backpack 65L', 'Spacious hiking backpack with rain cover.', '/images/backpack1.jpg', 45.80025, 15.97111, 45.80025, 15.97111),
+(25.00, 100.00, 'FER', 'FER', '2026-01-15', '2026-04-15', 1, 1, 'Professional Skis Set', 'High-quality professional skis with poles.', '/images/skis1.jpg', 45.80025, 15.97111, 45.80025, 15.97111),
+(18.50, 75.00, 'FER', 'FER', '2026-01-15', '2026-12-31', 1, 2, 'Snowboard Package', 'Complete snowboard set with bindings.', '/images/snowboard1.jpg', 45.80025, 15.97111, 45.80025, 15.97111),
+(12.00, 50.00, 'FER', 'FER', '2026-01-20', '2026-11-30', 1, 7, 'Hiking Backpack 65L', 'Spacious hiking backpack with rain cover.', '/images/backpack1.jpg', 45.80025, 15.97111, 45.80025, 15.97111),
 
 -- Charlie's items (account_id 3)
-(35.00, 150.00, 'FER', 'FER', '2024-01-20', '2024-05-20', 3, 3, 'Professional Climbing Rope', '60m dynamic climbing rope, UIAA certified.', '/images/climbing_rope1.jpg', 45.80025, 15.97111, 45.80025, 15.97111),
-(22.50, 120.00, 'FER', 'FER', '2024-03-01', '2024-10-31', 3, 5, 'Mountain Bike', 'Full-suspension mountain bike, 27.5 wheels.', '/images/mountain_bike1.jpg', 45.80025, 15.97111, 45.80025, 15.97111),
-(15.00, 60.00, 'FER', 'FER', '2024-05-01', '2024-09-30', 3, 6, 'Kayak Single Person', 'Lightweight kayak with paddle and life vest.', '/images/kayak1.jpg', 45.80025, 15.97111, 45.80025, 15.97111),
+(35.00, 150.00, 'FER', 'FER', '2026-01-18', '2026-05-20', 3, 3, 'Professional Climbing Rope', '60m dynamic climbing rope, UIAA certified.', '/images/climbing_rope1.jpg', 45.80025, 15.97111, 45.80025, 15.97111),
+(22.50, 120.00, 'FER', 'FER', '2026-02-01', '2026-10-31', 3, 5, 'Mountain Bike', 'Full-suspension mountain bike, 27.5 wheels.', '/images/mountain_bike1.jpg', 45.80025, 15.97111, 45.80025, 15.97111),
+(15.00, 60.00, 'FER', 'FER', '2026-03-01', '2026-09-30', 3, 6, 'Kayak Single Person', 'Lightweight kayak with paddle and life vest.', '/images/kayak1.jpg', 45.80025, 15.97111, 45.80025, 15.97111),
 
 -- George's items (account_id 4)
-(28.00, 200.00, 'FER', 'FER', '2024-01-25', '2024-03-31', 4, 8, 'Winter Sports Package', 'Complete winter gear: skis, boots, helmet.', '/images/winter_package1.jpg', 45.80025, 15.97111, 45.80025, 15.97111),
-(20.00, 80.00, 'FER', 'FER', '2024-04-01', '2024-10-31', 4, 4, '4-Season Tent', 'High-quality 4-season tent for 2 people.', '/images/tent1.jpg', 45.80025, 15.97111, 45.80025, 15.97111),
-(10.50, 40.00, 'FER', 'FER', '2024-01-15', '2024-12-15', 4, 7, 'Hiking Boots', 'Waterproof hiking boots, size 42.', '/images/boots1.jpg', 45.80025, 15.97111, 45.80025, 15.97111),
+(28.00, 200.00, 'FER', 'FER', '2026-01-15', '2026-03-31', 4, 8, 'Winter Sports Package', 'Complete winter gear: skis, boots, helmet.', '/images/winter_package1.jpg', 45.80025, 15.97111, 45.80025, 15.97111),
+(20.00, 80.00, 'FER', 'FER', '2026-04-01', '2026-10-31', 4, 4, '4-Season Tent', 'High-quality 4-season tent for 2 people.', '/images/tent1.jpg', 45.80025, 15.97111, 45.80025, 15.97111),
+(10.50, 40.00, 'FER', 'FER', '2026-01-15', '2026-12-15', 4, 7, 'Hiking Boots', 'Waterproof hiking boots, size 42.', '/images/boots1.jpg', 45.80025, 15.97111, 45.80025, 15.97111),
 
 -- More items
-(30.00, 180.00, 'FER', 'FER', '2024-12-01', '2025-03-31', 1, 1, 'Premium Ski Set', 'Top-of-the-line skis for expert skiers.', '/images/skis2.jpg', 45.80025, 15.97111, 45.80025, 15.97111),
-(40.00, 250.00, 'FER', 'FER', '2024-02-01', '2024-12-31', 3, 3, 'Complete Climbing Set', 'Harness, carabiners, and belay device.', '/images/climbing_set1.jpg', 45.80025, 15.97111, 45.80025, 15.97111),
-(24.00, 110.00, 'FER', 'FER', '2024-03-15', '2024-11-15', 4, 5, 'Road Bike', 'Lightweight road bike for city cycling.', '/images/road_bike1.jpg', 45.80025, 15.97111, 45.80025, 15.97111);
--- Insert into reservation (using buyers: 2, 5 and connecting to advertisements)
-INSERT INTO reservation (
-    reservation_start, reservation_end, reservation_grade, buyer_id, advertisement_id
-) VALUES
--- Bob's reservations (account_id 2)
-('2024-02-10 09:00:00+00', '2024-02-17 18:00:00+00', 5, 2, 1),
-('2024-03-15 10:00:00+00', '2024-03-22 17:00:00+00', 4,2, 5),
-('2024-06-10 08:00:00+00', '2024-06-12 20:00:00+00', 5,2, 6),
+(30.00, 180.00, 'FER', 'FER', '2026-12-01', '2027-03-31', 1, 1, 'Premium Ski Set', 'Top-of-the-line skis for expert skiers.', '/images/skis2.jpg', 45.80025, 15.97111, 45.80025, 15.97111),
+(40.00, 250.00, 'FER', 'FER', '2026-01-20', '2026-12-31', 3, 3, 'Complete Climbing Set', 'Harness, carabiners, and belay device.', '/images/climbing_set1.jpg', 45.80025, 15.97111, 45.80025, 15.97111),
+(24.00, 110.00, 'FER', 'FER', '2026-03-15', '2026-11-15', 4, 5, 'Road Bike', 'Lightweight road bike for city cycling.', '/images/road_bike1.jpg', 45.80025, 15.97111, 45.80025, 15.97111);
 
--- Jane's reservations (account_id 5)
-('2024-02-20 14:00:00+00', '2024-02-27 16:00:00+00', 4, 5, 2),
-('2024-04-05 09:00:00+00', '2024-04-12 18:00:00+00', 5, 5, 8),
-('2024-07-15 07:00:00+00', '2024-07-20 19:00:00+00', 4, 5, 9),
-
--- Mixed reservations
-('2024-03-01 11:00:00+00', '2024-03-08 15:00:00+00', 5, 2, 3),
-('2024-05-10 10:00:00+00', '2024-05-15 17:00:00+00', 4,5, 4),
-('2024-08-20 08:00:00+00', '2024-08-25 18:00:00+00', 5, 2, 7);
-
--- Update advertisement table to connect with reservations (circular reference)
-UPDATE advertisement SET reservation_id = 1 WHERE advertisement_id = 1;
-UPDATE advertisement SET reservation_id = 2 WHERE advertisement_id = 2;
-UPDATE advertisement SET reservation_id = 3 WHERE advertisement_id = 3;
-UPDATE advertisement SET reservation_id = 4 WHERE advertisement_id = 4;
-UPDATE advertisement SET reservation_id = 5 WHERE advertisement_id = 5;
-UPDATE advertisement SET reservation_id = 6 WHERE advertisement_id = 6;
-UPDATE advertisement SET reservation_id = 7 WHERE advertisement_id = 7;
-UPDATE advertisement SET reservation_id = 8 WHERE advertisement_id = 8;
-UPDATE advertisement SET reservation_id = 9 WHERE advertisement_id = 9;
 
 -- Add more accounts for a richer dataset
 INSERT INTO account (oauth2_id, user_email, user_first_name, user_last_name, user_contact,user_contact_email, user_location, account_role, account_rating) VALUES
@@ -200,16 +170,16 @@ INSERT INTO account (oauth2_id, user_email, user_first_name, user_last_name, use
 ('13', 'tom.davis@bike.com', 'Tom', 'Davis', '555-1013','tom.davis@bike.com', 'Amsterdam', 'trader', 4.5);               -- 13
 
 INSERT INTO advertisement (
-    advertisement_price, 
+    advertisement_price,
     advertisement_deposit,
-    advertisement_location_takeover, 
+    advertisement_location_takeover,
     advertisement_location_return,
-    advertisement_start, 
-    advertisement_end, 
-    trader_id, 
-    itemtype_id, 
-    item_name, 
-    item_description, 
+    advertisement_start,
+    advertisement_end,
+    trader_id,
+    itemtype_id,
+    item_name,
+    item_description,
     item_image_path,
     advertisement_location_takeover_latitude,
     advertisement_location_takeover_longitude,
@@ -229,34 +199,18 @@ INSERT INTO advertisement (
 (21.00, 100.00, 'Amsterdam Bike Central', 'Amsterdam Bike Central', '2024-02-15', '2024-11-30', 13, 5, 'City Bike', 'Comfortable city bike with basket and lock.', '/images/city_bike1.jpg', 52.3676, 4.9041, 52.3676, 4.9041),
 (16.50, 80.00, 'FER', 'FER', '2024-04-01', '2024-10-31', 13, 7, 'Day Hiking Pack', '25L daypack with hydration system.', '/images/daypack1.jpg', 45.8003, 15.9714, 45.8003, 15.9714);
 
--- Add more reservations from new buyers
-INSERT INTO reservation (
-    reservation_start, reservation_end, reservation_grade ,buyer_id, advertisement_id
-) VALUES
--- Lisa's reservations (Madrid)
-('2024-02-25 10:00:00+00', '2024-03-03 18:00:00+00', 5, 10, 10),
-('2024-06-15 09:00:00+00', '2024-06-20 17:00:00+00', 4, 10, 11),
 
--- David's reservations (Rome)
-('2024-03-10 08:00:00+00', '2024-03-17 19:00:00+00', 5, 11, 12),
-('2024-07-01 07:00:00+00', '2024-07-07 20:00:00+00', 4, 11, 13),
-
--- More mixed reservations
-('2024-04-15 11:00:00+00', '2024-04-22 16:00:00+00', 5,2, 14),
-('2024-08-10 10:00:00+00', '2024-08-15 18:00:00+00', 4, 5, 15),
-('2024-09-05 08:00:00+00', '2024-09-12 17:00:00+00', 5,10, 16);
--- Add more advertisements without reservations
 INSERT INTO advertisement (
-    advertisement_price, 
+    advertisement_price,
     advertisement_deposit,
-    advertisement_location_takeover, 
+    advertisement_location_takeover,
     advertisement_location_return,
-    advertisement_start, 
-    advertisement_end, 
-    trader_id, 
-    itemtype_id, 
-    item_name, 
-    item_description, 
+    advertisement_start,
+    advertisement_end,
+    trader_id,
+    itemtype_id,
+    item_name,
+    item_description,
     item_image_path,
     advertisement_location_takeover_latitude,
     advertisement_location_takeover_longitude,
@@ -402,3 +356,19 @@ ALTER TABLE payment ADD CONSTRAINT payment_payer_id_fkey
 ALTER TABLE reservation DROP CONSTRAINT fk_advertisement;
 ALTER TABLE reservation ADD CONSTRAINT fk_advertisement
     FOREIGN KEY (advertisement_id) REFERENCES advertisement(advertisement_id) ON DELETE CASCADE;
+
+ALTER TABLE reservation
+ADD CONSTRAINT unique_advertisement_buyer
+UNIQUE (advertisement_id, buyer_id);
+
+-- Add check constraints for date validation
+
+-- For reservation table: reservation_start must be <= reservation_end
+ALTER TABLE reservation
+ADD CONSTRAINT check_reservation_dates
+CHECK (reservation_start <= reservation_end);
+
+-- For advertisement table: advertisement_start must be <= advertisement_end
+ALTER TABLE advertisement
+ADD CONSTRAINT check_advertisement_dates
+CHECK (advertisement_start <= advertisement_end);

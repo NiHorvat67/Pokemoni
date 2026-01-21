@@ -1,4 +1,3 @@
-import profileImg from "../assets/images/profile.jpeg"
 import { locationIcon, mailIcon, starIcon, phoneIcon } from "../assets/icons"
 import "../styles/Profile.css"
 
@@ -9,9 +8,17 @@ import { useParams } from "react-router-dom"
 import { useState, useEffect } from "react"
 import { useMutation } from "@tanstack/react-query"
 import ReservationHistory from "@/components/ReservationHistory"
+import useAuthContext from "@/hooks/useAuthContext"
+import { useNavigate } from "react-router-dom"
+import noImage from "../assets/images/no-image.png"
+
 
 const Profile = () => {
   const { userId } = useParams()
+  const { user } = useAuthContext()
+  const navigate = useNavigate()
+  // jeli trenutno ulogirani user vlasnik otvorenog profile
+  const currentUserIsOwner = userId == user?.accountId ? true : false
 
   const [products, setProducts] = useState([])
 
@@ -22,17 +29,20 @@ const Profile = () => {
         .get(`/api/accounts/${userId}`)
         .then(res => {
           if (res.data == "") {
-            window.location.pathname = "/error"
+            navigate("/error")
           }
           return res.data
         })
-        .catch(err => console.log(err))
+        .catch(err => {
+          console.log(err)
+        })
     }
   })
 
   const { data: reservationsData } = useQuery({
     queryKey: ["reservations"],
-    enabled: accountData !== undefined,
+    enabled: accountData !== undefined && currentUserIsOwner && user.accountRole !== "admin",
+    //enabled: accountData !== undefined,
     queryFn: async () => {
       return axios
         .get(`/api/reservations/${accountData?.accountRole}/${userId}`)
@@ -42,7 +52,7 @@ const Profile = () => {
         .catch(err => {
           console.log(err)
           if (err.response.status === 400) {
-            window.location.pathname = "/error"
+            navigate("/error")
           }
         })
     }
@@ -83,7 +93,8 @@ const Profile = () => {
         <section id="info-container" className="mb-19 sm:mb-34 max-sm:!gap-x-[0px]">
           <img
             id="profile-image"
-            src={profileImg}
+            onError={(e) => (e.currentTarget.src = noImage)}
+            src={`/api/accounts/images/load/${userId}`}
             alt="profile"
             className="sm:ml-[-10px] ml-[-4px] rounded-full h-[110px] w-[110px] sm:h-[206px] sm:w-[206px] object-cover"
           />
@@ -109,7 +120,9 @@ const Profile = () => {
           </>
         }
 
-        <ReservationHistory reservationsData={reservationsData} accountRole={accountData?.accountRole} />
+        {currentUserIsOwner && user.accountRole !== "admin" &&
+          <ReservationHistory reservationsData={reservationsData} accountRole={accountData?.accountRole} />
+        }
 
       </section>
     </section >

@@ -5,7 +5,7 @@ const Search = ({ placeholder, query, setQuery }
   : {
     placeholder: string,
     query: string,
-    setQuery: any
+    setQuery: React.Dispatch<React.SetStateAction<string>>
   }) => {
   return (
     <div className="font-inter rounded-full pl-[26px] pr-1 py-1 flex items-center gap-3 justify-between bg-input-bg max-w-[460px] w-full shadow-[0_4px_4px_rgba(255,255,255,0.2)]">

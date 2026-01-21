@@ -1,5 +1,20 @@
 package com.back.app.controller;
 
+import java.net.URI;
+import java.util.HashMap;
+import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.back.app.model.Advertisement;
 import com.back.app.model.Reservation;
 import com.back.app.service.AdvertisementService;
@@ -9,19 +24,10 @@ import com.back.app.service.StripeConnectService;
 import com.stripe.Stripe;
 import com.stripe.exception.StripeException;
 import com.stripe.model.checkout.Session;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.HashMap;
-import java.util.Map;
 
 import io.swagger.v3.oas.annotations.Operation;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @RestController
 @CrossOrigin
@@ -37,12 +43,20 @@ public class PaymentController {
 
     @Value("${app.frontend.url}")
     private String clientBaseURL;
-    
+
     // for testing
-    
+
+    @GetMapping("/succesful-payment")
+    public ResponseEntity<Void> hostedCheckout12() throws StripeException {
+
+        return ResponseEntity.status(HttpStatus.FOUND)
+                .location(URI.create(clientBaseURL + "/auth/4"))
+                .build();
+    }
+
     @GetMapping("/trader/checkout")
     public String hostedCheckout() throws StripeException {
-        try{
+        try {
             String link = paymentService.createPaymentLink(null, 100);
 
             log.info("Stripe Session created: {}", link);
@@ -85,14 +99,16 @@ public class PaymentController {
 
             if (connectAccountId == null || connectAccountId.isEmpty()) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                        .body(Map.of("error", "Trader has not set up Stripe Connect account. Please complete onboarding first."));
+                        .body(Map.of("error",
+                                "Trader has not set up Stripe Connect account. Please complete onboarding first."));
             }
 
             // Check account status
             String accountStatus = stripeConnectService.getAccountStatus(traderId);
             if (!"active".equals(accountStatus)) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                        .body(Map.of("error", "Trader's Stripe Connect account is not active. Status: " + accountStatus));
+                        .body(Map.of("error",
+                                "Trader's Stripe Connect account is not active. Status: " + accountStatus));
             }
 
             // Create payment session
@@ -130,27 +146,27 @@ public class PaymentController {
 
             // Initialize Stripe with API key
             Stripe.apiKey = paymentService.getStripeApiKey();
-            
+
             // Retrieve the session from Stripe
             Session session = Session.retrieve(session_id);
-            
+
             // Check if payment was successful
             // Payment status can be: "paid", "unpaid", "no_payment_required"
             String paymentStatus = session.getPaymentStatus();
             if ("paid".equals(paymentStatus)) {
                 // Extract reservation ID from metadata
                 String reservationIdStr = session.getMetadata().get("reservation_id");
-                
+
                 Map<String, Object> response = new HashMap<>();
                 response.put("success", true);
                 response.put("session_id", session_id);
                 response.put("payment_status", "paid");
-                
+
                 if (reservationIdStr != null && !reservationIdStr.isEmpty()) {
                     try {
                         Integer reservationId = Integer.parseInt(reservationIdStr);
                         response.put("reservation_id", reservationId);
-                        
+
                         // Optionally update reservation status here if needed
                         // For now, we just confirm the payment was successful
                         log.info("Payment confirmed for reservation ID: {}", reservationId);
@@ -158,7 +174,7 @@ public class PaymentController {
                         log.error("Invalid reservation ID in session metadata: {}", reservationIdStr);
                     }
                 }
-                
+
                 return ResponseEntity.ok(response);
             } else {
                 // Payment not completed
@@ -167,10 +183,10 @@ public class PaymentController {
                 response.put("session_id", session_id);
                 response.put("payment_status", paymentStatus != null ? paymentStatus : "unknown");
                 response.put("message", "Payment not completed");
-                
+
                 return ResponseEntity.ok(response);
             }
-            
+
         } catch (StripeException e) {
             log.error("Stripe API error verifying payment: {}", e.getMessage(), e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)

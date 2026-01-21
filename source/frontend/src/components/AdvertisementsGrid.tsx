@@ -6,10 +6,9 @@ import { useEffect } from "react";
 
 
 const AdvertisementsGrid = ({ products }: { products: any[] }) => {
-
   const increment = 5
   const initialSize = 5
-  const [numCards, setNumCards] = useState(initialSize)
+  const [numCards, setNumCards] = useState<number>(initialSize)
 
 
 
@@ -56,7 +55,6 @@ const AdvertisementsGrid = ({ products }: { products: any[] }) => {
               <div key={product.advertisementId} className="product-card opacity-0">
                 <ProductCard
                   category={product.itemType.itemtypeName}
-                  img={product.itemImagePath}
                   productName={product.itemName}
                   owner={{ name: `${product.trader.userFirstName} ${product.trader.userLastName}`, id: product.trader.accountId }}
                   desc={product.itemDescription}

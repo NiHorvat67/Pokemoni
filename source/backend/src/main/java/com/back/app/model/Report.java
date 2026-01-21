@@ -1,5 +1,6 @@
 package com.back.app.model;
-import java.time.LocalDate;
+
+import java.time.LocalDateTime;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -29,24 +30,33 @@ import lombok.NoArgsConstructor;
 @Table(name = "report")
 public class Report {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "report_id")
-    private Integer report_id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Column(name = "report_id")
+  private Integer report_id;
 
-    @Column(name = "reporter_id")
-    private Integer reporter_id;
+  @Column(name = "reporter_id")
+  private Integer reporter_id;
 
-    @Column(name = "reported_id")
-    private Integer reported_id;
+  @Column(name = "reported_id")
+  private Integer reported_id;
 
-    @Column(name = "report_details")
-    private String report_details;
+  @Column(name = "report_details")
+  private String report_details;
 
-    @Column(name = "report_status")
-    private String report_status;
+  @Column(name = "report_status")
+  private String report_status;
 
-    @Column(name = "created_at")
-    private LocalDate created_at;
-    
+  @Column(name = "created_at")
+  private LocalDateTime created_at;
+
+  public Report(Integer reporter_id, Integer reported_id, String report_details,
+      String report_status, LocalDateTime created_at) {
+    this.reporter_id = reporter_id;
+    this.reported_id = reported_id;
+    this.report_details = report_details;
+    this.report_status = report_status;
+    this.created_at = created_at;
+  }
+
 }

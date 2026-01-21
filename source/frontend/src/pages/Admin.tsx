@@ -4,10 +4,12 @@ import { useState } from "react";
 import { dateRangeIcon } from "@/assets/icons";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const Admin = () => {
 
   const [price, setPrice] = useState<number | "">("")
+  const navigate = useNavigate()
 
   const { data: subscriptionPrice } = useQuery({
     queryKey: ["subscriptionPrice"],
@@ -16,14 +18,14 @@ const Admin = () => {
         .get(`/api/subscription-price/`)
         .then(res => {
           if (res.data == "") {
-            window.location.pathname = "/error"
+            navigate("/error")
           }
           return res.data
         })
         .catch(err => {
           console.log(err)
           if (err.response.status === 400) {
-            window.location.pathname = "/error"
+            navigate("/error")
           }
         })
     }
@@ -40,7 +42,7 @@ const Admin = () => {
         .catch(err => {
           console.log(err)
           if (err.response.status === 400) {
-            window.location.pathname = "/error"
+            navigate("/error")
           }
         })
     }
@@ -71,7 +73,6 @@ const Admin = () => {
         url: `/api/accounts/delete/${userId}`,
       })
         .then(res => {
-          console.log(res.data)
           return res.data
         })
         .catch(err => console.log(err))

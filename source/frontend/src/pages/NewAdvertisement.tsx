@@ -13,13 +13,19 @@ import PopupAlert from "@/components/PopupAlert";
 import { Input as InputShadCn } from "@/components/ui/input"
 
 import { useState } from "react";
-import { categories } from "@/constants";
 import Button from "@/components/Button";
 import Textarea from "@/components/Textarea";
 import Calendar23 from "@/components/calendar-23-dropdown";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import useAuthContext from "@/hooks/useAuthContext";
+import { useNavigate } from "react-router-dom";
+import { compressImage } from "@/lib/utils";
+
+type DateRange = {
+  from: Date | undefined,
+  to: Date | undefined
+}
 
 const NewAdvertisement = () => {
 
@@ -30,14 +36,28 @@ const NewAdvertisement = () => {
   const [deposit, setDeposit] = useState("")
   const [category, setCategory] = useState("")
   const [description, setDescription] = useState("")
-  const [dateRange, setDateRange] = useState<any>({ from: "", to: "" })
+  const [image, setImage] = useState<any>("")
+  const [dateRange, setDateRange] = useState<DateRange>({ from: undefined, to: undefined })
 
   const { user } = useAuthContext()
   const [errors, setErrors] = useState<any>([])
+  const [processingRequest, setProcessingRequest] = useState(false)
+  const navigate = useNavigate()
+
+
+  const { mutate: deleteAdvertisement } = useMutation({
+    mutationFn: async (advertisementId) => {
+      return axios.post(`/api/advertisements/delete/${advertisementId}`)
+        .then(res => {
+          return res.data
+        })
+        .catch(err => console.log(err));
+    }
+  });
 
 
 
-  const { mutate } = useMutation({
+  const { mutate: createAdvertisement } = useMutation({
     mutationFn: async () => {
       return axios({
         method: "post",
@@ -47,17 +67,55 @@ const NewAdvertisement = () => {
           advertisementDeposit: deposit ? Number(deposit) : 0,
           advertisementLocationTakeover: pickupLocation,
           advertisementLocationReturn: returnLocation,
-          advertisementStart: dateRange?.from.toISOString().substring(0, 10),
-          advertisementEnd: dateRange?.to.toISOString().substring(0, 10),
+          advertisementStart: dateRange.from!.toISOString().substring(0, 10),
+          advertisementEnd: dateRange.to!.toISOString().substring(0, 10),
           traderId: user.accountId,
           itemName: heading,
           itemTypeId: Number(category),
           itemDescription: description,
-          itemImagePath: `/img_${Date.now()}`,
         }
       })
         .then(res => {
-          window.location.href = `/advertisement/${res.data}`
+          uploadImage(res.data)
+          return res.data
+        })
+        .catch(err => {
+          console.log(err)
+          setProcessingRequest(false)
+        })
+    }
+  })
+
+  const { mutate: uploadImage } = useMutation({
+    mutationFn: async (advertisementId) => {
+      const formData = new FormData();
+      const compressedImage = await compressImage(image)
+      formData.append("file", compressedImage)
+      return axios({
+        method: "post",
+        url: `/api/advertisements/images/store/${advertisementId}`,
+        data: formData
+      })
+        .then(res => {
+          navigate(`/advertisement/${advertisementId}`)
+          setProcessingRequest(false)
+          return res.data
+        })
+        .catch(err => {
+          deleteAdvertisement(advertisementId)
+          setProcessingRequest(false)
+          console.log(err)
+        })
+    }
+  })
+
+
+  const { data: categories } = useQuery({
+    queryKey: ["categories"],
+    queryFn: async () => {
+      return axios
+        .get("/api/itemtypes/")
+        .then(res => {
           return res.data
         })
         .catch(err => {
@@ -66,8 +124,14 @@ const NewAdvertisement = () => {
     }
   })
 
+
+  async function onImageChange(e: any) {
+    const imageFile = e.target.files[0]
+    setImage(imageFile)
+  }
+
   const canProgress = () => {
-    const inputsFilled = heading !== "" && pickupLocation !== "" && returnLocation !== "" && price !== "" && category !== "" && description !== "" && dateRange.from !== "" && dateRange.to !== ""
+    const inputsFilled = heading !== "" && pickupLocation !== "" && returnLocation !== "" && price !== "" && category !== "" && description !== "" && dateRange.from !== undefined && dateRange.to !== undefined
     if (!inputsFilled) {
       setErrors((prev: string[]) => [...prev, "Fill out all the input fields"])
       setTimeout(() => {
@@ -80,12 +144,13 @@ const NewAdvertisement = () => {
   const onSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     setErrors([])
-    if (!canProgress()) {
-      console.log("cant finish")
-    } else {
-      mutate()
+    if (canProgress()) {
+      setProcessingRequest(true)
+      createAdvertisement()
     }
   }
+
+
 
   return (
     <section className="padding-x padding-t padding-b min-h-[100vh]">
@@ -108,13 +173,13 @@ const NewAdvertisement = () => {
                   <SelectValue placeholder="Category" />
                 </SelectTrigger>
                 <SelectContent>
-                  {categories.map((category) => (
-                    <SelectItem key={category.id} value={category.id.toString()}>{category.name}</SelectItem>
+                  {categories?.map((category: any) => (
+                    <SelectItem key={category.itemtypeId} value={category.itemtypeId.toString()}>{category.itemtypeName}</SelectItem>
                   ))}
 
                 </SelectContent>
               </Select>
-              <InputShadCn id="picture" type="file" className="file:text-[16px] file:text-black text-neutral-700 !text-[16px] !items-center rounded-[8px] outline-0 border-0 bg-input-bg" />
+              <InputShadCn id="picture" accept="image/*" required type="file" onChange={onImageChange} className="file:text-[16px] file:text-black text-neutral-700 !text-[16px] !items-center rounded-[8px] outline-0 border-0 bg-input-bg" />
             </div>
           </section>
 
@@ -128,7 +193,7 @@ const NewAdvertisement = () => {
               <Input placeholder="Deposit" state={deposit} setState={setDeposit} type="number" />
             </div>
           </section>
-          <Button text="Submit" submit={true} icon={true} onClick={() => { }} long={true} />
+          <Button text={processingRequest ? "Creating advertisement" : "Submit"} disabled={processingRequest} submit={true} icon={true} onClick={() => { }} long={true} />
 
 
         </form >

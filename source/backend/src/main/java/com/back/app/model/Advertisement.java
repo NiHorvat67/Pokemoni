@@ -1,13 +1,22 @@
 package com.back.app.model;
 
-import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Data;
 
 @AllArgsConstructor
 @Data
@@ -43,8 +52,6 @@ public class Advertisement {
     @JoinColumn(name = "trader_id")
     private Account trader;
 
-    @Column(name = "reservation_id")
-    private Integer reservationId;
 
     @Column(name = "item_name")
     private String itemName;
@@ -81,7 +88,6 @@ public class Advertisement {
         this.advertisementLocationReturn = "London Sports Center";
         this.advertisementStart = LocalDate.now().plusDays(1);
         this.advertisementEnd = LocalDate.now().plusMonths(3);
-        this.reservationId = null;
         this.itemName = "Professional Skis Set";
         this.itemDescription = "High-quality professional skis with poles, perfect for intermediate to advanced skiers.";
         this.itemImagePath = "/images/jhdfsghfdhgkds1.jpg";

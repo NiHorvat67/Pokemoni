@@ -10,7 +10,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover"
 
-export default function Calendar23({ range, setRange }: { range: any, setRange: any }) {
+export default function Calendar23({ range, setRange }: { range: { from: Date | undefined, to: Date | undefined }, setRange: any }) {
 
   return (
     <div className="flex flex-col gap-3">

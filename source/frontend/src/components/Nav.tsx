@@ -1,26 +1,28 @@
 import { NavLink, useLocation } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
-import profileImg from "../assets/images/profile.jpeg";
 import useAuthContext from "@/hooks/useAuthContext";
 import Button from "@/components/Button";
+import { useNavigate } from "react-router-dom";
+import noImage from "../assets/images/no-image.png"
 
 const Nav = () => {
   const location = useLocation();
   const { user, dispatch } = useAuthContext();
+  const navigate = useNavigate()
 
   const hideSingInButton = location.pathname.includes("/auth");
 
-  const [desktopOpen, setDesktopOpen] = useState(false);
-  const [mobileOpen, setMobileOpen] = useState(false);
+  const [desktopOpen, setDesktopOpen] = useState<boolean>(false);
+  const [mobileOpen, setMobileOpen] = useState<boolean>(false);
 
   const desktopMenuRef = useRef<HTMLDivElement | null>(null);
 
   const logoutOnClick = () => {
     fetch("/api/accounts/logout", { credentials: "include" })
-      .catch(() => {})
+      .catch(() => { })
       .finally(() => {
         dispatch({ type: "LOGOUT" });
-        window.location.pathname = "/";
+        navigate("/")
       });
   };
 
@@ -42,7 +44,6 @@ const Nav = () => {
   const role = String((user as any)?.accountRole ?? "").toLowerCase();
   const isAdmin = !!user && role === "admin";
   const isTrader = !!user && role === "trader";
-  const isBuyer = !!user && role === "buyer";
 
   const userId = (user as any)?.accountId;
 
@@ -83,7 +84,12 @@ const Nav = () => {
                 aria-expanded={desktopOpen || mobileOpen}
                 className="flex items-center justify-center cursor-pointer"
               >
-                <img src={profileImg} alt="profile" className={profileImgClass} />
+                <img
+                  src={`/api/accounts/images/load/${user.accountId}`}
+                  onError={(e) => (e.currentTarget.src = noImage)}
+                  alt="no image available"
+                  className={profileImgClass}
+                />
               </button>
 
               <div
@@ -112,8 +118,13 @@ const Nav = () => {
                     <NavLink
                       to={userId != null ? `/profile/${userId}` : "/error"}
                       className={`${menuLinkClass} after:bg-slate-300`}
+                      reloadDocument
                     >
                       My Profile
+                    </NavLink>
+
+                    <NavLink to="/settings" className={`${menuLinkClass} after:bg-slate-300`}>
+                      Settings
                     </NavLink>
 
                     {isTrader && (
@@ -160,9 +171,15 @@ const Nav = () => {
               to={userId != null ? `/profile/${userId}` : "/error"}
               onClick={() => setMobileOpen(false)}
               className={`${menuLinkClass} after:bg-white`}
+              reloadDocument
             >
               My Profile
             </NavLink>
+
+            <NavLink to="/settings" className={`${menuLinkClass} after:bg-slate-300`}>
+              Settings
+            </NavLink>
+
 
             {isTrader && (
               <NavLink

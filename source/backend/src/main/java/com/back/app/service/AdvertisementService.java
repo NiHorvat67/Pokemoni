@@ -14,8 +14,6 @@ import com.back.app.model.Advertisement;
 import com.back.app.repo.AdverNoJoinRepo;
 import com.back.app.repo.AdvertisementRepo;
 
-import com.back.app.service.GeocodingService;
-
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -102,7 +100,6 @@ public class AdvertisementService {
         return adverNoJoinRepo.save(adverNoJoin);
     }
     public Advertisement saveAdvertisement(Advertisement advertisement) {
-        log.info("I AM GAAAY");
         return advertisementRepo.save(advertisement);
     }
 

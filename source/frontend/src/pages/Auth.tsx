@@ -1,8 +1,7 @@
 import sideImg from "../assets/images/auth.jpg"
-import MultiStepAuth from "@/components/multi-step/MultiStepAuth";
+import MultiStepAuth from "@/components/multi-step-auth/MultiStepAuth";
 
 const Auth = () => {
-
 
   return (
     <>
