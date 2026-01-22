@@ -1,6 +1,5 @@
-package com.back.app;
+package com.back.app.controller;
 
-import com.back.app.controller.ReservationController;
 import com.back.app.model.Reservation;
 import com.back.app.model.ReservationGrade;
 import com.back.app.service.AccountService;
@@ -16,6 +15,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.time.LocalDate;;
 import java.time.LocalDateTime;
 
 import static org.mockito.Mockito.*;
@@ -46,8 +46,10 @@ public class ReservationControllerTest {
         reservation.setReservationId(1);
         reservation.setBuyerId(10);
         reservation.setAdvertisementId(20);
-        reservation.setReservationRequestStarted(LocalDateTime.now().minusDays(2));
-        reservation.setReservationRequestEnded(LocalDateTime.now().minusDays(1)); // rezervacija završena
+        reservation.setReservationStart(LocalDate.now().minusDays(2));
+        reservation.setReservationEnd(LocalDate.now().minusDays(1)); // rezervacija završena
+
+        reservation.setReservationRequestEnded(LocalDateTime.now().minusHours(1));
     }
 
     // ocjena 5
