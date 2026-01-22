@@ -1,4 +1,4 @@
-package com.back.app;
+package com.back.app.service;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -17,12 +17,11 @@ import static org.mockito.Mockito.when;
 import com.back.app.model.Advertisement;
 import com.back.app.repo.AdverNoJoinRepo;
 import com.back.app.repo.AdvertisementRepo;
-import com.back.app.service.AdvertisementService;
-import com.back.app.service.GeocodingService;
-
 
 public class AdvertisementServiceTest {
+
     
+    private GeocodingService geocodingService;
     private AdvertisementRepo advertisementRepo;
     private AdverNoJoinRepo adverNoJoinRepo; 
     private AdvertisementService advertisementService;
@@ -34,8 +33,8 @@ public class AdvertisementServiceTest {
     void setup() {
         advertisementRepo = Mockito.mock(AdvertisementRepo.class);
         adverNoJoinRepo = Mockito.mock(AdverNoJoinRepo.class);
-        GeocodingService geocodingService = Mockito.mock(GeocodingService.class);
-        advertisementService = new AdvertisementService(advertisementRepo, adverNoJoinRepo,geocodingService);
+
+        advertisementService = new AdvertisementService(advertisementRepo, adverNoJoinRepo, geocodingService);
 
         ad1 = new Advertisement();
         ad1.setAdvertisementId(1);

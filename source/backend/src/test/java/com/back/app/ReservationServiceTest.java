@@ -1,5 +1,6 @@
-package com.back.app;
+package com.back.app.service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -16,8 +17,6 @@ import static org.mockito.Mockito.when;
 
 import com.back.app.model.Reservation;
 import com.back.app.repo.ReservationRepo;
-import com.back.app.service.AdvertisementService;
-import com.back.app.service.ReservationService;
 
 public class ReservationServiceTest {
 
@@ -38,7 +37,7 @@ public class ReservationServiceTest {
         reservation.setReservationId(1);
         reservation.setBuyerId(10);
         reservation.setAdvertisementId(5);
-        reservation.setReservationRequestStarted(LocalDateTime.now());
+        reservation.setReservationStart(LocalDate.now());
     }
     // TESTOVI ZA METODU saveReservation !!!
     // uspjesna rezervacija
@@ -91,7 +90,7 @@ public class ReservationServiceTest {
     @Test
     void testDetermineStatus_EndInFuture_Active() {
         Reservation r = new Reservation();
-        r.setReservationRequestEnded(LocalDateTime.now().plusDays(3));
+        r.setReservationEnd(LocalDate.now().plusDays(3));
 
         String status = reservationService.determineStatus(r);
 
