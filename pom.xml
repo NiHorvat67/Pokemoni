@@ -123,6 +123,14 @@
                     </excludes>
                 </configuration>
             </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>3.5.4</version>
+                <configuration>
+                    <excludedGroups>selenium</excludedGroups>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
 
