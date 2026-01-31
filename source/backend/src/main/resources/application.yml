@@ -50,6 +50,6 @@ stripe:
 
 app:
   frontend:
-    url: "http://localhost:5173"
+    url: "http://52.59.224.134:4173"
   backend:
-    url: "http://localhost:8080"
+    url: "http://52.59.224.134:8080"
