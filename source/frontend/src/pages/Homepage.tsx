@@ -34,7 +34,6 @@ const Homepage = () => {
   const [products, setProducts] = useState([])
   const isMobile = useMediaQuery({ maxWidth: 640 })
 
-  fetch(`http://52.59.224.134:8080/api/accounts/1`).then(res => console.log(res)).catch(err => console.log(err))
 
 
   useEffect(() => {
